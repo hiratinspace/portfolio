@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Terminal, Code, Briefcase, GraduationCap, User, Mail, Linkedin, ChevronRight, Lock, Cpu, Network } from 'lucide-react';
+import { Shield, Terminal, Code, Award, Briefcase, GraduationCap, User, Mail, Linkedin, Github, ChevronRight, Lock, Cpu, Network } from 'lucide-react';
 
 const Portfolio = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,21 +32,87 @@ const Portfolio = () => {
       category: "Offensive Security",
       description: "Developed custom exploitation tools for CTF competitions, focusing on stack and heap vulnerabilities in compiled binaries.",
       tech: ["Python", "C++", "GDB", "Pwntools"],
-      gradient: "from-red-900 via-burgundy-900 to-black"
+      gradient: "from-red-900 via-burgundy-900 to-black",
+      fullDescription: `A comprehensive framework for exploiting binary vulnerabilities in CTF competitions and security research.
+
+**Key Features:**
+• Automated ROP chain generation for bypassing DEP/NX
+• Custom shellcode development and testing environment
+• Heap exploitation utilities for use-after-free and double-free bugs
+• Integration with GDB and Pwntools for streamlined exploitation
+
+**Technical Highlights:**
+Built primarily in Python with C++ for performance-critical components. The framework handles common exploitation patterns including buffer overflows, format string vulnerabilities, and return-oriented programming (ROP).
+
+**Challenges Overcome:**
+One of the biggest challenges was creating reliable exploits that work across different system configurations. I implemented multiple payload strategies that adapt to different security mitigations like ASLR, stack canaries, and PIE.
+
+**Results:**
+Successfully used in 10+ CTF competitions with a 70% solve rate on binary exploitation challenges.`,
+      links: [
+        { label: "GitHub Repository", url: "#" },
+        { label: "Documentation", url: "#" }
+      ]
     },
     {
       title: "Web Application Penetration Testing Suite",
       category: "Red Team Tools",
       description: "Automated reconnaissance and vulnerability assessment toolkit for web applications with focus on OWASP Top 10.",
       tech: ["Python", "Flask", "SQL Injection", "XSS"],
-      gradient: "from-burgundy-800 via-red-800 to-black"
+      gradient: "from-burgundy-800 via-red-800 to-black",
+      fullDescription: `An automated penetration testing suite designed to identify and exploit common web application vulnerabilities.
+
+**Core Capabilities:**
+• Automated SQL injection detection and exploitation
+• XSS (Cross-Site Scripting) vulnerability scanner
+• CSRF token analysis and bypass techniques
+• Authentication and session management testing
+• Directory traversal and file inclusion testing
+
+**Architecture:**
+Built with Flask for the web interface and Python for the scanning engine. Uses multithreading for concurrent testing of multiple endpoints. Includes a custom reporting system that generates detailed vulnerability reports with remediation steps.
+
+**Real-World Applications:**
+Used this suite in authorized penetration tests for educational purposes and CTF web challenges. It's helped me understand both offensive and defensive perspectives of web security.
+
+**Learning Experience:**
+This project taught me the importance of responsible disclosure and ethical hacking. Every vulnerability found is an opportunity to improve security.`,
+      links: [
+        { label: "GitHub Repository", url: "#" },
+        { label: "Demo Video", url: "#" }
+      ]
     },
     {
       title: "Cryptographic Challenge Solver",
       category: "Cryptography",
       description: "Built automated solvers for common cryptographic challenges including RSA, AES, and classical ciphers.",
       tech: ["Python", "PyCrypto", "Mathematics"],
-      gradient: "from-black via-burgundy-900 to-red-900"
+      gradient: "from-black via-burgundy-900 to-red-900",
+      fullDescription: `A collection of tools and algorithms for solving cryptographic puzzles commonly found in CTF competitions.
+
+**Supported Cryptosystems:**
+• RSA (small exponent attacks, Wiener's attack, Fermat factorization)
+• Classical ciphers (Caesar, Vigenère, substitution ciphers)
+• AES modes of operation and padding oracle attacks
+• Hash function analysis and collision detection
+• ECB/CBC mode exploitation
+
+**Mathematical Foundations:**
+Implements number theory algorithms including:
+- Extended Euclidean algorithm for modular arithmetic
+- Chinese Remainder Theorem for solving systems
+- Pollard's rho algorithm for integer factorization
+- Baby-step giant-step for discrete logarithms
+
+**Automation Features:**
+The toolkit automatically identifies cipher types and applies appropriate attack strategies. It includes frequency analysis for classical ciphers and automated parameter recovery for modern cryptosystems.
+
+**CTF Success:**
+This toolkit has been instrumental in solving 50+ cryptography challenges across various CTF platforms including picoCTF, HackTheBox, and TryHackMe.`,
+      links: [
+        { label: "GitHub Repository", url: "#" },
+        { label: "Writeups", url: "#" }
+      ]
     }
   ];
 
@@ -311,8 +378,12 @@ const Portfolio = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, idx) => (
-              <div key={idx} className="group cursor-pointer">
-                <div className={`h-48 bg-gradient-to-br ${project.gradient} mb-4 relative overflow-hidden border border-red-900/50`}>
+              <div
+                key={idx}
+                className="group cursor-pointer"
+                onClick={() => setSelectedProject(project)}
+              >
+                <div className={`h-48 bg-gradient-to-br ${project.gradient} mb-4 relative overflow-hidden border border-red-900/50 group-hover:border-red-600 transition-all`}>
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Terminal className="w-16 h-16 text-red-400/50 group-hover:text-red-400 transition-all group-hover:scale-110" />
@@ -321,6 +392,11 @@ const Portfolio = () => {
                     <span className="px-3 py-1 bg-black/60 border border-red-900/50 text-xs text-red-400 backdrop-blur">
                       {project.category}
                     </span>
+                  </div>
+                  <div className="absolute bottom-4 right-4">
+                    <div className="w-8 h-8 bg-red-900/60 border border-red-700 flex items-center justify-center backdrop-blur group-hover:bg-red-800/60 transition-all">
+                      <ChevronRight className="w-5 h-5 text-red-300" />
+                    </div>
                   </div>
                 </div>
                 <h3 className="text-xl font-bold mb-2 text-white group-hover:text-red-400 transition-colors">{project.title}</h3>
@@ -381,6 +457,81 @@ const Portfolio = () => {
           </div>
         </div>
       </footer>
+
+      {/* Project Modal */}
+      {selectedProject && (
+        <div
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setSelectedProject(null)}
+        >
+          <div
+            className="bg-gradient-to-br from-burgundy-950/95 to-black border-2 border-red-900/50 max-w-4xl w-full my-8 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedProject(null)}
+              className="absolute top-4 right-4 w-10 h-10 bg-red-900/50 border border-red-800 hover:bg-red-900 hover:border-red-600 transition-all flex items-center justify-center group z-10"
+            >
+              <span className="text-2xl text-red-400 group-hover:text-red-300">×</span>
+            </button>
+
+            {/* Header */}
+            <div className={`h-48 bg-gradient-to-br ${selectedProject.gradient} relative overflow-hidden border-b-2 border-red-900/50`}>
+              <div className="absolute inset-0 bg-black/40"></div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
+                <span className="px-4 py-2 bg-black/60 border border-red-900/50 text-sm text-red-400 backdrop-blur mb-4">
+                  {selectedProject.category}
+                </span>
+                <h2 className="text-4xl font-bold text-white text-center">{selectedProject.title}</h2>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-8 max-h-[60vh] overflow-y-auto">
+              {/* Tech Stack */}
+              <div className="mb-6">
+                <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-3">Technologies Used</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.tech.map((tech, i) => (
+                    <span key={i} className="px-4 py-2 bg-red-950/50 border border-red-900/50 text-red-400 text-sm">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="mb-6">
+                <div className="text-gray-300 leading-relaxed whitespace-pre-line">
+                  {selectedProject.fullDescription}
+                </div>
+              </div>
+
+              {/* Links */}
+              {selectedProject.links && (
+                <div className="border-t border-red-900/30 pt-6">
+                  <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-4">Project Links</h3>
+                  <div className="flex flex-wrap gap-4">
+                    {selectedProject.links.map((link, i) => (
+                      <a
+                        key={i}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-6 py-3 bg-gradient-to-r from-red-900 to-burgundy-900 hover:from-red-800 hover:to-burgundy-800 transition-all border border-red-800 flex items-center space-x-2 group"
+                      >
+                        <span>{link.label}</span>
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes float {

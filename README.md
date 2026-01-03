@@ -81,6 +81,34 @@ portfolio/
 - [ ] Include CTF stats/achievements
 - [ ] Add resume download functionality
 
+📝 How to Add More Projects:
+Just add new objects to the projects array with this format:
+javascript{
+  title: "Your Project Name",
+  category: "Category (e.g., Web Security)",
+  description: "Short preview description",
+  tech: ["Tech1", "Tech2", "Tech3"],
+  gradient: "from-red-900 via-burgundy-900 to-black",
+  fullDescription: `Full detailed description here.
+  
+  **You can use:**
+  • Bullet points
+  • Multiple paragraphs
+  
+  **Sections** with bold headers`,
+  links: [
+    { label: "GitHub", url: "https://github.com/..." },
+    { label: "Live Demo", url: "https://..." }
+  ]
+}
+🎨 Features for Future Projects:
+
+Add screenshots/images by including an images array
+Add date completed
+Add GitHub stars or metrics
+Add collaborators
+Add status (In Progress, Completed, etc.)
+
 ## 🤝 Contributing
 
 This is a personal portfolio, but if you find bugs or have suggestions, feel free to open an issue!

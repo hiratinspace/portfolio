@@ -86,14 +86,17 @@ const Portfolio = () => {
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/95 backdrop-blur-sm border-b border-red-900/30' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-red-900 to-burgundy-900 flex items-center justify-center font-bold text-xl border border-red-800">
+            <button
+              onClick={() => scrollToSection('home')}
+              className="flex items-center space-x-2 cursor-pointer group"
+            >
+              <div className="w-10 h-10 bg-gradient-to-br from-red-900 to-burgundy-900 flex items-center justify-center font-bold text-xl border border-red-800 group-hover:border-red-600 transition-all">
                 HR
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-red-500 to-burgundy-500 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r from-red-500 via-burgundy-600 to-burgundy-900 bg-clip-text text-transparent group-hover:from-red-400 group-hover:via-burgundy-500 transition-all">
                 HIRAT RAHMAN RAHI
               </span>
-            </div>
+            </button>
             <div className="flex items-center space-x-8">
               {[
                 { label: 'HOME', id: 'home' },

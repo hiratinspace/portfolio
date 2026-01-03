@@ -137,7 +137,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
   const experiences = [
     {
       title: "Intern Analyst",
-      company: "Driving Forward (Deloitte)",
+      company: "Driving Forward",
       period: "Dec 2025 – Present",
       description: "Develop business cases through market analysis and competitive research. Collaborate with senior managers on strategic recommendations.",
       icon: Briefcase

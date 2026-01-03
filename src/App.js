@@ -144,14 +144,14 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
     },
     {
       title: "IT Intern",
-      company: "McLean County Regional Planning",
+      company: "McLean County RPC",
       period: "Aug 2025 – Present",
       description: "Analyze transportation data, develop automated pipelines, and support GIS database management for regional infrastructure.",
       icon: Cpu
     },
     {
       title: "GIS Analyst & Technical Assistant",
-      company: "Illinois Wesleyan University",
+      company: "Illinois Wesleyan Physical Plant",
       period: "May 2025 – Aug 2025",
       description: "Architected geodatabases for 8 campus buildings, improving data accuracy by 40%. Created automated validation scripts.",
       icon: Network

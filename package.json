@@ -2,7 +2,7 @@
   "name": "hr-portfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://hiratinspace.github.io/portfolio",
+
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -40,9 +40,9 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.23",
+    "autoprefixer": "^10.4.16",
     "gh-pages": "^6.1.1",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.19"
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0"
   }
 }

@@ -73,16 +73,6 @@ portfolio/
 └── tailwind.config.js
 ```
 
-## 🔧 Customization
-
-Feel free to fork this and make it your own! Key things to change:
-
-1. **Personal Info** - Update name, email, links in `App.js`
-2. **Colors** - Modify the burgundy theme in `tailwind.config.js`
-3. **Projects** - Add your own projects in the projects array
-4. **Experience** - Update work experience section
-5. **Skills** - Customize your skill set
-
 ## 📝 TODO
 
 - [ ] Add a blog section for writeups

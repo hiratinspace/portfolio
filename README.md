@@ -83,7 +83,8 @@ portfolio/
 
 📝 How to Add More Projects:
 Just add new objects to the projects array with this format:
-javascript{
+
+{
   title: "Your Project Name",
   category: "Category (e.g., Web Security)",
   description: "Short preview description",
@@ -101,6 +102,7 @@ javascript{
     { label: "Live Demo", url: "https://..." }
   ]
 }
+
 🎨 Features for Future Projects:
 
 Add screenshots/images by including an images array

@@ -9,7 +9,25 @@ const Portfolio = () => {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
+
+      // Update active section based on scroll position
+      const sections = ['home', 'about', 'projects', 'contact'];
+      const scrollPosition = window.scrollY + 200; // Offset for better detection
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const offsetBottom = offsetTop + element.offsetHeight;
+
+          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -151,20 +169,20 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
     <div className="bg-black text-gray-100 min-h-screen font-mono">
       {/* Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/95 backdrop-blur-sm border-b border-red-900/30' : 'bg-transparent'}`}>
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <button
               onClick={() => scrollToSection('home')}
               className="flex items-center space-x-2 cursor-pointer group"
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-red-900 to-burgundy-900 flex items-center justify-center font-bold text-xl border border-red-800 group-hover:border-red-600 transition-all">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-red-900 to-burgundy-900 flex items-center justify-center font-bold text-lg sm:text-xl border border-red-800 group-hover:border-red-600 transition-all flex-shrink-0">
                 HR
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-red-500 via-burgundy-600 to-burgundy-900 bg-clip-text text-transparent group-hover:from-red-400 group-hover:via-burgundy-500 transition-all">
+              <span className="text-base sm:text-xl font-bold bg-gradient-to-r from-red-500 via-burgundy-600 to-burgundy-900 bg-clip-text text-transparent group-hover:from-red-400 group-hover:via-burgundy-500 transition-all hidden sm:inline">
                 HIRAT RAHMAN RAHI
               </span>
             </button>
-            <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-3 sm:space-x-8">
               {[
                 { label: 'HOME', id: 'home' },
                 { label: 'ABOUT', id: 'about' },
@@ -174,7 +192,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`text-sm transition-colors hover:text-red-500 ${activeSection === item.id ? 'text-red-500' : 'text-gray-400'}`}
+                  className={`text-xs sm:text-sm transition-colors hover:text-red-500 ${activeSection === item.id ? 'text-red-500' : 'text-gray-400'}`}
                 >
                   {item.label}
                 </button>
@@ -185,7 +203,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+      <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 px-4 sm:px-6">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-burgundy-950 to-black opacity-50"></div>
         <div className="absolute inset-0">
           {[...Array(20)].map((_, i) => (
@@ -203,63 +221,63 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
           ))}
         </div>
 
-        <div className="max-w-6xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-6xl mx-auto relative z-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <Terminal className="text-red-500 w-6 h-6" />
-                <span className="text-red-500 text-sm font-bold tracking-wider">OFFENSIVE SECURITY ENGINEER</span>
+                <Terminal className="text-red-500 w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="text-red-500 text-xs sm:text-sm font-bold tracking-wider">OFFENSIVE SECURITY ENGINEER</span>
               </div>
-              <h1 className="text-6xl font-bold mb-6 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 <span className="bg-gradient-to-r from-red-500 via-burgundy-500 to-red-600 bg-clip-text text-transparent">
                   RED TEAM
                 </span>
                 <br />
                 <span className="text-white">OPERATOR</span>
               </h1>
-              <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+              <p className="text-gray-400 text-base sm:text-lg mb-8 leading-relaxed">
                 Computer Science & Neuroscience student at Illinois Wesleyan University. Specializing in binary exploitation,
                 reverse engineering, and offensive security operations. Active CTF competitor with passion for finding and exploiting vulnerabilities.
               </p>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                 <button
                   onClick={() => scrollToSection('contact')}
-                  className="px-6 py-3 bg-gradient-to-r from-red-900 to-burgundy-900 hover:from-red-800 hover:to-burgundy-800 transition-all border border-red-800 flex items-center space-x-2 group"
+                  className="px-6 py-3 bg-gradient-to-r from-red-900 to-burgundy-900 hover:from-red-800 hover:to-burgundy-800 transition-all border border-red-800 flex items-center justify-center space-x-2 group"
                 >
                   <span>GET IN TOUCH</span>
                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
-                <a href="mailto:hrahi@iwu.edu" className="px-6 py-3 border border-red-900 hover:border-red-700 hover:bg-red-950/30 transition-all">
+                <a href="mailto:hrahi@iwu.edu" className="px-6 py-3 border border-red-900 hover:border-red-700 hover:bg-red-950/30 transition-all text-center">
                   VIEW RESUME
                 </a>
               </div>
             </div>
 
-            <div className="relative">
-              <div className="relative z-10 bg-gradient-to-br from-burgundy-900/30 to-black border border-red-900/50 p-8 backdrop-blur">
-                <Shield className="text-red-500 w-16 h-16 mb-4" />
-                <h3 className="text-2xl font-bold mb-4 text-red-400">Security Expertise</h3>
+            <div className="relative mt-8 lg:mt-0">
+              <div className="relative z-10 bg-gradient-to-br from-burgundy-900/30 to-black border border-red-900/50 p-6 sm:p-8 backdrop-blur">
+                <Shield className="text-red-500 w-12 h-12 sm:w-16 sm:h-16 mb-4" />
+                <h3 className="text-xl sm:text-2xl font-bold mb-4 text-red-400">Security Expertise</h3>
                 <ul className="space-y-3">
                   {['Binary Exploitation', 'Web Application Security', 'Cryptography & Crypto-analysis', 'Reverse Engineering', 'CTF Competitions'].map((item, i) => (
-                    <li key={i} className="flex items-center space-x-3 text-gray-300">
-                      <div className="w-2 h-2 bg-red-500 rotate-45"></div>
+                    <li key={i} className="flex items-center space-x-3 text-sm sm:text-base text-gray-300">
+                      <div className="w-2 h-2 bg-red-500 rotate-45 flex-shrink-0"></div>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="absolute -bottom-4 -right-4 w-full h-full border border-red-900/30"></div>
+              <div className="absolute -bottom-4 -right-4 w-full h-full border border-red-900/30 hidden sm:block"></div>
             </div>
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-24 bg-gradient-to-b from-black to-burgundy-950/20">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center space-x-3 mb-12">
-            <User className="text-red-500 w-8 h-8" />
-            <h2 className="text-4xl font-bold text-white">ABOUT</h2>
+      <section id="about" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center space-x-3 mb-8 sm:mb-12">
+            <User className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">ABOUT</h2>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -311,11 +329,11 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* Skills Section */}
-      <section className="py-24 bg-black">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center space-x-3 mb-12">
-            <Lock className="text-red-500 w-8 h-8" />
-            <h2 className="text-4xl font-bold text-white">SKILLS & EXPERTISE</h2>
+      <section className="py-16 sm:py-24 bg-black px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center space-x-3 mb-8 sm:mb-12">
+            <Lock className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">SKILLS & EXPERTISE</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -336,31 +354,31 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* Experience Section */}
-      <section className="py-24 bg-gradient-to-b from-black to-burgundy-950/20">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center space-x-3 mb-12">
-            <Briefcase className="text-red-500 w-8 h-8" />
-            <h2 className="text-4xl font-bold text-white">EXPERIENCE</h2>
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center space-x-3 mb-8 sm:mb-12">
+            <Briefcase className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">EXPERIENCE</h2>
           </div>
 
           <div className="space-y-6">
             {experiences.map((exp, idx) => {
               const Icon = exp.icon;
               return (
-                <div key={idx} className="border border-red-900/50 p-6 bg-gradient-to-r from-burgundy-950/20 to-black hover:border-red-700/70 transition-all group">
-                  <div className="flex items-start justify-between mb-4">
+                <div key={idx} className="border border-red-900/50 p-4 sm:p-6 bg-gradient-to-r from-burgundy-950/20 to-black hover:border-red-700/70 transition-all group">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 space-y-3 sm:space-y-0">
                     <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-red-900 to-burgundy-900 flex items-center justify-center border border-red-800 group-hover:border-red-600 transition-all">
+                      <div className="w-12 h-12 bg-gradient-to-br from-red-900 to-burgundy-900 flex items-center justify-center border border-red-800 group-hover:border-red-600 transition-all flex-shrink-0">
                         <Icon className="w-6 h-6 text-red-300" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-white group-hover:text-red-400 transition-colors">{exp.title}</h3>
-                        <p className="text-red-400">{exp.company}</p>
+                        <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-red-400 transition-colors">{exp.title}</h3>
+                        <p className="text-red-400 text-sm sm:text-base">{exp.company}</p>
                       </div>
                     </div>
-                    <span className="text-sm text-gray-400 border border-red-900/50 px-3 py-1">{exp.period}</span>
+                    <span className="text-xs sm:text-sm text-gray-400 border border-red-900/50 px-3 py-1 self-start sm:self-auto">{exp.period}</span>
                   </div>
-                  <p className="text-gray-300 leading-relaxed ml-16">{exp.description}</p>
+                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base sm:ml-16">{exp.description}</p>
                 </div>
               );
             })}
@@ -369,11 +387,11 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-24 bg-black">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center space-x-3 mb-12">
-            <Code className="text-red-500 w-8 h-8" />
-            <h2 className="text-4xl font-bold text-white">PROJECTS</h2>
+      <section id="projects" className="py-16 sm:py-24 bg-black px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center space-x-3 mb-8 sm:mb-12">
+            <Code className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">PROJECTS</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -415,11 +433,11 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-24 bg-gradient-to-b from-black to-burgundy-950/20">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="flex items-center space-x-3 mb-12">
-            <Mail className="text-red-500 w-8 h-8" />
-            <h2 className="text-4xl font-bold text-white">CONTACT</h2>
+      <section id="contact" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center space-x-3 mb-8 sm:mb-12">
+            <Mail className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">CONTACT</h2>
           </div>
 
           <div className="border border-red-900/50 p-8 bg-gradient-to-br from-burgundy-950/30 to-black">
@@ -446,13 +464,13 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-red-900/30 py-8 bg-black">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center justify-between">
-            <p className="text-gray-500 text-sm">© 2026 Hirat Rahman Rahi. All rights reserved.</p>
+      <footer className="border-t border-red-900/30 py-6 sm:py-8 bg-black px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
+            <p className="text-gray-500 text-xs sm:text-sm text-center sm:text-left">© 2026 Hirat Rahman Rahi. All rights reserved.</p>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-              <span className="text-gray-500 text-sm">Available for opportunities</span>
+              <span className="text-gray-500 text-xs sm:text-sm">Available for opportunities</span>
             </div>
           </div>
         </div>

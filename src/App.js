@@ -5,6 +5,7 @@ const Portfolio = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [matrixColumns, setMatrixColumns] = useState([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -12,7 +13,7 @@ const Portfolio = () => {
 
       // Update active section based on scroll position
       const sections = ['home', 'about', 'projects', 'contact'];
-      const scrollPosition = window.scrollY + 200; // Offset for better detection
+      const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -30,6 +31,53 @@ const Portfolio = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Matrix rain effect
+  useEffect(() => {
+    const columns = Math.floor(window.innerWidth / 25);
+    const chars = '0123456789ABCDEF'.split('');
+    const securityTerms = [
+      '0x', 'PWN', 'ROP', 'NOP', 'JMP', 'XOR', 'DEP', 'PIE',
+      'root@', 'sudo', 'nc', 'sh', 'bin'
+    ];
+
+    const initColumns = Array.from({ length: columns }, (_, i) => ({
+      id: i,
+      x: i * 25,
+      y: Math.random() * -2000,
+      speed: 1 + Math.random() * 3,
+      chars: Array.from({ length: 15 + Math.floor(Math.random() * 15) }, () =>
+        Math.random() > 0.7
+          ? securityTerms[Math.floor(Math.random() * securityTerms.length)]
+          : chars[Math.floor(Math.random() * chars.length)]
+      )
+    }));
+
+    setMatrixColumns(initColumns);
+
+    const interval = setInterval(() => {
+      setMatrixColumns(prevColumns =>
+        prevColumns.map(col => {
+          let newY = col.y + col.speed;
+          if (newY > window.innerHeight + 200) {
+            return {
+              ...col,
+              y: -200 - Math.random() * 500,
+              speed: 1 + Math.random() * 3,
+              chars: Array.from({ length: 15 + Math.floor(Math.random() * 15) }, () =>
+                Math.random() > 0.7
+                  ? securityTerms[Math.floor(Math.random() * securityTerms.length)]
+                  : chars[Math.floor(Math.random() * chars.length)]
+              )
+            };
+          }
+          return { ...col, y: newY };
+        })
+      );
+    }, 50);
+
+    return () => clearInterval(interval);
   }, []);
 
   const scrollToSection = (sectionId) => {
@@ -137,21 +185,21 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
   const experiences = [
     {
       title: "Intern Analyst",
-      company: "Driving Forward",
+      company: "Driving Forward (Deloitte)",
       period: "Dec 2025 – Present",
       description: "Develop business cases through market analysis and competitive research. Collaborate with senior managers on strategic recommendations.",
       icon: Briefcase
     },
     {
       title: "IT Intern",
-      company: "McLean County RPC",
+      company: "McLean County Regional Planning",
       period: "Aug 2025 – Present",
       description: "Analyze transportation data, develop automated pipelines, and support GIS database management for regional infrastructure.",
       icon: Cpu
     },
     {
       title: "GIS Analyst & Technical Assistant",
-      company: "Illinois Wesleyan Physical Plant",
+      company: "Illinois Wesleyan University",
       period: "May 2025 – Aug 2025",
       description: "Architected geodatabases for 8 campus buildings, improving data accuracy by 40%. Created automated validation scripts.",
       icon: Network
@@ -166,9 +214,53 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
   };
 
   return (
-    <div className="bg-black text-gray-100 min-h-screen font-mono">
+    <div className="bg-black text-gray-100 min-h-screen font-mono relative overflow-hidden">
+      {/* Matrix Rain Background */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1 }}>
+        {matrixColumns.map((col) => (
+          <div
+            key={col.id}
+            className="absolute font-mono text-sm leading-tight"
+            style={{
+              left: `${col.x}px`,
+              top: `${col.y}px`,
+              transform: 'translateZ(0)',
+              willChange: 'transform'
+            }}
+          >
+            {col.chars.map((char, idx) => {
+              const opacity = Math.max(0.1, 1 - (idx / col.chars.length));
+              const isHead = idx === 0;
+              const isTail = idx === col.chars.length - 1;
+
+              return (
+                <div
+                  key={idx}
+                  className="transition-opacity duration-100"
+                  style={{
+                    color: isHead
+                      ? '#ffffff'
+                      : isTail
+                        ? '#450a0a'
+                        : `rgba(220, 38, 38, ${opacity})`,
+                    textShadow: isHead
+                      ? '0 0 8px rgba(220, 38, 38, 0.8), 0 0 12px rgba(220, 38, 38, 0.6)'
+                      : isTail
+                        ? 'none'
+                        : `0 0 6px rgba(220, 38, 38, ${opacity * 0.6})`,
+                    opacity: opacity,
+                    fontWeight: isHead ? '700' : '400'
+                  }}
+                >
+                  {char}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/95 backdrop-blur-sm border-b border-red-900/30' : 'bg-transparent'}`}>
+      <nav className={`fixed top-0 w-full transition-all duration-300 ${scrolled ? 'bg-black/95 backdrop-blur-sm border-b border-red-900/30' : 'bg-transparent'}`} style={{ zIndex: 100 }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <button
@@ -203,25 +295,10 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 px-4 sm:px-6">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-burgundy-950 to-black opacity-50"></div>
-        <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-red-900/10 font-mono text-xs"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `float ${5 + Math.random() * 10}s infinite`
-              }}
-            >
-              {['0x', '0xFF', '0x00', '#!/bin/', 'root@', 'exploit', 'pwn'][Math.floor(Math.random() * 7)]}
-            </div>
-          ))}
-        </div>
+      <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 px-4 sm:px-6" style={{ zIndex: 10 }}>
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-burgundy-950/50 to-black" style={{ zIndex: 2 }}></div>
 
-        <div className="max-w-6xl mx-auto relative z-10 w-full">
+        <div className="max-w-6xl mx-auto relative w-full" style={{ zIndex: 10 }}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
               <div className="flex items-center space-x-2 mb-4">
@@ -273,7 +350,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6">
+      <section id="about" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <User className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
@@ -329,7 +406,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* Skills Section */}
-      <section className="py-16 sm:py-24 bg-black px-4 sm:px-6">
+      <section className="py-16 sm:py-24 bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Lock className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
@@ -354,7 +431,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* Experience Section */}
-      <section className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6">
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Briefcase className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
@@ -387,7 +464,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-16 sm:py-24 bg-black px-4 sm:px-6">
+      <section id="projects" className="py-16 sm:py-24 bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Code className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
@@ -433,7 +510,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6">
+      <section id="contact" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Mail className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
@@ -464,7 +541,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-red-900/30 py-6 sm:py-8 bg-black px-4 sm:px-6">
+      <footer className="border-t border-red-900/30 py-6 sm:py-8 bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
             <p className="text-gray-500 text-xs sm:text-sm text-center sm:text-left">© 2026 Hirat Rahman Rahi. All rights reserved.</p>
@@ -479,7 +556,8 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       {/* Project Modal */}
       {selectedProject && (
         <div
-          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          style={{ zIndex: 200 }}
           onClick={() => setSelectedProject(null)}
         >
           <div
@@ -551,12 +629,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
         </div>
       )}
 
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-      `}</style>
+
     </div>
   );
 };

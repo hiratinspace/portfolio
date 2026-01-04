@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Terminal, Code, Award, Briefcase, GraduationCap, User, Mail, Linkedin, Github, ChevronRight, Lock, Cpu, Network } from 'lucide-react';
+import { Shield, Terminal, Code, Briefcase, GraduationCap, User, Mail, Linkedin, ChevronRight, Lock, Cpu, Network, Building2, Megaphone, Users } from 'lucide-react';
 
 const Portfolio = () => {
   const [activeSection, setActiveSection] = useState('home');
@@ -185,32 +185,58 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
   const experiences = [
     {
       title: "Intern Analyst",
-      company: "Driving Forward (Deloitte)",
+      company: "Driving Forward",
       period: "Dec 2025 – Present",
-      description: "Develop business cases through market analysis and competitive research. Collaborate with senior managers on strategic recommendations.",
+      description: "Develop business cases by analyzing market data and industry trends; translate findings into executive-ready recommendations with clear assumptions, risks, and next steps.",
       icon: Briefcase
     },
     {
       title: "IT Intern",
-      company: "McLean County Regional Planning",
+      company: "McLean County RPC",
       period: "Aug 2025 – Present",
-      description: "Analyze transportation data, develop automated pipelines, and support GIS database management for regional infrastructure.",
+      description: "Support planning and transportation initiatives through GIS/database workflows and IT innovation; analyze multi-year transportation and planning datasets to identify trends supporting the 2050 Metropolitan Transportation Plan (MTP)",
       icon: Cpu
     },
     {
       title: "GIS Analyst & Technical Assistant",
-      company: "Illinois Wesleyan University",
+      company: "Illinois Wesleyan Physical Plant",
       period: "May 2025 – Aug 2025",
-      description: "Architected geodatabases for 8 campus buildings, improving data accuracy by 40%. Created automated validation scripts.",
+      description: "Built and maintained indoor geodatabases for 8 campus buildings, improving data accuracy by ~40% and creating automated validation scripts to reduce manual QA.",
       icon: Network
+    }
+  ];
+
+
+
+    const leaderships = [
+    {
+      title: "Resident Advisor",
+      company: "IWU Office of Residential Life",
+      period: "Aug 2024 – Present",
+      description: "Mentor and support 30+ first-year students through the transition to college, promoting well-being, engagement, and accountability while upholding university policies across 300+ residents. Also bring experience advising upper-division residents in a suite-style community.",
+      icon: Building2
+    },
+    {
+      title: "Presidential Ambassador",
+      company: "IWU Admissions Office",
+      period: "May 2024 – Present",
+      description: "Represent IWU in admissions panels and weekly campus tours; communicate academics and student life clearly to prospective students and families.",
+      icon: Megaphone
+    },
+    {
+      title: "President",
+      company: "IWU MSA & Billiards Club",
+      period: "Aug 2024 – Present",
+      description: "Lead executive boards for cultural/interfaith programming and run weekly engagement through the Billiards Club.",
+      icon: Users
     }
   ];
 
   const skills = {
     "Offensive Security": ["Binary Exploitation", "Web Exploitation", "Cryptography", "Reverse Engineering", "CTF Competitions"],
     "Languages": ["Python", "C++", "Rust", "OCaml", "SQL"],
-    "Tools & Frameworks": ["Flask", "Git", "Linux", "RESTful APIs", "ArcGIS Pro"],
-    "Specializations": ["Red Team Operations", "Vulnerability Research", "Exploit Development"]
+    "Tools & Frameworks": [ "Linux", "Git", "Flask", "HTML/CSS", "REST APIs", "ArcGIS Pro"],
+    "Engineering Focus": ["Red Team Operations", "Vulnerability Research", "Exploit Development", "Security Labs & Writeups"]
   };
 
   return (
@@ -267,8 +293,42 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
               onClick={() => scrollToSection('home')}
               className="flex items-center space-x-2 cursor-pointer group"
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-red-900 to-burgundy-900 flex items-center justify-center font-bold text-lg sm:text-xl border border-red-800 group-hover:border-red-600 transition-all flex-shrink-0">
-                HR
+              <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center flex-shrink-0 relative">
+                {/* Your hexagon logo */}
+                <svg viewBox="0 0 100 100" className="w-full h-full">
+                  <defs>
+                    <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style={{ stopColor: '#991B1B', stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: '#450A0A', stopOpacity: 1 }} />
+                    </linearGradient>
+                    <linearGradient id="letterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style={{ stopColor: '#FEF3C7', stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: '#FDE68A', stopOpacity: 1 }} />
+                    </linearGradient>
+                  </defs>
+                  <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                           fill="url(#hexGrad)"
+                           stroke="#DC2626"
+                           strokeWidth="2"
+                           className="group-hover:stroke-red-500 transition-colors"/>
+                  <polygon points="50,12 82,30 82,70 50,88 18,70 18,30"
+                           fill="none"
+                           stroke="#7F1D1D"
+                           strokeWidth="1.5"
+                           opacity="0.5"/>
+                  <path d="M 28 35 L 28 65 M 28 50 L 42 50 M 42 35 L 42 65"
+                        stroke="url(#letterGrad)"
+                        strokeWidth="6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        fill="none"/>
+                  <path d="M 58 35 L 58 65 M 58 35 L 70 35 Q 75 35 75 42 Q 75 50 68 50 L 58 50 M 68 50 L 75 65"
+                        stroke="url(#letterGrad)"
+                        strokeWidth="6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        fill="none"/>
+                </svg>
               </div>
               <span className="text-base sm:text-xl font-bold bg-gradient-to-r from-red-500 via-burgundy-600 to-burgundy-900 bg-clip-text text-transparent group-hover:from-red-400 group-hover:via-burgundy-500 transition-all hidden sm:inline">
                 HIRAT RAHMAN RAHI
@@ -303,25 +363,25 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Terminal className="text-red-500 w-5 h-5 sm:w-6 sm:h-6" />
-                <span className="text-red-500 text-xs sm:text-sm font-bold tracking-wider">OFFENSIVE SECURITY ENGINEER</span>
+                <span className="text-red-500 text-xs sm:text-sm font-bold tracking-wider">ASPIRING OFFENSIVE SECURITY ENGINEER</span>
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 <span className="bg-gradient-to-r from-red-500 via-burgundy-500 to-red-600 bg-clip-text text-transparent">
-                  RED TEAM
+                  PURPLE → RED
                 </span>
                 <br />
-                <span className="text-white">OPERATOR</span>
+                <span className="text-white">AUTOMATION</span>
               </h1>
               <p className="text-gray-400 text-base sm:text-lg mb-8 leading-relaxed">
-                Computer Science & Neuroscience student at Illinois Wesleyan University. Specializing in binary exploitation,
-                reverse engineering, and offensive security operations. Active CTF competitor with passion for finding and exploiting vulnerabilities.
+                Hi, I’m Hirat. I build and document security projects across web security, reverse engineering,
+                and CTF-style problem solving, and apply the same discipline to data and automation work through my internships.
               </p>
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                 <button
                   onClick={() => scrollToSection('contact')}
                   className="px-6 py-3 bg-gradient-to-r from-red-900 to-burgundy-900 hover:from-red-800 hover:to-burgundy-800 transition-all border border-red-800 flex items-center justify-center space-x-2 group"
                 >
-                  <span>GET IN TOUCH</span>
+                  <span>LET'S CONNECT</span>
                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <a href="mailto:hrahi@iwu.edu" className="px-6 py-3 border border-red-900 hover:border-red-700 hover:bg-red-950/30 transition-all text-center">
@@ -333,9 +393,9 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
             <div className="relative mt-8 lg:mt-0">
               <div className="relative z-10 bg-gradient-to-br from-burgundy-900/30 to-black border border-red-900/50 p-6 sm:p-8 backdrop-blur">
                 <Shield className="text-red-500 w-12 h-12 sm:w-16 sm:h-16 mb-4" />
-                <h3 className="text-xl sm:text-2xl font-bold mb-4 text-red-400">Security Expertise</h3>
+                <h3 className="text-xl sm:text-2xl font-bold mb-4 text-red-400">Security Focus</h3>
                 <ul className="space-y-3">
-                  {['Binary Exploitation', 'Web Application Security', 'Cryptography & Crypto-analysis', 'Reverse Engineering', 'CTF Competitions'].map((item, i) => (
+                  {['Web Application Security (OWASP mindset)', 'Reverse Engineering (fundamentals)', 'Binary Exploitation (pwn fundamentals)', 'Cryptography (CTF / applied basics)', 'CTF Writeups & Learning Notes'].map((item, i) => (
                     <li key={i} className="flex items-center space-x-3 text-sm sm:text-base text-gray-300">
                       <div className="w-2 h-2 bg-red-500 rotate-45 flex-shrink-0"></div>
                       <span>{item}</span>
@@ -360,13 +420,10 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="space-y-6">
               <p className="text-gray-300 leading-relaxed">
-                I'm a Computer Science and Neuroscience double major at Illinois Wesleyan University with a deep passion
-                for offensive security. Currently pursuing CompTIA Security+ certification while actively competing in CTF competitions.
-              </p>
-              <p className="text-gray-300 leading-relaxed">
-                My approach combines technical expertise with strategic thinking, whether I'm exploiting binary vulnerabilities,
-                analyzing complex systems, or developing automated security tools. I thrive in environments that challenge conventional
-                security boundaries.
+                I’m Hirat Rahman Rahi, a Computer Science & Neuroscience double major at Illinois Wesleyan University.
+                I’m building toward offensive security through hands-on practice (CTFs, labs, writeups) and strong engineering
+                habits—clean documentation, repeatable workflows, and measurable outcomes. Currently preparing for CompTIA Security+
+                while continuing technical work in systems and automation.
               </p>
               <div className="grid grid-cols-2 gap-4 pt-4">
                 <div className="border border-red-900/50 p-4 bg-burgundy-950/20">
@@ -392,7 +449,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
                 <div className="mt-4 pt-4 border-t border-red-900/30">
                   <p className="text-sm text-gray-400 mb-2">Relevant Coursework:</p>
                   <div className="flex flex-wrap gap-2">
-                    {['Data Structures', 'Software Development', 'Discrete Math', 'Logic & Recursion'].map((course, i) => (
+                    {['Data Structures', 'Software Development', 'Discrete Math', 'Logic, Sets & Recursion'].map((course, i) => (
                       <span key={i} className="text-xs px-3 py-1 bg-red-950/50 border border-red-900/50 text-red-400">
                         {course}
                       </span>
@@ -410,7 +467,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Lock className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">SKILLS & EXPERTISE</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">SKILLS & TOOLKIT</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -440,6 +497,40 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
 
           <div className="space-y-6">
             {experiences.map((exp, idx) => {
+              const Icon = exp.icon;
+              return (
+                <div key={idx} className="border border-red-900/50 p-4 sm:p-6 bg-gradient-to-r from-burgundy-950/20 to-black hover:border-red-700/70 transition-all group">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 space-y-3 sm:space-y-0">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-red-900 to-burgundy-900 flex items-center justify-center border border-red-800 group-hover:border-red-600 transition-all flex-shrink-0">
+                        <Icon className="w-6 h-6 text-red-300" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-red-400 transition-colors">{exp.title}</h3>
+                        <p className="text-red-400 text-sm sm:text-base">{exp.company}</p>
+                      </div>
+                    </div>
+                    <span className="text-xs sm:text-sm text-gray-400 border border-red-900/50 px-3 py-1 self-start sm:self-auto">{exp.period}</span>
+                  </div>
+                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base sm:ml-16">{exp.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+
+      {/* Leadership Section */}
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center space-x-3 mb-8 sm:mb-12">
+            <Briefcase className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">LEADERSHIP</h2>
+          </div>
+
+          <div className="space-y-6">
+            {leaderships.map((exp, idx) => {
               const Icon = exp.icon;
               return (
                 <div key={idx} className="border border-red-900/50 p-4 sm:p-6 bg-gradient-to-r from-burgundy-950/20 to-black hover:border-red-700/70 transition-all group">

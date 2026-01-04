@@ -422,8 +422,10 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
               <p className="text-gray-300 leading-relaxed">
                 I’m Hirat Rahman Rahi, a Computer Science & Neuroscience double major at Illinois Wesleyan University.
                 I’m building toward offensive security through hands-on practice (CTFs, labs, writeups) and strong engineering
-                habits—clean documentation, repeatable workflows, and measurable outcomes. Currently preparing for CompTIA Security+
-                while continuing technical work in systems and automation.
+                habits, clean documentation, repeatable workflows, and measurable outcomes. My neuroscience background strengthens
+                how I think about human behavior, attention, and decision-making, which connects directly to security’s human
+                layer (social engineering, usability, and risk). Currently preparing for CompTIA Security+ while continuing
+                technical work in systems and automation.
               </p>
               <div className="grid grid-cols-2 gap-4 pt-4">
                 <div className="border border-red-900/50 p-4 bg-burgundy-950/20">

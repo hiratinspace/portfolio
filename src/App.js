@@ -556,10 +556,31 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       {/* Project Modal */}
       {selectedProject && (
         <div
-          className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
-          style={{ zIndex: 200 }}
+          className="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          style={{ zIndex: 200, backgroundColor: 'rgba(0, 0, 0, 0.85)' }}
           onClick={() => setSelectedProject(null)}
         >
+          {/* Matrix rain for modal - only show heads */}
+          <div className="fixed inset-0 pointer-events-none overflow-hidden">
+            {matrixColumns.map((col) => (
+              <div
+                key={`modal-${col.id}`}
+                className="absolute font-mono text-sm font-bold"
+                style={{
+                  left: `${col.x}px`,
+                  top: `${col.y}px`,
+                  color: '#ffffff',
+                  textShadow: '0 0 10px rgba(220, 38, 38, 0.8), 0 0 20px rgba(220, 38, 38, 0.4)',
+                  opacity: 0.6,
+                  transform: 'translateZ(0)',
+                  willChange: 'transform'
+                }}
+              >
+                {col.chars[0]}
+              </div>
+            ))}
+          </div>
+
           <div
             className="bg-gradient-to-br from-burgundy-950/95 to-black border-2 border-red-900/50 max-w-4xl w-full my-8 relative"
             onClick={(e) => e.stopPropagation()}

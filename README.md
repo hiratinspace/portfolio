@@ -22,8 +22,8 @@ A modern, dark-themed portfolio with a burgundy and red color scheme designed to
 - **React** - Frontend framework
 - **Tailwind CSS** - For styling (with custom burgundy theme)
 - **Lucide React** - Icons
-- **GitHub Pages** - Hosting
-- **Netlify** - Server
+- **GitHub Pages** - Source
+- **Cloudflare** - Hosting + Deployment platform
 
 ## 🎨 Design Choices
 

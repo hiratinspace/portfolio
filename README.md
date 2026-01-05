@@ -23,33 +23,7 @@ A modern, dark-themed portfolio with a burgundy and red color scheme designed to
 - **Tailwind CSS** - For styling (with custom burgundy theme)
 - **Lucide React** - Icons
 - **GitHub Pages** - Hosting
-
-## 🚀 Running Locally
-
-Want to run this on your machine? Here's how:
-
-```bash
-# Clone the repo
-git clone https://github.com/hiratinspace/portfolio.git
-cd portfolio
-
-# Install dependencies
-npm install
-
-# Start the dev server
-npm start
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-## 📦 Deployment
-
-The site is automatically deployed to GitHub Pages. To deploy updates:
-
-```bash
-npm run build
-npm run deploy
-```
+- **Netlify** - Server
 
 ## 🎨 Design Choices
 
@@ -76,14 +50,13 @@ portfolio/
 ## 📝 TODO
 
 - [ ] Add a blog section for writeups
-- [ ] Create detailed project pages
-- [ ] Add dark/light mode toggle (though dark is life)
 - [ ] Include CTF stats/achievements
 - [ ] Add resume download functionality
 
-📝 How to Add More Projects:
-Just add new objects to the projects array with this format:
+## 📝 How to Add More Projects:
+- Just add new objects to the projects array with this format:
 
+```
 {
   title: "Your Project Name",
   category: "Category (e.g., Web Security)",
@@ -102,14 +75,15 @@ Just add new objects to the projects array with this format:
     { label: "Live Demo", url: "https://..." }
   ]
 }
+```
 
-🎨 Features for Future Projects:
+## 🎨 Features for Future Projects:
 
-Add screenshots/images by including an images array
-Add date completed
-Add GitHub stars or metrics
-Add collaborators
-Add status (In Progress, Completed, etc.)
+- Add screenshots/images by including an images array
+- Add date completed
+- Add GitHub stars or metrics
+- Add collaborators
+- Add status (In Progress, Completed, etc.)
 
 ## 🤝 Contributing
 
@@ -118,7 +92,7 @@ This is a personal portfolio, but if you find bugs or have suggestions, feel fre
 ## 📧 Contact
 
 - **Email:** hrahi@iwu.edu
-- **LinkedIn:** [linkedin.com/in/hiratrahman](https://linkedin.com/in/hiratrahman)
+- **LinkedIn:** [linkedin.com/in/hiratrahman](https://linkedin.com/in/hiratrahi)
 - **GitHub:** [github.com/hiratinspace](https://github.com/hiratinspace)
 
 ## 📄 License

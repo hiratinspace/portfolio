@@ -2,7 +2,7 @@
 
 Hey! This is my personal portfolio website showcasing my work in cybersecurity, software development, and my journey as a Computer Science & Neuroscience student at Illinois Wesleyan University.
 
-🌐 **Live Site:** [hiratinspace.github.io/portfolio](https://hiratrahi.com)
+🌐 **Live Site:** [hiratrahi.com](https://hiratrahi.com)
 
 ## 📸 Preview
 

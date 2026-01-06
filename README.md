@@ -79,21 +79,50 @@ portfolio/
 
 ## How to Commit (since the merge is required)
 
-- Create a Feature Branch (local) (already created)
+- Daily workflow (keep update-projects)
+ - Start work: sync both branches
+
 ```
-git checkout -b update-projects
+From your repo root:
+
+git fetch origin
+
+git checkout main
+git pull origin main
+
+git checkout update-projects
+git pull origin update-projects
+
+
+This keeps your local branches aligned with GitHub.
 ```
-- Commit Changes
+
+- Make changes, then commit on update-projects
+
 ```
-git add .
-git commit -m "Add new project section"
+Do your edits (files, _headers, React code, etc.), then:
+
+git status
+git add -A
+git commit -m "Describe what you changed"
+git push
+
+Because you already did git push -u origin update-projects, plain git push works.
 ```
-- Push the Branch (Not Main)
+
+- When you want it live: create a PR (update-projects → main)
+
 ```
-git push origin update-projects
+On GitHub:
+
+Pull requests → New pull request
+
+base: main
+
+compare: update-projects
+
+Create PR → approvals → merge
 ```
-- Open Pull Request (GitHub UI)
-- Merge Pull Request
 
 ## 🎨 Features for Future Projects:
 

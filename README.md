@@ -77,6 +77,24 @@ portfolio/
 }
 ```
 
+## How to Commit (since the merge is required)
+
+- Create a Feature Branch (local) (already created)
+```
+git checkout -b update-projects
+```
+- Commit Changes
+```
+git add .
+git commit -m "Add new project section"
+```
+- Push the Branch (Not Main)
+```
+git push origin update-projects
+```
+- Open Pull Request (GitHub UI)
+- Merge Pull Request
+
 ## 🎨 Features for Future Projects:
 
 - Add screenshots/images by including an images array

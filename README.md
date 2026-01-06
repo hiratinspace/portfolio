@@ -95,7 +95,6 @@ git push origin update-projects
 - Open Pull Request (GitHub UI)
 - Merge Pull Request
 
-
 ## 🎨 Features for Future Projects:
 
 - Add screenshots/images by including an images array

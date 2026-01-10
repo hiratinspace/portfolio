@@ -191,8 +191,8 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       icon: Briefcase
     },
     {
-      title: "IT Intern",
-      company: "McLean County RPC",
+      title: "IT Intern (Planning)",
+      company: "McLean County Regional Planning Commissions",
       period: "Aug 2025 – Present",
       description: "Support planning and transportation initiatives through GIS/database workflows and IT innovation; analyze multi-year transportation and planning datasets to identify trends supporting the 2050 Metropolitan Transportation Plan (MTP)",
       icon: Cpu

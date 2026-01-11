@@ -122,6 +122,9 @@ base: main
 compare: update-projects
 
 Create PR → approvals → merge
+
+check the status: 
+git log --oneline origin/main..origin/update-projects
 ```
 
 ## 🎨 Features for Future Projects:

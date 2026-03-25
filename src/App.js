@@ -182,20 +182,20 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
     }
   ];
 
-  const experiences = [
+  const experiences = [ 
+    {
+      title: "IT Intern",
+      company: "McLean County Government - MCRPC",
+      period: "Aug 2025 – Present",
+      description: "Analyze 5+ years of transportation and U.S. Census data to identify demographic and mobility trends supporting the 2055 Metropolitan Transportation Plan. Build automated data pipelines and interactive Tableau dashboards to enhance reporting efficiency and data-driven planning decisions.",
+      icon: Cpu
+    },    
     {
       title: "Intern Analyst",
       company: "Driving Forward",
-      period: "Dec 2025 – Present",
-      description: "Develop business cases by analyzing market data and industry trends; translate findings into executive-ready recommendations with clear assumptions, risks, and next steps.",
+      period: "Dec 2025 – Mar 2026",
+      description: "Led a 4-member team benchmarking midsize companies’ cybersecurity and AI readiness across 10 control domains against NIST CSF and ISO 27001, producing overall maturity scores on a 1–5 scale. Evaluated cloud, network, and data security controls via framework research and leadership interviews; delivered executive reports and roadmaps targeting gaps in DLP, vendor risk, and AI governance.",
       icon: Briefcase
-    },
-    {
-      title: "IT Intern (Planning)",
-      company: "McLean County Regional Planning Commission",
-      period: "Aug 2025 – Present",
-      description: "Support planning and transportation initiatives through GIS/database workflows and IT innovation; analyze multi-year transportation and planning datasets to identify trends supporting the 2050 Metropolitan Transportation Plan (MTP)",
-      icon: Cpu
     },
     {
       title: "GIS Analyst & Technical Assistant",
@@ -213,7 +213,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       title: "Resident Advisor",
       company: "IWU Office of Residential Life",
       period: "Aug 2024 – Present",
-      description: "Mentor and support 30+ first-year students through the transition to college, promoting well-being, engagement, and accountability while upholding university policies across 300+ residents. Also bring experience advising upper-division residents in a suite-style community.",
+      description: "Mentor and support 30+ first-year students through the transition to college; promote well-being, engagement, and accountability while upholding university policies across four residence halls with 300+ residents. Supervised and mentored 28+ upper-division students in a suite-style community; collaborated with hall staff, and campus resources to respond to emergencies, and conflicts across five residence halls serving 250+ residents.",
       icon: Building2
     },
     {
@@ -234,8 +234,8 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
 
   const skills = {
     "Offensive Security": ["Binary Exploitation", "Web Exploitation", "Cryptography", "Reverse Engineering", "CTF Competitions"],
-    "Languages": ["Python", "C++", "Rust", "OCaml", "SQL"],
-    "Tools & Frameworks": [ "Linux", "Git", "Flask", "HTML/CSS", "REST APIs", "ArcGIS Pro"],
+    "Languages": ["Python","Java", "C++", "Rust", "OCaml", "SQL"],
+    "Tools & Frameworks": [ "Linux", "Git", "Flask", "HTML/CSS", "REST APIs", "ArcGIS Pro", "Tableau"],
     "Engineering Focus": ["Red Team Operations", "Vulnerability Research", "Exploit Development", "Security Labs & Writeups"]
   };
 
@@ -428,7 +428,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
               </p>
               <div className="grid grid-cols-2 gap-4 pt-4">
                 <div className="border border-red-900/50 p-4 bg-burgundy-950/20">
-                  <div className="text-3xl font-bold text-red-500 mb-2">3.40</div>
+                  <div className="text-3xl font-bold text-red-500 mb-2">3.24</div>
                   <div className="text-sm text-gray-400">GPA / 4.0</div>
                 </div>
                 <div className="border border-red-900/50 p-4 bg-burgundy-950/20">
@@ -445,7 +445,7 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
                 <div className="text-gray-300">
                   <p className="font-semibold">Illinois Wesleyan University</p>
                   <p className="text-sm text-gray-400">B.S. Computer Science & Neuroscience</p>
-                  <p className="text-sm text-gray-400">Expected May 2027</p>
+                  <p className="text-sm text-gray-400">Expected Dec 2027</p>
                 </div>
                 <div className="mt-4 pt-4 border-t border-red-900/30">
                   <p className="text-sm text-gray-400 mb-2">Relevant Coursework:</p>

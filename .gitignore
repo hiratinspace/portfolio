@@ -5,3 +5,4 @@ build/
 .vscode/
 __MACOSX/
 .idea/
+SECURITY_AUDIT_v2.md

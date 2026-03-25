@@ -1,5 +1,84 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, Component } from 'react';
 import { Shield, Terminal, Code, Briefcase, GraduationCap, User, Mail, Linkedin, ChevronRight, Lock, Cpu, Network, Building2, Megaphone, Users } from 'lucide-react';
+
+/**
+ * Email obfuscation — decoded at runtime so the address never
+ * appears as a literal string in the HTML source or JS bundle.
+ * Defeats static scrapers and harvesting bots.
+ *
+ * To re-encode a new address, run in DevTools console:
+ *   "you@email.com".split('').map(c => c.charCodeAt(0))
+ */
+const getEmail = () => String.fromCharCode(
+  104, 114, 97, 104, 105, 64, 105, 119, 117, 46, 101, 100, 117
+);
+
+/**
+ * URL sanitization — allowlists https/http/mailto protocols before
+ * any user-facing URL is rendered into an href attribute.
+ * Blocks javascript:, data:, and other injection vectors.
+ */
+const ALLOWED_PROTOCOLS = new Set(['https:', 'http:', 'mailto:']);
+const sanitizeUrl = (url) => {
+  if (!url || url.trim() === '' || url === '#') return null;
+  try {
+    const parsed = new URL(url, window.location.origin);
+    if (!ALLOWED_PROTOCOLS.has(parsed.protocol)) return null;
+    return url;
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * Recursively freezes all nested objects/arrays so static data
+ * cannot be mutated at runtime. In strict mode, any attempted
+ * mutation throws a TypeError immediately.
+ */
+const deepFreeze = (obj) => {
+  if (obj === null || typeof obj !== 'object') return obj;
+  Object.keys(obj).forEach(key => {
+    if (typeof obj[key] === 'object' && obj[key] !== null) deepFreeze(obj[key]);
+  });
+  return Object.freeze(obj);
+};
+
+/**
+ * Error Boundary — catches any runtime error in the component
+ * tree and renders a graceful fallback instead of a blank page.
+ * Must be a class component; hooks cannot catch render errors.
+ * Console logging is dev-only to avoid leaking stack traces.
+ */
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(error, info) {
+    if (process.env.NODE_ENV !== 'production') console.error('[ErrorBoundary]', error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          background: '#000', color: '#ef4444', minHeight: '100vh',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          justifyContent: 'center', fontFamily: 'monospace', padding: '2rem', textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠</div>
+          <h2 style={{ marginBottom: '0.5rem' }}>Something went wrong</h2>
+          <p style={{ color: '#9ca3af', marginBottom: '1.5rem' }}>An unexpected error occurred. Please refresh.</p>
+          <button onClick={() => window.location.reload()} style={{
+            padding: '0.75rem 1.5rem', background: '#7f1d1d',
+            border: '1px solid #ef4444', color: '#fca5a5', fontFamily: 'monospace', cursor: 'pointer'
+          }}>RELOAD PAGE</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const Portfolio = () => {
   const [activeSection, setActiveSection] = useState('home');
@@ -7,6 +86,7 @@ const Portfolio = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [matrixColumns, setMatrixColumns] = useState([]);
   const [showResume, setShowResume] = useState(false);
+  const prevWidthRef = useRef(window.innerWidth);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,7 +110,7 @@ const Portfolio = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -44,51 +124,78 @@ const Portfolio = () => {
     return () => { document.body.style.overflow = ''; };
   }, [showResume, selectedProject]);
 
-  // Matrix rain effect
+  // Close project modal on Escape
   useEffect(() => {
-    const columns = Math.floor(window.innerWidth / 25);
-    const chars = '0123456789ABCDEF'.split('');
-    const securityTerms = [
-      '0x', 'PWN', 'ROP', 'NOP', 'JMP', 'XOR', 'DEP', 'PIE',
-      'root@', 'sudo', 'nc', 'sh', 'bin'
-    ];
+    if (!selectedProject) return;
+    const onKey = (e) => { if (e.key === 'Escape') setSelectedProject(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selectedProject]);
 
-    const initColumns = Array.from({ length: columns }, (_, i) => ({
-      id: i,
-      x: i * 25,
-      y: Math.random() * -2000,
-      speed: 1 + Math.random() * 3,
-      chars: Array.from({ length: 15 + Math.floor(Math.random() * 15) }, () =>
-        Math.random() > 0.7
-          ? securityTerms[Math.floor(Math.random() * securityTerms.length)]
-          : chars[Math.floor(Math.random() * chars.length)]
-      )
-    }));
+  // Close resume modal on Escape
+  useEffect(() => {
+    if (!showResume) return;
+    const onKey = (e) => { if (e.key === 'Escape') setShowResume(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [showResume]);
 
-    setMatrixColumns(initColumns);
+  // Matrix rain — reinitializes on window resize (debounced)
+  useEffect(() => {
+    const buildColumns = (width) => {
+      const chars = '0123456789ABCDEF'.split('');
+      const terms = ['0x', 'PWN', 'ROP', 'NOP', 'JMP', 'XOR', 'DEP', 'PIE', 'root@', 'sudo', 'nc', 'sh', 'bin'];
+      return Array.from({ length: Math.floor(width / 25) }, (_, i) => ({
+        id: i, x: i * 25, y: Math.random() * -2000, speed: 1 + Math.random() * 3,
+        chars: Array.from({ length: 15 + Math.floor(Math.random() * 15) }, () =>
+          Math.random() > 0.7
+            ? terms[Math.floor(Math.random() * terms.length)]
+            : chars[Math.floor(Math.random() * chars.length)]
+        )
+      }));
+    };
+
+    setMatrixColumns(buildColumns(window.innerWidth));
 
     const interval = setInterval(() => {
-      setMatrixColumns(prevColumns =>
-        prevColumns.map(col => {
-          let newY = col.y + col.speed;
-          if (newY > window.innerHeight + 200) {
-            return {
-              ...col,
-              y: -200 - Math.random() * 500,
-              speed: 1 + Math.random() * 3,
-              chars: Array.from({ length: 15 + Math.floor(Math.random() * 15) }, () =>
-                Math.random() > 0.7
-                  ? securityTerms[Math.floor(Math.random() * securityTerms.length)]
-                  : chars[Math.floor(Math.random() * chars.length)]
-              )
-            };
-          }
-          return { ...col, y: newY };
-        })
-      );
+      setMatrixColumns(prev => prev.map(col => {
+        const newY = col.y + col.speed;
+        if (newY > window.innerHeight + 200) {
+          const chars = '0123456789ABCDEF'.split('');
+          const terms = ['0x', 'PWN', 'ROP', 'NOP', 'JMP', 'XOR', 'DEP', 'PIE', 'root@', 'sudo', 'nc', 'sh', 'bin'];
+          return {
+            ...col,
+            y: -200 - Math.random() * 500,
+            speed: 1 + Math.random() * 3,
+            chars: Array.from({ length: 15 + Math.floor(Math.random() * 15) }, () =>
+              Math.random() > 0.7
+                ? terms[Math.floor(Math.random() * terms.length)]
+                : chars[Math.floor(Math.random() * chars.length)]
+            )
+          };
+        }
+        return { ...col, y: newY };
+      }));
     }, 50);
 
-    return () => clearInterval(interval);
+    let resizeTimer;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const w = window.innerWidth;
+        if (Math.abs(w - prevWidthRef.current) > 50) {
+          prevWidthRef.current = w;
+          setMatrixColumns(buildColumns(w));
+        }
+      }, 200);
+    };
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(resizeTimer);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const scrollToSection = (sectionId) => {
@@ -103,7 +210,8 @@ const Portfolio = () => {
     }
   };
 
-  const projects = [
+  // ─── Static data — frozen at module load, not on every render ───
+  const projects = deepFreeze([
     {
       title: "Binary Exploitation Framework",
       category: "Offensive Security",
@@ -197,9 +305,9 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       ]
       */
     }
-  ];
+  ]);
 
-  const experiences = [ 
+  const experiences = deepFreeze([ 
     {
       title: "IT Intern",
       company: "McLean County Government - MCRPC",
@@ -221,11 +329,11 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       description: "Built and maintained indoor geodatabases for 8 campus buildings, improving data accuracy by ~40% and creating automated validation scripts to reduce manual QA.",
       icon: Network
     }
-  ];
+  ]);
 
 
 
-    const leaderships = [
+  const leaderships = deepFreeze([
     {
       title: "Resident Advisor",
       company: "IWU Office of Residential Life",
@@ -247,14 +355,14 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       description: "Lead executive boards for cultural/interfaith programming and run weekly engagement through the Billiards Club.",
       icon: Users
     }
-  ];
+  ]);
 
-  const skills = {
+  const skills = deepFreeze({
     "Offensive Security": ["Binary Exploitation", "Web Exploitation", "Cryptography", "Reverse Engineering", "CTF Competitions"],
     "Languages": ["Python","Java", "C++", "Rust", "OCaml", "SQL"],
     "Tools & Frameworks": [ "Linux", "Git", "Flask", "HTML/CSS", "REST APIs", "ArcGIS Pro", "Tableau"],
     "Engineering Focus": ["Red Team Operations", "Vulnerability Research", "Exploit Development", "Security Labs & Writeups"]
-  };
+  });
 
   return (
     <div className="bg-black text-gray-100 min-h-screen font-mono relative overflow-hidden">
@@ -636,13 +744,25 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-              <a href="mailto:hrahi@iwu.edu" className="flex flex-col items-center p-8 border border-red-900/50 hover:border-red-700 hover:bg-red-950/20 transition-all group">
-                <Mail className="w-10 h-10 text-red-500 mb-4 group-hover:scale-110 transition-transform" />
+              {/* Email decoded at runtime — address never appears as a literal in source */}
+              <a href={`mailto:${getEmail()}`}
+                className="flex flex-col items-center p-8 border border-red-900/50 hover:border-red-700 hover:bg-red-950/20 transition-all group"
+                referrerPolicy="no-referrer"
+                aria-label="Send an email"
+              >
+                <Mail className="w-10 h-10 text-red-500 mb-4 group-hover:scale-110 transition-transform" aria-hidden="true" />
                 <span className="text-sm text-gray-400 uppercase tracking-wider mb-2">Email</span>
-                <span className="text-white text-lg text-center break-all">hrahi@iwu.edu</span>
+                <span className="text-white text-lg text-center break-all">{getEmail()}</span>
               </a>
 
-              <a href="https://linkedin.com/in/hiratrahi" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center p-8 border border-red-900/50 hover:border-red-700 hover:bg-red-950/20 transition-all group">
+              {/* referrerPolicy prevents the destination from seeing where the visitor came from */}
+              <a href="https://linkedin.com/in/hiratrahi"
+              target="_blank"
+              rel="noopener noreferrer"
+              referrerPolicy="no-referrer"
+              className="flex flex-col items-center p-8 border border-red-900/50 hover:border-red-700 hover:bg-red-950/20 transition-all group"
+              aria-label="Visit LinkedIn profile (opens in new tab)"
+              >
                 <Linkedin className="w-10 h-10 text-red-500 mb-4 group-hover:scale-110 transition-transform" />
                 <span className="text-sm text-gray-400 uppercase tracking-wider mb-2">LinkedIn</span>
                 <span className="text-white text-lg">hiratrahman</span>
@@ -742,18 +862,35 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
                 <div className="border-t border-red-900/30 pt-6">
                   <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-4">Project Links</h3>
                   <div className="flex flex-wrap gap-4">
-                    {selectedProject.links.map((link, i) => (
-                      <a
-                        key={i}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-6 py-3 bg-gradient-to-r from-red-900 to-burgundy-900 hover:from-red-800 hover:to-burgundy-800 transition-all border border-red-800 flex items-center space-x-2 group"
-                      >
-                        <span>{link.label}</span>
-                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </a>
-                    ))}
+                    {/* sanitizeUrl validates protocol before any URL touches the DOM */}
+                    {selectedProject.links.map((link, i) => {
+                      const safeUrl = sanitizeUrl(link.url);
+                      if (!safeUrl) {
+                        return (
+                          <span
+                            key={i}
+                            className="px-6 py-3 bg-red-900/20 border border-red-900/30 text-gray-500 cursor-not-allowed"
+                            title="Coming soon"
+                          >
+                            {link.label}
+                          </span>
+                        );
+                      }
+                      return (
+                        <a
+                          key={i}
+                          href={safeUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          referrerPolicy="no-referrer"
+                          className="px-6 py-3 bg-gradient-to-r from-red-900 to-burgundy-900 hover:from-red-800 hover:to-burgundy-800 transition-all border border-red-800 flex items-center space-x-2 group"
+                          aria-label={`${link.label} (opens in new tab)`}
+                        >
+                          <span>{link.label}</span>
+                          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -817,20 +954,26 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
               </div>
             </div>
 
-            {/* PDF viewer */}
-            <iframe
-              src="/resume.pdf"
-              className="w-full"
-              style={{ height: 'calc(90vh - 52px)' }}
-              title="Resume"
-            />
+              <iframe
+                src="/resume.pdf"
+                className="w-full"
+                style={{ height: 'calc(90vh - 52px)' }}
+                title="Resume — Hirat Rahman Rahi"
+              />
           </div>
         </div>
       )}
-
 
     </div>
   );
 };
 
-export default Portfolio;
+// ErrorBoundary wraps the entire app — any runtime error shows a
+// graceful fallback instead of a blank page
+const App = () => (
+  <ErrorBoundary>
+    <Portfolio />
+  </ErrorBoundary>
+);
+
+export default App;

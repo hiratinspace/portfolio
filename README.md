@@ -51,7 +51,7 @@ portfolio/
 
 - [ ] Add a blog section for writeups
 - [ ] Include CTF stats/achievements
-- [ ] Add resume download functionality
+- [ ] removing inline styles (to avoid injection risks)
 
 ## 📝 How to Add More Projects:
 - Just add new objects to the projects array with this format:

@@ -126,10 +126,12 @@ One of the biggest challenges was creating reliable exploits that work across di
 
 Results:
 Successfully used in 10+ CTF competitions with a 70% solve rate on binary exploitation challenges.`,
+      /*
       links: [
         { label: "GitHub Repository", url: "#" },
         { label: "Documentation", url: "#" }
       ]
+      */
     },
     {
       title: "Web Application Penetration Testing Suite",
@@ -154,10 +156,12 @@ Used this suite in authorized penetration tests for educational purposes and CTF
 
 Learning Experience:
 This project taught me the importance of responsible disclosure and ethical hacking. Every vulnerability found is an opportunity to improve security.`,
+      /*
       links: [
         { label: "GitHub Repository", url: "#" },
         { label: "Demo Video", url: "#" }
       ]
+      */
     },
     {
       title: "Cryptographic Challenge Solver",
@@ -186,10 +190,12 @@ The toolkit automatically identifies cipher types and applies appropriate attack
 
 CTF Success:
 This toolkit has been instrumental in solving 50+ cryptography challenges across various CTF platforms including picoCTF, HackTheBox, and TryHackMe.`,
+      /*
       links: [
         { label: "GitHub Repository", url: "#" },
         { label: "Writeups", url: "#" }
       ]
+      */
     }
   ];
 

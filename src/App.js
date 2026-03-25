@@ -6,6 +6,7 @@ const Portfolio = () => {
   const [scrolled, setScrolled] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [matrixColumns, setMatrixColumns] = useState([]);
+  const [showResume, setShowResume] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +33,16 @@ const Portfolio = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  //  locks the page scroll whenever the resume or the project modal is open
+  useEffect(() => {
+    if (showResume || selectedProject) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [showResume, selectedProject]);
 
   // Matrix rain effect
   useEffect(() => {
@@ -384,9 +395,12 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
                   <span>LET'S CONNECT</span>
                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
-                <a href="mailto:hrahi@iwu.edu" className="px-6 py-3 border border-red-900 hover:border-red-700 hover:bg-red-950/30 transition-all text-center">
+                <button
+                  onClick={() => setShowResume(true)}
+                  className="px-6 py-3 border border-red-900 hover:border-red-700 hover:bg-red-950/30 transition-all text-center"
+                >
                   VIEW RESUME
-                </a>
+                </button>
               </div>
             </div>
 
@@ -738,6 +752,72 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
                 </div>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Resume Modal */}
+      {showResume && (
+        <div
+          className="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4"
+          style={{ zIndex: 300, backgroundColor: 'rgba(0, 0, 0, 0.85)' }}
+          onClick={() => setShowResume(false)}
+        >
+          {/* Matrix rain (reused) */}
+          <div className="fixed inset-0 pointer-events-none overflow-hidden">
+            {matrixColumns.map((col) => (
+              <div
+                key={`resume-${col.id}`}
+                className="absolute font-mono text-sm font-bold"
+                style={{
+                  left: `${col.x}px`,
+                  top: `${col.y}px`,
+                  color: '#ffffff',
+                  textShadow: '0 0 10px rgba(220, 38, 38, 0.8), 0 0 20px rgba(220, 38, 38, 0.4)',
+                  opacity: 0.6,
+                  transform: 'translateZ(0)',
+                  willChange: 'transform'
+                }}
+              >
+                {col.chars[0]}
+              </div>
+            ))}
+          </div>
+
+          <div
+            className="bg-gradient-to-br from-burgundy-950/95 to-black border-2 border-red-900/50 max-w-4xl w-full my-8 relative"
+            style={{ height: '90vh' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header bar */}
+            <div className="flex items-center justify-between px-6 py-3 border-b border-red-900/50">
+              <div className="flex items-center space-x-3">
+                <Terminal className="text-red-500 w-4 h-4" />
+                <span className="text-red-500 text-xs font-bold tracking-wider">RESUME // HIRAT_RAHMAN_RAHI.pdf</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <a
+                  href="/resume.pdf"
+                  download
+                  className="text-xs text-red-400 border border-red-900/60 px-3 py-1 hover:bg-red-950/40 transition-all"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  ↓ DOWNLOAD
+                </a>
+                <button
+                  onClick={() => setShowResume(false)}
+                  className="w-8 h-8 flex items-center justify-center border border-red-900/50 hover:bg-red-900/40 transition-all text-red-400 text-xl"
+                >×</button>
+              </div>
+            </div>
+
+            {/* PDF viewer */}
+            <iframe
+              src="/resume.pdf"
+              className="w-full"
+              style={{ height: 'calc(90vh - 52px)' }}
+              title="Resume"
+            />
           </div>
         </div>
       )}

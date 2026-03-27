@@ -131,12 +131,14 @@ const ThreatFeedPage = () => {
     isRefresh ? setRefreshing(true) : setLoading(true);
     setError(null);
     try {
+      const apiKey = process.env.REACT_APP_NVD_API_KEY;
+      const headers = apiKey ? { 'apiKey': apiKey } : {};
       const end = new Date(), start = new Date();
       start.setDate(start.getDate() - 7);
       const fmt = d => d.toISOString().replace(/\.\d+Z$/, '.000');
       const [r1, r2] = await Promise.all([
-        fetch(`https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=CRITICAL&resultsPerPage=20`),
-        fetch(`https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=HIGH&resultsPerPage=15`),
+        fetch(`https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=CRITICAL&resultsPerPage=20`, { headers }),
+        fetch(`https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=HIGH&resultsPerPage=15`, { headers }),
       ]);
       if (!r1.ok) throw new Error(`NVD API error: ${r1.status}`);
       const [d1, d2] = await Promise.all([r1.json(), r2.ok ? r2.json() : { vulnerabilities: [] }]);
@@ -334,7 +336,7 @@ const ThreatFeedPage = () => {
           )}
           {!loading && !error && filteredCves.length > 0 && (
             <div style={{ marginTop: 20, textAlign: 'center', color: 'rgba(209,213,219,0.25)', fontSize: 11, letterSpacing: 1 }}>
-              SOURCE: NATIONAL VULNERABILITY DATABASE (NVD) · NIST · DATA MAY BE DELAYED UP TO 2 HOURS
+              THIS PRODUCT USES THE NVD API BUT IS NOT ENDORSED OR CERTIFIED BY THE NVD · DATA MAY BE DELAYED UP TO 2 HOURS
             </div>
           )}
         </div>

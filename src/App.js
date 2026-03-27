@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef, Component } from 'react';
-import { Shield, Terminal, Code, Briefcase, GraduationCap, User, Mail, Linkedin, ChevronRight, Lock, Cpu, Network, Building2, Megaphone, Users } from 'lucide-react';
+import { Shield, Terminal, Code, Briefcase, Radio, GraduationCap, User, Mail, Linkedin, ChevronRight, Lock, Cpu, Network, Building2, Megaphone, Users } from 'lucide-react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import ThreatFeedPage from './components/ThreatFeedPage';
+import CertTracker from './components/CertTracker';
 
 /**
  * Email obfuscation — decoded at runtime so the address never
@@ -81,6 +84,7 @@ class ErrorBoundary extends Component {
 }
 
 const Portfolio = () => {
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -93,7 +97,7 @@ const Portfolio = () => {
       setScrolled(window.scrollY > 50);
 
       // Update active section based on scroll position
-      const sections = ['home', 'about', 'projects', 'contact'];
+      const sections = ['home', 'about', 'projects', 'cert-roadmap', 'contact'];
       const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
@@ -413,13 +417,14 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
       {/* Navigation */}
       <nav className={`fixed top-0 w-full transition-all duration-300 ${scrolled ? 'bg-black/95 backdrop-blur-sm border-b border-red-900/30' : 'bg-transparent'}`} style={{ zIndex: 100 }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
+
+            {/* LEFT — logo */}
             <button
               onClick={() => scrollToSection('home')}
-              className="flex items-center space-x-2 cursor-pointer group"
+              className="flex items-center space-x-2 cursor-pointer group justify-self-start"
             >
               <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center flex-shrink-0 relative">
-                {/* Your hexagon logo */}
                 <svg viewBox="0 0 100 100" className="w-full h-full">
                   <defs>
                     <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -432,39 +437,45 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
                     </linearGradient>
                   </defs>
                   <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
-                           fill="url(#hexGrad)"
-                           stroke="#DC2626"
-                           strokeWidth="2"
-                           className="group-hover:stroke-red-500 transition-colors"/>
+                    fill="url(#hexGrad)" stroke="#DC2626" strokeWidth="2"
+                    className="group-hover:stroke-red-500 transition-colors" />
                   <polygon points="50,12 82,30 82,70 50,88 18,70 18,30"
-                           fill="none"
-                           stroke="#7F1D1D"
-                           strokeWidth="1.5"
-                           opacity="0.5"/>
+                    fill="none" stroke="#7F1D1D" strokeWidth="1.5" opacity="0.5" />
                   <path d="M 28 35 L 28 65 M 28 50 L 42 50 M 42 35 L 42 65"
-                        stroke="url(#letterGrad)"
-                        strokeWidth="6"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        fill="none"/>
+                    stroke="url(#letterGrad)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                   <path d="M 58 35 L 58 65 M 58 35 L 70 35 Q 75 35 75 42 Q 75 50 68 50 L 58 50 M 68 50 L 75 65"
-                        stroke="url(#letterGrad)"
-                        strokeWidth="6"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        fill="none"/>
+                    stroke="url(#letterGrad)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                 </svg>
               </div>
               <span className="text-base sm:text-xl font-bold bg-gradient-to-r from-red-500 via-burgundy-600 to-burgundy-900 bg-clip-text text-transparent group-hover:from-red-400 group-hover:via-burgundy-500 transition-all hidden sm:inline">
                 HIRAT RAHMAN RAHI
               </span>
             </button>
-            <div className="flex items-center space-x-3 sm:space-x-8">
+
+            {/* CENTRE — INTEL page link */}
+            <button
+              onClick={() => navigate('/intel')}
+              className="flex items-center space-x-2 px-4 py-1.5 border border-red-900/60 hover:border-red-600 hover:bg-red-950/30 transition-all group"
+              style={{ fontFamily: "'Monaco', 'Courier New', monospace" }}
+            >
+              <Radio className="w-3.5 h-3.5 text-red-600 group-hover:text-red-400 transition-colors" />
+              <span className="text-xs font-bold tracking-widest text-red-600 group-hover:text-red-400 transition-colors">
+                INTEL
+              </span>
+              <span style={{
+                width: 5, height: 5, borderRadius: '50%', background: '#ef4444', display: 'inline-block',
+                animation: 'navPulse 1.8s ease-in-out infinite',
+              }} />
+            </button>
+
+            {/* RIGHT — scroll nav */}
+            <div className="flex items-center space-x-3 sm:space-x-6 justify-self-end">
               {[
-                { label: 'HOME', id: 'home' },
-                { label: 'ABOUT', id: 'about' },
-                { label: 'PROJECTS', id: 'projects' },
-                { label: 'CONTACT', id: 'contact' }
+                { label: 'HOME',     id: 'home'         },
+                { label: 'ABOUT',   id: 'about'        },
+                { label: 'PROJECTS', id: 'projects'    },
+                { label: 'CERTS',   id: 'cert-roadmap' },
+                { label: 'CONTACT', id: 'contact'      },
               ].map((item) => (
                 <button
                   key={item.id}
@@ -477,6 +488,10 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
             </div>
           </div>
         </div>
+        {/* Keyframe for the live dot */}
+        <style>{`
+          @keyframes navPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
+        `}</style>
       </nav>
 
       {/* Hero Section */}
@@ -729,6 +744,9 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
         </div>
       </section>
 
+      {/* ── Cert Roadmap ── */}
+      <CertTracker />
+
       {/* Contact Section */}
       <section id="contact" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-4xl mx-auto">
@@ -969,11 +987,12 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
 };
 
 // ErrorBoundary wraps the entire app — any runtime error shows a
-// graceful fallback instead of a blank page
+// fallback instead of a blank page
 const App = () => (
-  <ErrorBoundary>
-    <Portfolio />
-  </ErrorBoundary>
+  <Routes>
+    <Route path="/"      element={<ErrorBoundary><Portfolio /></ErrorBoundary>} />
+    <Route path="/intel" element={<ThreatFeedPage />} />
+  </Routes>
 );
 
 export default App;

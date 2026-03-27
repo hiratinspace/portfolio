@@ -166,8 +166,8 @@ const ThreatFeedPage = () => {
       start.setDate(start.getDate() - 7);
       const fmt = d => d.toISOString().replace(/\.\d+Z$/, '.000');
       const [r1, r2] = await Promise.all([
-        fetchWithRetry(`https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=CRITICAL&resultsPerPage=20`),
-        fetchWithRetry(`https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=HIGH&resultsPerPage=15`),
+        fetchWithRetry(`/api/cves?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=CRITICAL&resultsPerPage=20`),
+        fetchWithRetry(`/api/cves?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=HIGH&resultsPerPage=15`),
       ]);
       if (!r1.ok) throw new Error(`NVD API error: ${r1.status}`);
       const [d1, d2] = await Promise.all([r1.json(), r2.ok ? r2.json() : { vulnerabilities: [] }]);

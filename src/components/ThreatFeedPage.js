@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, AlertTriangle, RefreshCw, ExternalLink, ChevronRight, Database, ArrowLeft, Radio } from 'lucide-react';
+import { AlertTriangle, RefreshCw, ExternalLink, ChevronRight, Database, ArrowLeft, Radio } from 'lucide-react';
 
 const FONT = "'Monaco', 'Courier New', monospace";
 

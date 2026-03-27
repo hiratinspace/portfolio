@@ -127,18 +127,47 @@ const ThreatFeedPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Retries up to 3 times if NVD rate-limits us (HTTP 429)
+  const fetchWithRetry = async (url, options = {}, retries = 3) => {
+    for (let i = 0; i < retries; i++) {
+      const res = await fetch(url, options);
+      if (res.status === 429) {
+        await new Promise(r => setTimeout(r, 6000 * (i + 1)));
+        continue;
+      }
+      return res;
+    }
+    throw new Error('NVD rate limit exceeded. Try again in a moment.');
+  };
+
   const fetchCVEs = useCallback(async (isRefresh = false) => {
     isRefresh ? setRefreshing(true) : setLoading(true);
+
+    // Serve cached data if fresh (15 min TTL) and not a manual refresh
+    const CACHE_KEY = 'nvd_cve_cache';
+    const CACHE_TTL = 15 * 60 * 1000;
+    if (!isRefresh) {
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          const { data, timestamp } = JSON.parse(cached);
+          if (Date.now() - timestamp < CACHE_TTL) {
+            setCves(data);
+            setLastUpdated(new Date(timestamp));
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (_) {}
+    }
     setError(null);
     try {
-      const apiKey = process.env.REACT_APP_NVD_API_KEY;
-      const headers = apiKey ? { 'apiKey': apiKey } : {};
       const end = new Date(), start = new Date();
       start.setDate(start.getDate() - 7);
       const fmt = d => d.toISOString().replace(/\.\d+Z$/, '.000');
       const [r1, r2] = await Promise.all([
-        fetch(`https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=CRITICAL&resultsPerPage=20`, { headers }),
-        fetch(`https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=HIGH&resultsPerPage=15`, { headers }),
+        fetchWithRetry(`https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=CRITICAL&resultsPerPage=20`),
+        fetchWithRetry(`https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&cvssV3Severity=HIGH&resultsPerPage=15`),
       ]);
       if (!r1.ok) throw new Error(`NVD API error: ${r1.status}`);
       const [d1, d2] = await Promise.all([r1.json(), r2.ok ? r2.json() : { vulnerabilities: [] }]);
@@ -149,6 +178,10 @@ const ThreatFeedPage = () => {
         return 0;
       };
       setCves([...(d1.vulnerabilities ?? []), ...(d2.vulnerabilities ?? [])].sort((a, b) => getScore(b) - getScore(a)).slice(0, 40));
+      localStorage.setItem('nvd_cve_cache', JSON.stringify({
+        data: [...(d1.vulnerabilities ?? []), ...(d2.vulnerabilities ?? [])].sort((a, b) => getScore(b) - getScore(a)).slice(0, 40),
+        timestamp: Date.now()
+      }));
       setLastUpdated(new Date());
     } catch (err) { setError(err.message); }
     finally { setLoading(false); setRefreshing(false); }

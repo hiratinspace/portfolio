@@ -83,7 +83,7 @@ portfolio/
  - Start work: sync both branches
 
 ```
-From your repo root:
+# ── STEP 1: Start of every work session ───────────────────────────────────────
 
 git fetch origin
 
@@ -92,22 +92,37 @@ git pull origin main
 
 git checkout update-projects
 git pull origin update-projects
+git merge main                # keep your branch in sync with main
+git push                      # push the sync if anything came in
 
 
-This keeps your local branches aligned with GitHub.
-```
+# ── STEP 2: Do the work ──────────────────────────────────────────────────────
 
-- Make changes, then commit on update-projects
+# edit files, build, test locally...
 
-```
-Do your edits (files, _headers, React code, etc.), then:
 
-git status
+# ── STEP 3: Commit and push ───────────────────────────────────────────────────
+
+git status                    # check what changed
 git add -A
-git commit -m "Describe what you changed"
+git commit -m "describe what you changed"
 git push
 
-Because you already did git push -u origin update-projects, plain git push works.
+
+# ── STEP 4: After merging the PR on GitHub ────────────────────────────────────
+
+git fetch origin
+
+git checkout main
+git pull origin main
+
+git checkout update-projects
+git pull origin update-projects
+git merge main
+git push
+
+# you're back to a clean state — both branches identical
+# repeat from Step 2 for your next change
 ```
 
 - When you want it live: create a PR (update-projects → main)

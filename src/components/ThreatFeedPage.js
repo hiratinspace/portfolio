@@ -357,7 +357,7 @@ const ThreatFeedPage = () => {
         if (cached) {
           const { data, timestamp } = JSON.parse(cached);
           if (Date.now() - timestamp < CACHE_TTL) {
-            setCves(data); setLastUpdated(new Date(timestamp)); setLoading(false); return;
+            setCves(data); setLoading(false); return;
           }
         }
       } catch (_) {}
@@ -377,7 +377,6 @@ const ThreatFeedPage = () => {
         .sort((a, b) => getScore(b) - getScore(a)).slice(0, 40);
       setCves(merged);
       localStorage.setItem(CACHE_KEY, JSON.stringify({ data: merged, timestamp: Date.now() }));
-      setLastUpdated(new Date());
     } catch (err) { setError(err.message); }
     finally { setLoading(false); setRefreshing(false); }
   }, []);

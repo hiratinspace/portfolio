@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   AlertTriangle, RefreshCw, ExternalLink, ChevronRight,
-  Database, ArrowLeft, ChevronDown, Shield
+  Database, ArrowLeft, ChevronDown, Shield, Menu, X
 } from 'lucide-react';
 import NewsSection from './NewsSection';
 
@@ -310,6 +310,8 @@ const ThreatFeedPage = () => {
   const [activeCategory, setActiveCategory] = useState(null);
   const [refreshing, setRefreshing]         = useState(false);
   const [matrixColumns, setMatrixColumns]   = useState([]);
+  const [sideNavOpen, setSideNavOpen]       = useState(false);
+  const [activeSection, setActiveSection]   = useState('threat-feed');
   // Matrix rain
   useEffect(() => {
     const columns = Math.floor(window.innerWidth / 28);
@@ -383,6 +385,20 @@ const ThreatFeedPage = () => {
 
   useEffect(() => { fetchCVEs(); }, [fetchCVEs]);
 
+  // Scroll-based active section tracking
+  useEffect(() => {
+    const handleScroll = () => {
+      const newsEl = document.getElementById('security-news');
+      if (newsEl && window.scrollY + window.innerHeight / 2 >= newsEl.offsetTop) {
+        setActiveSection('security-news');
+      } else {
+        setActiveSection('threat-feed');
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const counts = { ALL: cves.length, CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0 };
   cves.forEach(c => counts[getSeverity(getScore(c))]++);
   const handleTileClick = (cat) => setActiveCategory(prev => prev === cat ? null : cat);
@@ -447,6 +463,8 @@ const ThreatFeedPage = () => {
 
         ::-webkit-scrollbar { width: 4px; background: #080103; }
         ::-webkit-scrollbar-thumb { background: rgba(180,0,30,0.5); border-radius: 2px; }
+
+        @media (max-width: 640px) { .refresh-label { display: none; } }
 
         /* Tiles — 5 columns desktop, 2 columns mobile */
         .tiles-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
@@ -513,10 +531,81 @@ const ThreatFeedPage = () => {
               <span className="pulse-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: '#ff4444', display: 'inline-block', flexShrink: 0 }} />
             </div>
 
-            {/* Right — refresh + timestamp- removed*/}
-            
+            {/* Right — hamburger */}
+            <button
+              onClick={() => setSideNavOpen(o => !o)}
+              style={{ justifySelf: 'end', background: 'none', border: '1px solid rgba(180,0,30,0.4)', padding: '6px 8px', cursor: 'pointer', color: '#ff6b6b', display: 'flex', alignItems: 'center', transition: 'border-color 0.15s' }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,68,68,0.7)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(180,0,30,0.4)'}
+              aria-label="Toggle navigation"
+            >
+              {sideNavOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+
           </div>
         </nav>
+
+        {/* Side nav backdrop */}
+        {sideNavOpen && (
+          <div
+            onClick={() => setSideNavOpen(false)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 300, backdropFilter: 'blur(2px)' }}
+          />
+        )}
+
+        {/* Side drawer */}
+        <div style={{
+          position: 'fixed', top: 0, right: 0, height: '100vh', width: 260,
+          background: 'rgba(6,0,2,0.98)', borderLeft: '1px solid rgba(180,0,30,0.5)',
+          zIndex: 301, fontFamily: FONT,
+          transform: sideNavOpen ? 'translateX(0)' : 'translateX(100%)',
+          transition: 'transform 0.25s ease',
+          display: 'flex', flexDirection: 'column',
+        }}>
+          {/* Drawer header */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid rgba(180,0,30,0.35)' }}>
+            <span style={{ color: '#ff6b6b', fontSize: 11, letterSpacing: 3, fontWeight: 700 }}>NAVIGATION</span>
+            <button onClick={() => setSideNavOpen(false)} style={{ background: 'none', border: 'none', color: 'rgba(200,140,140,0.6)', cursor: 'pointer', display: 'flex' }}>
+              <X size={16} />
+            </button>
+          </div>
+
+          {/* Nav items */}
+          <nav style={{ padding: '20px 0', flex: 1 }}>
+            {/* Threat Feed */}
+            <button
+              onClick={() => { setSideNavOpen(false); setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 260); }}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: activeSection === 'threat-feed' ? 'rgba(239,68,68,0.06)' : 'none', border: 'none', padding: '10px 20px', color: activeSection === 'threat-feed' ? '#ef4444' : 'rgba(200,140,140,0.55)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 2, textAlign: 'left', transition: 'all 0.15s', borderLeft: `2px solid ${activeSection === 'threat-feed' ? '#ef4444' : 'transparent'}` }}
+            >
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: activeSection === 'threat-feed' ? '#ef4444' : 'rgba(200,140,140,0.4)', boxShadow: activeSection === 'threat-feed' ? '0 0 6px rgba(239,68,68,0.9)' : 'none', display: 'inline-block', flexShrink: 0, transition: 'all 0.15s' }} />
+              THREAT FEED
+            </button>
+
+            {/* Security News */}
+            <button
+              onClick={() => { setSideNavOpen(false); setTimeout(() => { const el = document.getElementById('security-news'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 260); }}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: activeSection === 'security-news' ? 'rgba(239,68,68,0.06)' : 'none', border: 'none', padding: '10px 20px', color: activeSection === 'security-news' ? '#ef4444' : 'rgba(200,140,140,0.55)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 2, textAlign: 'left', transition: 'all 0.15s', borderLeft: `2px solid ${activeSection === 'security-news' ? '#ef4444' : 'transparent'}` }}
+            >
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: activeSection === 'security-news' ? '#ef4444' : 'rgba(200,140,140,0.4)', boxShadow: activeSection === 'security-news' ? '0 0 6px rgba(239,68,68,0.9)' : 'none', display: 'inline-block', flexShrink: 0, transition: 'all 0.15s' }} />
+              SECURITY NEWS
+            </button>
+
+            {/* Future nav items go here */}
+
+          </nav>
+
+          {/* Drawer footer */}
+          <div style={{ padding: '14px 20px', borderTop: '1px solid rgba(180,0,30,0.25)' }}>
+            <button
+              onClick={() => navigate('/')}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: '1px solid rgba(180,0,30,0.35)', padding: '8px 14px', color: 'rgba(200,140,140,0.55)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 1.5, transition: 'all 0.15s' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#ff6b6b'; e.currentTarget.style.borderColor = 'rgba(255,68,68,0.5)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,140,140,0.55)'; e.currentTarget.style.borderColor = 'rgba(180,0,30,0.35)'; }}
+            >
+              <ArrowLeft size={13} /> BACK TO PORTFOLIO
+            </button>
+          </div>
+        </div>
 
 
         {/* ── Content ────────────────────────────────────────────────────── */}
@@ -525,10 +614,14 @@ const ThreatFeedPage = () => {
 
             {/* Hero */}
             <div style={{ marginBottom: 48, borderBottom: '1px solid rgba(139,0,0,0.3)', paddingBottom: 32 }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 12, marginBottom: 16 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <Shield className="text-red-700 w-12 h-12 sm:w-16 sm:h-16" />
                 <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                    <span className="pulse-dot" style={{ width: 6, height: 6, borderRadius: '50%', background: '#ef4444', boxShadow: '0 0 6px rgba(239,68,68,0.8)', display: 'inline-block', flexShrink: 0 }} />
+                    <span style={{ color: '#ef4444', fontSize: 10, letterSpacing: 3, fontFamily: FONT }}>LIVE NVD NIST</span>
+                  </div>
                   <h2 style={{ fontFamily: FONT, fontSize: 'clamp(1.6rem,4vw,2.25rem)', fontWeight: 700, color: '#fff', letterSpacing: 1 }}>
                     THREAT FEED
                   </h2>
@@ -537,15 +630,14 @@ const ThreatFeedPage = () => {
                   </p>
                 </div>
               </div>
-              {/* Refresh now lives here, matching Security News */}
+              {/* Refresh, matching Security News */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                
                 <button
                   onClick={() => fetchCVEs(true)} disabled={refreshing || loading}
                   style={{ border: '1px solid rgba(139,0,0,0.5)', padding: '5px 14px', background: 'transparent', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontFamily: FONT, letterSpacing: 1 }}
                 >
                   <RefreshCw size={11} className={refreshing ? 'spin-slow' : ''} />
-                  {refreshing ? 'FETCHING…' : 'REFRESH'}
+                  <span className="refresh-label">{refreshing ? 'FETCHING…' : 'REFRESH'}</span>
                 </button>
               </div>
             </div>
@@ -610,7 +702,7 @@ const ThreatFeedPage = () => {
             )}
 
             {/* ── Future sections go here ── */}
-            <div style={{ marginTop: 64, borderTop: '1px solid rgba(139,0,0,0.3)', paddingTop: 48 }}>
+            <div id="security-news" style={{ marginTop: 64, borderTop: '1px solid rgba(139,0,0,0.3)', paddingTop: 48 }}>
               <NewsSection />
             </div>
 

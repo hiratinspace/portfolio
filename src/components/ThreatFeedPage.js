@@ -308,7 +308,6 @@ const ThreatFeedPage = () => {
   const [loading, setLoading]               = useState(true);
   const [error, setError]                   = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [lastUpdated, setLastUpdated]       = useState(null);
   const [refreshing, setRefreshing]         = useState(false);
   const [matrixColumns, setMatrixColumns]   = useState([]);
   // Matrix rain

@@ -4,6 +4,7 @@ import {
   AlertTriangle, RefreshCw, ExternalLink, ChevronRight,
   Database, ArrowLeft, ChevronDown, Shield
 } from 'lucide-react';
+import NewsSection from './NewsSection';
 
 const FONT = "'Monaco', 'Courier New', monospace";
 
@@ -307,7 +308,6 @@ const ThreatFeedPage = () => {
   const [loading, setLoading]               = useState(true);
   const [error, setError]                   = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [lastUpdated, setLastUpdated]       = useState(null);
   const [refreshing, setRefreshing]         = useState(false);
   const [matrixColumns, setMatrixColumns]   = useState([]);
   // Matrix rain
@@ -357,7 +357,7 @@ const ThreatFeedPage = () => {
         if (cached) {
           const { data, timestamp } = JSON.parse(cached);
           if (Date.now() - timestamp < CACHE_TTL) {
-            setCves(data); setLastUpdated(new Date(timestamp)); setLoading(false); return;
+            setCves(data); setLoading(false); return;
           }
         }
       } catch (_) {}
@@ -377,7 +377,6 @@ const ThreatFeedPage = () => {
         .sort((a, b) => getScore(b) - getScore(a)).slice(0, 40);
       setCves(merged);
       localStorage.setItem(CACHE_KEY, JSON.stringify({ data: merged, timestamp: Date.now() }));
-      setLastUpdated(new Date());
     } catch (err) { setError(err.message); }
     finally { setLoading(false); setRefreshing(false); }
   }, []);
@@ -514,27 +513,10 @@ const ThreatFeedPage = () => {
               <span className="pulse-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: '#ff4444', display: 'inline-block', flexShrink: 0 }} />
             </div>
 
-            {/* Right — refresh + timestamp */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4, justifySelf: 'end' }}>
-              {lastUpdated && (
-                <span style={{ color: 'rgba(200,180,180,0.3)', fontSize: 10, letterSpacing: 0.5, fontFamily: FONT }}>
-                  
-                </span>
-              )}
-              <button
-                onClick={() => fetchCVEs(true)} disabled={refreshing || loading}
-                style={{ border: '1px solid rgba(180,0,30,0.6)', padding: '5px 14px', background: 'transparent', color: '#ff4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontFamily: FONT, letterSpacing: 1.5, transition: 'all 0.15s' }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(180,0,30,0.2)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-              >
-                <RefreshCw size={11} className={refreshing ? 'spin' : ''} />
-                <span className="refresh-label">{refreshing ? 'FETCHING…' : 'REFRESH'}</span>
-              </button>
-            </div>
+            {/* Right — refresh + timestamp- removed*/}
+            
           </div>
         </nav>
-
-
 
 
         {/* ── Content ────────────────────────────────────────────────────── */}
@@ -542,32 +524,35 @@ const ThreatFeedPage = () => {
           <div style={{ maxWidth: 860, margin: '0 auto', padding: '52px 24px 100px' }}>
 
             {/* Hero */}
-            <div className="fade-up" style={{ marginBottom: 56, paddingBottom: 40, borderBottom: '1px solid rgba(180,0,30,0.2)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-                <span className="pulse-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff4444', display: 'inline-block' }} />
-                <span style={{ color: '#ff4444', fontSize: 10, letterSpacing: 4, fontWeight: 700 }}>LIVE · NVD FEED</span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 20, marginBottom: 18 }}>
-                <Shield style={{ color: 'rgba(180,0,30,0.5)', width: 52, height: 52, flexShrink: 0, marginTop: 4 }} />
+            <div style={{ marginBottom: 48, borderBottom: '1px solid rgba(139,0,0,0.3)', paddingBottom: 32 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <Shield className="text-red-700 w-12 h-12 sm:w-16 sm:h-16" />
                 <div>
-                  <h1 style={{
-                    fontFamily: FONT, fontSize: 'clamp(2rem,5.5vw,3.2rem)', fontWeight: 700,
-                    color: '#fff', letterSpacing: 2, marginBottom: 4, lineHeight: 1.1,
-                  }}>
+                  <h2 style={{ fontFamily: FONT, fontSize: 'clamp(1.6rem,4vw,2.25rem)', fontWeight: 700, color: '#fff', letterSpacing: 1 }}>
                     THREAT FEED
-                  </h1>
-                  <div style={{ color: 'rgba(180,0,30,0.7)', fontSize: 11, letterSpacing: 3, fontWeight: 700 }}>
+                  </h2>
+                  <p style={{ color: 'rgba(209,213,219,0.5)', fontSize: 11, letterSpacing: 3, marginTop: 3, fontFamily: FONT }}>
                     NATIONAL VULNERABILITY DATABASE
-                  </div>
+                  </p>
                 </div>
               </div>
-
-              <p style={{ color: 'rgba(255,245,245,0.92)', fontSize: 13, lineHeight: 1.85, maxWidth: 520, marginLeft: 72 }}>
-                CRITICAL &amp; HIGH severity disclosures from the past 7 days,
-                sorted by CVSS score. Click a severity tile to drill down.
-              </p>
+              {/* Refresh now lives here, matching Security News */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                
+                <button
+                  onClick={() => fetchCVEs(true)} disabled={refreshing || loading}
+                  style={{ border: '1px solid rgba(139,0,0,0.5)', padding: '5px 14px', background: 'transparent', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontFamily: FONT, letterSpacing: 1 }}
+                >
+                  <RefreshCw size={11} className={refreshing ? 'spin-slow' : ''} />
+                  {refreshing ? 'FETCHING…' : 'REFRESH'}
+                </button>
+              </div>
             </div>
+            <p style={{ color: 'rgba(243, 235, 235, 0.92)', fontSize: 13, lineHeight: 1.7, fontFamily: FONT, maxWidth: 600 }}>
+              CRITICAL &amp; HIGH severity disclosures from the past 7 days, sorted by CVSS score. Click a severity tile to drill down.
+            </p>
+          </div>
 
             {/* Error */}
             {error && (
@@ -615,21 +600,19 @@ const ThreatFeedPage = () => {
                 {activeCategory
                   ? <CategoryPanel cves={cves} category={activeCategory} />
                   : (
-                    <div style={{ textAlign: 'center', padding: '24px 0 4px', color: 'rgba(249, 239, 239, 0.55)', fontSize: 12, letterSpacing: 3 }}>
-                      ↑ SELECT A CATEGORY TO VIEW VULNERABILITIES
+                    <div style={{ textAlign: 'center', padding: '24px 0 4px', color: 'rgba(249, 239, 239, 0.55)', fontSize: 10, letterSpacing: 1, lineHeight: 2, borderTop: '1px solid rgba(180,0,30,0.2)', paddingTop: 15 }}>
+                      THIS PRODUCT USES THE NVD API BUT IS NOT ENDORSED OR CERTIFIED BY THE NVD
                     </div>
                   )
                 }
 
-                {/* Attribution */}
-                <div style={{ marginTop: 40, textAlign: 'center', color: 'rgba(249, 239, 239, 0.55)', fontSize: 11, letterSpacing: 1.5, lineHeight: 2, borderTop: '1px solid rgba(180,0,30,0.2)', paddingTop: 24 }}>
-                  THIS PRODUCT USES THE NVD API BUT IS NOT ENDORSED OR CERTIFIED BY THE NVD<br />
-                  DATA MAY BE DELAYED UP TO 2 HOURS
-                </div>
               </div>
             )}
 
             {/* ── Future sections go here ── */}
+            <div style={{ marginTop: 64, borderTop: '1px solid rgba(139,0,0,0.3)', paddingTop: 48 }}>
+              <NewsSection />
+            </div>
 
           </div>
         </div>

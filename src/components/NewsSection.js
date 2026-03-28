@@ -144,12 +144,13 @@ const NewsSection = () => {
         @keyframes newsAppear { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
         @keyframes newsSpin   { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
         .news-spin { animation: newsSpin 1s linear infinite; }
+        @media (max-width: 640px) { .refresh-label { display: none; } }
       `}</style>
 
       {/* Section header */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 12, marginBottom: 24, paddingBottom: 20, borderBottom: '1px solid rgba(139,0,0,0.3)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <Newspaper className="text-red-700 w-12 h-12 sm:w-16 sm:h-16" />
+            <Newspaper className="text-red-700 w-16 h-16" />
             <div>
                 <h2 style={{ fontFamily: FONT, fontSize: 'clamp(1.6rem,4vw,2.25rem)', fontWeight: 700, color: '#fff', letterSpacing: 1 }}>
                 SECURITY NEWS
@@ -165,7 +166,7 @@ const NewsSection = () => {
             style={{ border: '1px solid rgba(139,0,0,0.5)', padding: '5px 14px', background: 'transparent', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontFamily: FONT, letterSpacing: 1 }}
           >
             <RefreshCw size={11} className={refreshing ? 'news-spin' : ''} />
-            {refreshing ? 'FETCHING…' : 'REFRESH'}
+            <span className="refresh-label">{refreshing ? 'FETCHING…' : 'REFRESH'}</span>
           </button>
         </div>
       </div>

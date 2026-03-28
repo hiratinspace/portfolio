@@ -90,6 +90,7 @@ const Portfolio = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [matrixColumns, setMatrixColumns] = useState([]);
   const [showResume, setShowResume] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
   const prevWidthRef = useRef(window.innerWidth);
 
   useEffect(() => {
@@ -468,23 +469,36 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
               }} />
             </button>
 
-            {/* RIGHT — scroll nav */}
-            <div className="flex items-center space-x-3 sm:space-x-6 justify-self-end">
-              {[
-                { label: 'HOME',     id: 'home'         },
-                { label: 'ABOUT',   id: 'about'        },
-                { label: 'PROJECTS', id: 'projects'    },
-                { label: 'CERTS',   id: 'cert-roadmap' },
-                { label: 'CONTACT', id: 'contact'      },
-              ].map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`text-xs sm:text-sm transition-colors hover:text-red-500 ${activeSection === item.id ? 'text-red-500' : 'text-gray-400'}`}
-                >
-                  {item.label}
-                </button>
-              ))}
+            {/* RIGHT — nav links on desktop, hamburger on mobile */}
+            <div className="justify-self-end flex items-center">
+              {/* Desktop nav links */}
+              <div className="hidden sm:flex items-center space-x-3 sm:space-x-6">
+                {[
+                  { label: 'HOME',     id: 'home'         },
+                  { label: 'ABOUT',   id: 'about'        },
+                  { label: 'PROJECTS', id: 'projects'    },
+                  { label: 'CERTS',   id: 'cert-roadmap' },
+                  { label: 'CONTACT', id: 'contact'      },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`text-xs sm:text-sm transition-colors hover:text-red-500 ${activeSection === item.id ? 'text-red-500' : 'text-gray-400'}`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+              {/* Mobile hamburger */}
+              <button
+                className="sm:hidden flex flex-col gap-1.5 p-1 ml-2"
+                onClick={() => setNavOpen(o => !o)}
+                aria-label="Open navigation"
+              >
+                <span style={{ display: 'block', width: 22, height: 2, background: navOpen ? '#ef4444' : 'rgba(220,180,180,0.7)', transition: 'all 0.22s', transform: navOpen ? 'translateY(7px) rotate(45deg)' : 'none' }} />
+                <span style={{ display: 'block', width: 22, height: 2, background: navOpen ? 'transparent' : 'rgba(220,180,180,0.7)', transition: 'all 0.22s' }} />
+                <span style={{ display: 'block', width: 22, height: 2, background: navOpen ? '#ef4444' : 'rgba(220,180,180,0.7)', transition: 'all 0.22s', transform: navOpen ? 'translateY(-7px) rotate(-45deg)' : 'none' }} />
+              </button>
             </div>
           </div>
         </div>
@@ -493,6 +507,74 @@ This toolkit has been instrumental in solving 50+ cryptography challenges across
           @keyframes navPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
         `}</style>
       </nav>
+
+      {/* Mobile nav sidebar — backdrop */}
+      {navOpen && (
+        <div
+          className="fixed inset-0 sm:hidden"
+          style={{ zIndex: 99, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(2px)' }}
+          onClick={() => setNavOpen(false)}
+        />
+      )}
+
+      {/* Mobile nav sidebar — drawer (slides from right) */}
+      <div
+        className="fixed top-0 bottom-0 sm:hidden"
+        style={{
+          right: 0, width: 240, zIndex: 110,
+          background: 'rgba(4,0,1,0.98)',
+          borderLeft: '1px solid rgba(127,29,29,0.6)',
+          backdropFilter: 'blur(16px)',
+          transform: navOpen ? 'translateX(0)' : 'translateX(100%)',
+          transition: 'transform 0.25s ease',
+          display: 'flex', flexDirection: 'column',
+          padding: '80px 28px 40px',
+        }}
+      >
+        <div style={{ color: 'rgba(127,29,29,0.7)', fontSize: 9, letterSpacing: 4, fontFamily: "'Monaco','Courier New',monospace", fontWeight: 700, marginBottom: 24 }}>
+          NAVIGATE
+        </div>
+        {[
+          { label: 'HOME',     id: 'home'         },
+          { label: 'ABOUT',   id: 'about'        },
+          { label: 'PROJECTS', id: 'projects'    },
+          { label: 'CERTS',   id: 'cert-roadmap' },
+          { label: 'CONTACT', id: 'contact'      },
+        ].map((item) => (
+          <button
+            key={item.id}
+            onClick={() => { scrollToSection(item.id); setNavOpen(false); }}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: activeSection === item.id ? '#ef4444' : 'rgba(220,180,180,0.65)',
+              fontFamily: "'Monaco','Courier New',monospace",
+              fontSize: 13, letterSpacing: 2,
+              padding: '13px 0',
+              borderBottom: '1px solid rgba(127,29,29,0.15)',
+              transition: 'color 0.15s', textAlign: 'left', width: '100%',
+            }}
+          >
+            {activeSection === item.id && <span style={{ width: 4, height: 4, background: '#ef4444', borderRadius: '50%', flexShrink: 0 }} />}
+            {item.label}
+          </button>
+        ))}
+        {/* INTEL link in sidebar */}
+        <button
+          onClick={() => { navigate('/intel'); setNavOpen(false); }}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: 'rgba(239,68,68,0.8)', fontFamily: "'Monaco','Courier New',monospace",
+            fontSize: 13, letterSpacing: 2, padding: '13px 0',
+            transition: 'color 0.15s', textAlign: 'left', width: '100%',
+            marginTop: 8,
+          }}
+        >
+          INTEL
+          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#ef4444', display: 'inline-block', animation: 'navPulse 1.8s ease-in-out infinite' }} />
+        </button>
+      </div>
 
       {/* Hero Section */}
       <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 px-4 sm:px-6" style={{ zIndex: 10 }}>

@@ -60,12 +60,8 @@ const QRLandingPage = () => {
   const [phase, setPhase] = useState('typing');
   const [blink, setBlink] = useState(true);
   const bottomRef = useRef(null);
-  const hasRun = useRef(false);
 
   useEffect(() => {
-  if (hasRun.current) return;
-  hasRun.current = true;
-
   const timers = [];
   TERMINAL_LINES.forEach(({ text, delay, red, reveal }) => {
     const t = setTimeout(() => {
@@ -80,7 +76,7 @@ const QRLandingPage = () => {
   });
 
   return () => timers.forEach(clearTimeout);
-}, []);
+}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });

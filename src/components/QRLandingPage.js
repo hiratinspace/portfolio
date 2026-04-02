@@ -80,7 +80,6 @@ const QRLandingPage = () => {
 
     return () => {
       timers.forEach(clearTimeout);
-      animationStarted = false; // reset on true unmount so hot-reload works
     };
   }, []);
 

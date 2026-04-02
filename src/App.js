@@ -3,6 +3,7 @@ import { Shield, Terminal, Code, Briefcase, Radio, GraduationCap, User, Mail, Li
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import ThreatFeedPage from './components/ThreatFeedPage';
 import CertTracker from './components/CertTracker';
+import QRLandingPage from './components/QRLandingPage';
 
 /**
  * Email obfuscation — decoded at runtime so the address never
@@ -1074,6 +1075,7 @@ const App = () => (
   <Routes>
     <Route path="/"      element={<ErrorBoundary><Portfolio /></ErrorBoundary>} />
     <Route path="/intel" element={<ThreatFeedPage />} />
+    <Route path="/scan"  element={<QRLandingPage />} />
   </Routes>
 );
 

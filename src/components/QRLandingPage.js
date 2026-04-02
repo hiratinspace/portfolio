@@ -14,9 +14,6 @@ const TERMINAL_LINES = [
   { text: '> lol jk.', delay: 5500, reveal: true },
 ];
 
-// ← outside component so StrictMode remounts cannot reset it
-let animationStarted = false;
-
 const MatrixRain = () => {
   const [cols, setCols] = useState([]);
 
@@ -64,6 +61,7 @@ const QRLandingPage = () => {
   const [blink, setBlink] = useState(true);
   const bottomRef = useRef(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (visibleLines.length > 0) return;
 

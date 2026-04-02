@@ -60,27 +60,27 @@ const QRLandingPage = () => {
   const [phase, setPhase] = useState('typing');
   const [blink, setBlink] = useState(true);
   const bottomRef = useRef(null);
+  const hasRun = useRef(false);
 
   useEffect(() => {
-    if (visibleLines.length > 0) return;
+  if (hasRun.current) return;
+  hasRun.current = true;
 
-    const timers = [];
-    TERMINAL_LINES.forEach(({ text, delay, red, reveal }) => {
-      const t = setTimeout(() => {
-        setVisibleLines(prev => [...prev, { text, red, reveal }]);
-        if (reveal) {
-          const t1 = setTimeout(() => setPhase('revealed'), 600);
-          const t2 = setTimeout(() => setPhase('cta'), 1400);
-          timers.push(t1, t2);
-        }
-      }, delay);
-      timers.push(t);
-    });
+  const timers = [];
+  TERMINAL_LINES.forEach(({ text, delay, red, reveal }) => {
+    const t = setTimeout(() => {
+      setVisibleLines(prev => [...prev, { text, red, reveal }]);
+      if (reveal) {
+        const t1 = setTimeout(() => setPhase('revealed'), 600);
+        const t2 = setTimeout(() => setPhase('cta'), 1400);
+        timers.push(t1, t2);
+      }
+    }, delay);
+    timers.push(t);
+  });
 
-    return () => {
-      timers.forEach(clearTimeout);
-    };
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+  return () => timers.forEach(clearTimeout);
+}, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });

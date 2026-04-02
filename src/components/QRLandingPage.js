@@ -61,7 +61,6 @@ const QRLandingPage = () => {
   const [blink, setBlink] = useState(true);
   const bottomRef = useRef(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (visibleLines.length > 0) return;
 
@@ -81,7 +80,7 @@ const QRLandingPage = () => {
     return () => {
       timers.forEach(clearTimeout);
     };
-  }, []);
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });

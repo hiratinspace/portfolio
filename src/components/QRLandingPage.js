@@ -209,7 +209,7 @@ const QRLandingPage = () => {
           </div>
         </div>
 
-        {/* Footer */}
+        {/* Footer sign */}
         <p className="text-center text-xs mt-4 tracking-widest" style={{ color: '#6b0909' }}>
           [ built by redhexx ]
         </p>

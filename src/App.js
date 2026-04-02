@@ -1075,7 +1075,7 @@ const App = () => (
   <Routes>
     <Route path="/"      element={<ErrorBoundary><Portfolio /></ErrorBoundary>} />
     <Route path="/intel" element={<ThreatFeedPage />} />
-    <Route path="/scan"  element={<QRLandingPage />} />
+    <Route path="/scan"  element={<ErrorBoundary><QRLandingPage /></ErrorBoundary>} />
   </Routes>
 );
 

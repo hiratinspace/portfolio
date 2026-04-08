@@ -6,12 +6,12 @@ const TERMINAL_LINES = [
   { text: '> Initializing scan...', delay: 0 },
   { text: '> Reading QR payload...', delay: 600 },
   { text: '> Resolving target host:........', delay: 1000 },
-  { text: '> Probing open ports...', delay: 1900 },
-  { text: '> CVE-2025-????  [CRITICAL]  exploiting...', delay: 1700 },
+  { text: '> Probing open ports...', delay: 1000 },
+  { text: '> CVE-2025-????  [CRITICAL]  exploiting...', delay: 1300 },
   { text: '> Privilege escalation: ████████ 100%', delay: 2500 },
-  { text: '> ROOT ACCESS GRANTED', delay: 3400, red: true },
-  { text: '> Exfiltrating data...', delay: 4000 },
-  { text: '> lol jk.', delay: 5500, reveal: true },
+  { text: '> ROOT ACCESS GRANTED', delay: 2400, red: true },
+  { text: '> Exfiltrating data...', delay: 2500 },
+  { text: '> lol jk.', delay: 2800, reveal: true },
 ];
 
 const MatrixRain = () => {

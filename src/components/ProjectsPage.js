@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Terminal, ChevronRight, Code,
-  Menu, X, Radio,
+  Menu, X,
 } from 'lucide-react';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

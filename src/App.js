@@ -19,23 +19,6 @@ const getEmail = () => String.fromCharCode(
 );
 
 /**
- * URL sanitization — allowlists https/http/mailto protocols before
- * any user-facing URL is rendered into an href attribute.
- * Blocks javascript:, data:, and other injection vectors.
- */
-const ALLOWED_PROTOCOLS = new Set(['https:', 'http:', 'mailto:']);
-const sanitizeUrl = (url) => {
-  if (!url || url.trim() === '' || url === '#') return null;
-  try {
-    const parsed = new URL(url, window.location.origin);
-    if (!ALLOWED_PROTOCOLS.has(parsed.protocol)) return null;
-    return url;
-  } catch {
-    return null;
-  }
-};
-
-/**
  * Recursively freezes all nested objects/arrays so static data
  * cannot be mutated at runtime. In strict mode, any attempted
  * mutation throws a TypeError immediately.

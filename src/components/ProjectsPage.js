@@ -28,7 +28,7 @@ const PROJECTS = [
     gradient: "from-red-950 via-red-900 to-black",
     logo: "/SpecterAI.png",
     links: [
-      { label: "Live Tool", url: "https://specter-ai-8p3g.onrender.com/" },
+      { label: "Live Tool", url: "https://hiratinspace.github.io/specter-ai/" },
       { label: "GitHub", url: "https://github.com/hiratinspace/specter-ai" },
     ],
     fullDescription: `An AI-powered penetration testing reconnaissance tool that automates the first phase of a security assessment.

@@ -21,6 +21,52 @@ const sanitizeUrl = (url) => {
 // ─── Project data — add new projects here ─────────────────────────────────────
 const PROJECTS = [
   {
+    title: "SpecterAI",
+    category: "AI-Powered Security Tool",
+    description: "AI-powered penetration testing reconnaissance tool. Input a target domain, get a full recon scan analyzed by Claude AI, and receive a professional pentest report. All in one command.",
+    tech: ["Python", "Flask", "Claude AI", "DNS", "SSL/TLS", "SSE", "REST API"],
+    gradient: "from-red-950 via-red-900 to-black",
+    logo: "/SpecterAI.png",
+    links: [
+      { label: "Live Tool", url: "https://specter-ai-8p3g.onrender.com/" },
+      { label: "GitHub", url: "https://github.com/hiratinspace/specter-ai" },
+    ],
+    fullDescription: `An AI-powered penetration testing reconnaissance tool that automates the first phase of a security assessment.
+
+How It Works:
+User inputs a target domain → 4 recon modules run in parallel → Results aggregated → Sent to Claude AI (acts as an experienced pentester) → AI returns risk level + findings + next steps → Markdown report generated → Visual web dashboard displays everything
+Web is deployed through render. So it might take some time deploying at first.
+
+Recon Modules:
+• DNS / WHOIS — IP addresses, DNS records, subdomains, registrar info
+• Port Scanner — Open TCP ports, running services, service banners
+• HTTP Probe — Tech stack, missing security headers, cookie flags, redirects
+• SSL/TLS — Certificate expiry, weak ciphers, self-signed certs, HTTP→HTTPS
+
+AI Analysis:
+Claude Sonnet acts as an experienced pentester. It doesn't just return raw data, it interprets findings, assigns a risk level, summarizes the attack surface, and provides prioritized next steps in structured JSON.
+
+Key Features:
+• Parallel scanning — all 4 modules run simultaneously for speed
+• Two interfaces — CLI for terminal users, web dashboard for visual reporting
+• Real-time progress streaming via Server-Sent Events (SSE)
+• Scan history — every scan persisted and accessible anytime also downloadable
+• JSON export — raw API endpoint for every report
+• Graceful error handling — one failing module never crashes the scan
+• Ethical use built in — authorized-use disclaimer on every report
+
+Tech Stack:
+Backend: Python 3.9+, Flask, concurrent.futures, socket, ssl, SSE
+Libraries: anthropic, dnspython, python-whois, requests, python-dotenv
+Frontend: Pure HTML/CSS/JS - terminal/hacker aesthetic 
+AI: Claude Sonnet via Anthropic API
+
+Security & Compliance:
+Apache 2.0 license. API keys secured via .env + python-dotenv. .gitignore excludes keys, reports, and scan history. Authorized use only - legal test target: scanme.nmap.org.
+
+Built with Python and Claude AI (Anthropic) for both the AI analysis feature and to assist in building the tool itself.`,
+  },
+  {
     title: "Binary Exploitation Framework",
     category: "Offensive Security",
     description: "Developed custom exploitation tools for CTF competitions, focusing on stack and heap vulnerabilities in compiled binaries.",
@@ -106,7 +152,10 @@ const ProjectCard = ({ project, onClick }) => (
     <div className={`h-48 bg-gradient-to-br ${project.gradient} mb-4 relative overflow-hidden border border-red-900/50 group-hover:border-red-600 transition-all`}>
       <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all" />
       <div className="absolute inset-0 flex items-center justify-center">
-        <Terminal className="w-16 h-16 text-red-400/50 group-hover:text-red-400 transition-all group-hover:scale-110" />
+        {project.logo
+          ? <img src={project.logo} alt={project.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+          : <Terminal className="w-16 h-16 text-red-400/50 group-hover:text-red-400 transition-all group-hover:scale-110" />
+        }
       </div>
       <div className="absolute top-4 left-4">
         <span className="px-3 py-1 bg-black/60 border border-red-900/50 text-xs text-red-400 backdrop-blur" style={{ fontFamily: FONT }}>
@@ -178,11 +227,34 @@ const ProjectModal = ({ project, onClose, matrixColumns }) => {
         {/* Header */}
         <div className={`h-48 bg-gradient-to-br ${project.gradient} relative overflow-hidden border-b-2 border-red-900/50`}>
           <div className="absolute inset-0 bg-black/40" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-            <span className="px-4 py-2 bg-black/60 border border-red-900/50 text-sm text-red-400 backdrop-blur mb-4">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-8 gap-3">
+            <span className="px-4 py-2 bg-black/60 border border-red-900/50 text-sm text-red-400 backdrop-blur">
               {project.category}
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-white text-center">{project.title}</h2>
+            {project.links && (
+              <div className="flex flex-wrap justify-center gap-3 mt-1">
+                {project.links.map((link, i) => {
+                  const safeUrl = sanitizeUrl(link.url);
+                  if (!safeUrl) return null;
+                  return (
+                    <a
+                      key={i}
+                      href={safeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      referrerPolicy="no-referrer"
+                      onClick={e => e.stopPropagation()}
+                      className="px-4 py-2 bg-black/60 hover:bg-red-900/60 border border-red-800 text-red-300 hover:text-white text-sm flex items-center gap-1 backdrop-blur transition-all"
+                      aria-label={`${link.label} (opens in new tab)`}
+                    >
+                      {link.label}
+                      <ChevronRight className="w-3 h-3" aria-hidden="true" />
+                    </a>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
 
@@ -207,38 +279,6 @@ const ProjectModal = ({ project, onClose, matrixColumns }) => {
             </div>
           </div>
 
-          {/* Links */}
-          {project.links && (
-            <div className="border-t border-red-900/30 pt-6">
-              <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-4">Project Links</h3>
-              <div className="flex flex-wrap gap-4">
-                {project.links.map((link, i) => {
-                  const safeUrl = sanitizeUrl(link.url);
-                  if (!safeUrl) {
-                    return (
-                      <span key={i} className="px-6 py-3 bg-red-900/20 border border-red-900/30 text-gray-500 cursor-not-allowed" title="Coming soon">
-                        {link.label}
-                      </span>
-                    );
-                  }
-                  return (
-                    <a
-                      key={i}
-                      href={safeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      referrerPolicy="no-referrer"
-                      className="px-6 py-3 bg-gradient-to-r from-red-900 to-burgundy-900 hover:from-red-800 hover:to-burgundy-800 transition-all border border-red-800 flex items-center space-x-2 group"
-                      aria-label={`${link.label} (opens in new tab)`}
-                    >
-                      <span>{link.label}</span>
-                      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

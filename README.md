@@ -50,7 +50,6 @@ portfolio/
 ## 📝 TODO
 
 - [ ] Add a blog section for writeups
-- [ ] Include CTF stats/achievements
 - [ ] removing inline styles (to avoid injection risks)
 
 ## 📝 How to Add More Projects:

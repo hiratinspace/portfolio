@@ -153,7 +153,8 @@ export async function onRequest(context) {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'public, max-age=1200', // 20 min browser + edge cache
-      'Access-Control-Allow-Origin': '*',
+      // Restrict to your own domain — same policy as /api/cves
+      'Access-Control-Allow-Origin': 'https://hiratrahi.com',
     },
   });
 }

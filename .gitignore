@@ -4,8 +4,11 @@ build/
 .idea/
 .vscode/
 __MACOSX/
-.idea/
 SECURITY_AUDIT_v2.md
+.wrangler/
+
+# graphify knowledge-graph output
+graphify-out/
 
 # Environment variables
 .env

@@ -168,7 +168,7 @@ const KevSection = () => {
       {!loading && !error && items.length > 0 && (
         <>
           <p style={{ color: 'rgba(243,235,235,0.85)', fontSize: 13, lineHeight: 1.7, fontFamily: FONT, maxWidth: 620, marginBottom: 16 }}>
-            CVEs with confirmed active exploitation, per CISA. These are the vulnerabilities attackers are using right now — federal agencies are required to patch them by the listed due date.
+            Not just disclosed — <strong style={{ color: '#fff', fontWeight: 700 }}>confirmed exploited</strong>. CVEs that CISA has verified are under active attack in the wild (of any age), which is why federal agencies are required to patch them by the listed due date.
           </p>
           <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
             <button onClick={() => { setRansomwareOnly(false); setVisibleCount(4); }} style={{ border: `1px solid ${!ransomwareOnly ? 'rgba(239,68,68,0.7)' : 'rgba(139,0,0,0.3)'}`, background: !ransomwareOnly ? 'rgba(239,68,68,0.1)' : 'transparent', color: !ransomwareOnly ? '#ef4444' : 'rgba(209,213,219,0.55)', padding: '4px 14px', fontSize: 10, fontFamily: FONT, letterSpacing: 1.5, cursor: 'pointer', transition: 'all 0.15s' }}>

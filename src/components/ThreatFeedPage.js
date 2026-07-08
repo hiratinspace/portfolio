@@ -651,7 +651,7 @@ const ThreatFeedPage = () => {
               </div>
             </div>
             <p style={{ color: 'rgba(243, 235, 235, 0.92)', fontSize: 13, lineHeight: 1.7, fontFamily: FONT, maxWidth: 600 }}>
-              CRITICAL &amp; HIGH severity disclosures from the past 7 days, sorted by CVSS score. Click a severity tile to drill down.
+              Newly <strong style={{ color: '#fff', fontWeight: 700 }}>disclosed</strong> CRITICAL &amp; HIGH severity CVEs from the past 7 days, ranked by CVSS score — the raw feed of what's being reported, most of it not yet seen in active attacks. Click a severity tile to drill down.
             </p>
           </div>
 

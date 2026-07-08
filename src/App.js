@@ -17,10 +17,20 @@ const Portfolio = () => {
   const [showResume, setShowResume] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
   const prevWidthRef = useRef(window.innerWidth);
+  const dimOverlayRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
+
+      // Dim the matrix rain everywhere below the hero: transparent while the
+      // landing view is on screen, fading to mostly-opaque once scrolled one
+      // viewport down. Written straight to the DOM (no state) so the matrix
+      // animation never re-renders on scroll.
+      if (dimOverlayRef.current) {
+        const progress = Math.min(1, window.scrollY / window.innerHeight);
+        dimOverlayRef.current.style.opacity = (progress * 0.8).toFixed(3);
+      }
 
       // Update active section based on scroll position
       const sections = ['home', 'about', 'cert-roadmap', 'contact'];
@@ -40,6 +50,7 @@ const Portfolio = () => {
       }
     };
 
+    handleScroll(); // sync overlay + active section on first paint (e.g. reload mid-page)
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -178,6 +189,13 @@ const Portfolio = () => {
           </div>
         ))}
       </div>
+      {/* Scroll-driven dim layer — keeps the matrix rain vivid on the hero,
+          fades it back for every section below. Opacity set in handleScroll. */}
+      <div
+        ref={dimOverlayRef}
+        className="fixed inset-0 pointer-events-none"
+        style={{ zIndex: 2, background: '#000', opacity: 0 }}
+      />
       {/* Navigation */}
       <nav className={`fixed top-0 w-full transition-all duration-300 ${scrolled ? 'bg-black/95 backdrop-blur-sm border-b border-red-900/30' : 'bg-transparent'}`} style={{ zIndex: 100 }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
@@ -251,7 +269,7 @@ const Portfolio = () => {
                 {[
                   { label: 'HOME',     id: 'home'         },
                   { label: 'ABOUT',   id: 'about'        },
-                  { label: 'CERTS',   id: 'cert-roadmap' },
+                  { label: 'PRACTICE', id: 'cert-roadmap' },
                   { label: 'CONTACT', id: 'contact'      },
                 ].map((item) => (
                   <button
@@ -311,7 +329,7 @@ const Portfolio = () => {
         {[
           { label: 'HOME',     id: 'home'         },
           { label: 'ABOUT',   id: 'about'        },
-          { label: 'CERTS',   id: 'cert-roadmap' },
+          { label: 'PRACTICE', id: 'cert-roadmap' },
           { label: 'CONTACT', id: 'contact'      },
         ].map((item) => (
           <button
@@ -408,7 +426,7 @@ const Portfolio = () => {
                 <Shield className="text-red-500 w-12 h-12 sm:w-16 sm:h-16 mb-4" />
                 <h3 className="text-xl sm:text-2xl font-bold mb-4 text-red-400">Security Focus</h3>
                 <ul className="space-y-3">
-                  {['Web Application Security (OWASP mindset)', 'Reverse Engineering (fundamentals)', 'Binary Exploitation (pwn fundamentals)', 'Cryptography (CTF / applied basics)', 'CTF Writeups & Learning Notes'].map((item, i) => (
+                  {['Web Application Security (OWASP Top 10)', 'Reverse Engineering (fundamentals)', 'Cryptography (CTF / applied basics)', 'Python Automation & Tooling', 'CTF Competitions & Writeups'].map((item, i) => (
                     <li key={i} className="flex items-center space-x-3 text-sm sm:text-base text-gray-300">
                       <div className="w-2 h-2 bg-red-500 rotate-45 flex-shrink-0"></div>
                       <span>{item}</span>
@@ -433,22 +451,14 @@ const Portfolio = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="space-y-6">
               <p className="text-gray-300 leading-relaxed">
-                I’m Hirat Rahman Rahi, a Computer Science & Neuroscience double major at Illinois Wesleyan University.
-                I’m building toward offensive security through hands-on practice (CTFs, labs, writeups) and strong engineering
-                habits, clean documentation, repeatable workflows, and measurable outcomes. My neuroscience background strengthens
-                how I think about human behavior, attention, and decision-making, which connects directly to security’s human
-                layer (social engineering, usability, and risk).
+                I’m Hirat Rahman Rahi, a Computer Science & Neuroscience double major at Illinois Wesleyan University
+                focused on offensive security. I identify and validate weaknesses in web applications and systems through
+                hands-on practice, CTFs, labs, and clearly documented writeups, and I build Python automation for
+                reconnaissance, testing, and reporting so results are consistent, repeatable, and easy to act on.
+                My goal is straightforward: help organizations find real risks before attackers do, and communicate
+                them in terms that support clear decisions. My neuroscience background adds useful perspective on the
+                human side of security, from social engineering to how people actually make decisions under pressure.
               </p>
-              <div className="grid grid-cols-2 gap-4 pt-4">
-                <div className="border border-red-900/50 p-4 bg-burgundy-950/20">
-                  <div className="text-3xl font-bold text-red-500 mb-2">3.24</div>
-                  <div className="text-sm text-gray-400">GPA / 4.0</div>
-                </div>
-                <div className="border border-red-900/50 p-4 bg-burgundy-950/20">
-                  <div className="text-3xl font-bold text-red-500 mb-2">4+</div>
-                  <div className="text-sm text-gray-400">Languages Fluent</div>
-                </div>
-              </div>
             </div>
 
             <div className="space-y-6">
@@ -463,7 +473,7 @@ const Portfolio = () => {
                 <div className="mt-4 pt-4 border-t border-red-900/30">
                   <p className="text-sm text-gray-400 mb-2">Relevant Coursework:</p>
                   <div className="flex flex-wrap gap-2">
-                    {['Data Structures', 'Software Development', 'Discrete Math', 'Logic, Sets & Recursion'].map((course, i) => (
+                    {['Algorithm Design & Analysis', 'Data Structures', 'Software Development', 'Discrete Math', 'Logic, Sets & Recursion'].map((course, i) => (
                       <span key={i} className="text-xs px-3 py-1 bg-red-950/50 border border-red-900/50 text-red-400">
                         {course}
                       </span>

@@ -53,8 +53,8 @@ export const leaderships = deepFreeze([
 ]);
 
 export const skills = deepFreeze({
-  "Offensive Security": ["Binary Exploitation", "Web Exploitation", "Cryptography", "Reverse Engineering", "CTF Competitions"],
-  "Languages": ["Python", "Java", "C++", "Rust", "OCaml", "SQL"],
-  "Tools & Frameworks": ["Linux", "Git", "Flask", "HTML/CSS", "REST APIs", "ArcGIS Pro", "Tableau"],
-  "Engineering Focus": ["Red Team Operations", "Vulnerability Research", "Exploit Development", "Security Labs & Writeups"]
+  "Offensive Security": ["Web Application Security", "Reverse Engineering", "Cryptography", "CTF Competitions", "Security Writeups"],
+  "Automation & Scripting": ["Python Automation", "Recon & Reporting Scripts", "Web Scraping", "REST APIs", "Bash"],
+  "Languages": ["Python", "Java", "C++", "SQL"],
+  "Tools & Frameworks": ["Linux", "Git", "Flask", "HTML/CSS", "Tableau"]
 });

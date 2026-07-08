@@ -5,6 +5,7 @@ import {
   Database, ArrowLeft, ChevronDown, Shield, Menu, X
 } from 'lucide-react';
 import NewsSection from './NewsSection';
+import KevSection from './KevSection';
 
 const FONT = "'Monaco', 'Courier New', monospace";
 
@@ -388,9 +389,13 @@ const ThreatFeedPage = () => {
   // Scroll-based active section tracking
   useEffect(() => {
     const handleScroll = () => {
+      const kevEl  = document.getElementById('kev-feed');
       const newsEl = document.getElementById('security-news');
-      if (newsEl && window.scrollY + window.innerHeight / 2 >= newsEl.offsetTop) {
+      const mid    = window.scrollY + window.innerHeight / 2;
+      if (newsEl && mid >= newsEl.offsetTop) {
         setActiveSection('security-news');
+      } else if (kevEl && mid >= kevEl.offsetTop) {
+        setActiveSection('kev-feed');
       } else {
         setActiveSection('threat-feed');
       }
@@ -464,15 +469,12 @@ const ThreatFeedPage = () => {
         ::-webkit-scrollbar { width: 4px; background: #080103; }
         ::-webkit-scrollbar-thumb { background: rgba(180,0,30,0.5); border-radius: 2px; }
 
-        @media (max-width: 640px) { .refresh-label { display: none; } }
-
         /* Tiles — 5 columns desktop, 2 columns mobile */
         .tiles-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+
         @media (max-width: 640px) {
           .tiles-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 640px) {
-          .portfolio-label { display: none !important; }
+          .portfolio-label,
           .refresh-label { display: none !important; }
         }
       `}</style>
@@ -581,6 +583,15 @@ const ThreatFeedPage = () => {
               THREAT FEED
             </button>
 
+            {/* Exploited in the Wild (KEV) */}
+            <button
+              onClick={() => { setSideNavOpen(false); setTimeout(() => { const el = document.getElementById('kev-feed'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 260); }}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: activeSection === 'kev-feed' ? 'rgba(239,68,68,0.06)' : 'none', border: 'none', padding: '10px 20px', color: activeSection === 'kev-feed' ? '#ef4444' : 'rgba(200,140,140,0.55)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 2, textAlign: 'left', transition: 'all 0.15s', borderLeft: `2px solid ${activeSection === 'kev-feed' ? '#ef4444' : 'transparent'}` }}
+            >
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: activeSection === 'kev-feed' ? '#ef4444' : 'rgba(200,140,140,0.4)', boxShadow: activeSection === 'kev-feed' ? '0 0 6px rgba(239,68,68,0.9)' : 'none', display: 'inline-block', flexShrink: 0, transition: 'all 0.15s' }} />
+              EXPLOITED (KEV)
+            </button>
+
             {/* Security News */}
             <button
               onClick={() => { setSideNavOpen(false); setTimeout(() => { const el = document.getElementById('security-news'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 260); }}
@@ -589,8 +600,6 @@ const ThreatFeedPage = () => {
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: activeSection === 'security-news' ? '#ef4444' : 'rgba(200,140,140,0.4)', boxShadow: activeSection === 'security-news' ? '0 0 6px rgba(239,68,68,0.9)' : 'none', display: 'inline-block', flexShrink: 0, transition: 'all 0.15s' }} />
               SECURITY NEWS
             </button>
-
-            {/* Future nav items go here */}
 
           </nav>
 
@@ -636,7 +645,7 @@ const ThreatFeedPage = () => {
                   onClick={() => fetchCVEs(true)} disabled={refreshing || loading}
                   style={{ border: '1px solid rgba(139,0,0,0.5)', padding: '5px 14px', background: 'transparent', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontFamily: FONT, letterSpacing: 1 }}
                 >
-                  <RefreshCw size={11} className={refreshing ? 'spin-slow' : ''} />
+                  <RefreshCw size={11} className={refreshing ? 'spin' : ''} />
                   <span className="refresh-label">{refreshing ? 'FETCHING…' : 'REFRESH'}</span>
                 </button>
               </div>
@@ -701,7 +710,12 @@ const ThreatFeedPage = () => {
               </div>
             )}
 
-            {/* ── Future sections go here ── */}
+            {/* ── Known Exploited Vulnerabilities (CISA KEV) ── */}
+            <div id="kev-feed" style={{ marginTop: 64, borderTop: '1px solid rgba(139,0,0,0.3)', paddingTop: 48 }}>
+              <KevSection />
+            </div>
+
+            {/* ── Security News ── */}
             <div id="security-news" style={{ marginTop: 64, borderTop: '1px solid rgba(139,0,0,0.3)', paddingTop: 48 }}>
               <NewsSection />
             </div>

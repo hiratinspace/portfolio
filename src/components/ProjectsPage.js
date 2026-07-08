@@ -21,6 +21,35 @@ const sanitizeUrl = (url) => {
 // ─── Project data — add new projects here ─────────────────────────────────────
 const PROJECTS = [
   {
+    title: "REDHEXX",
+    category: "Startup · Founder",
+    description: "AI-native security review platform for the MCP and AI-agent attack surface. Founder — currently in early access.",
+    tech: ["AI Security", "MCP", "LLM Agents", "Prompt Injection", "Pentesting"],
+    gradient: "from-red-800 via-red-950 to-black",
+    logo: "/redhexx.png",
+    links: [
+      { label: "Visit REDHEXX", url: "https://redhexx.com" },
+    ],
+    fullDescription: `REDHEXX is an early-stage startup I'm building — an AI-native security review platform focused on the new attack surface created by AI agents and Model Context Protocol (MCP) servers.
+
+The Problem:
+Teams are shipping AI agents and MCP integrations fast, but traditional pentests rarely reason about prompt-injection-to-tool-abuse or privilege chains between agents. That leaves a new class of exposure unaddressed.
+
+What It Does:
+A hands-on security review of your MCP and agent configuration, run in a scoped test environment — no production access required. It surfaces:
+• Unauthenticated tools that agents can invoke without authorization
+• Over-scoped permissions granting excessive capability
+• Injection paths that turn prompt attacks into privileged actions
+• Privilege-escalation chains between agents
+
+Deliverables: a configuration scan, ranked vulnerability findings, and clear remediation guidance.
+
+Status:
+Pre-launch / early access — building the platform, refining the methodology, and working with first design partners.
+
+Role: Founder — product direction, security research, and engineering.`,
+  },
+  {
     title: "SpecterAI",
     category: "AI-Powered Security Tool",
     description: "AI-powered penetration testing reconnaissance tool. Input a target domain, get a full recon scan analyzed by Claude AI, and receive a professional pentest report. All in one command.",
@@ -498,7 +527,7 @@ const ProjectsPage = () => {
               PROJECTS
             </h1>
             <p style={{ color: 'rgba(200,180,180,0.5)', fontSize: 13, maxWidth: 520, lineHeight: 1.7 }}>
-              A running record of security tools, CTF solvers, and applied research. Click any card to view full details.
+              What I build — from an early-stage security startup to hands-on tools, CTF solvers, and applied research. Click any card to view full details.
             </p>
             <div style={{ marginTop: 16, width: 48, height: 2, background: 'linear-gradient(to right, #ef4444, transparent)' }} />
           </div>

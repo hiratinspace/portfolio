@@ -18,27 +18,27 @@ const sanitizeUrl = (url) => {
   } catch { return null; }
 };
 
-// ─── Project data — add new projects here ─────────────────────────────────────
+// ─── Project data - add new projects here ─────────────────────────────────────
 const PROJECTS = [
   {
     title: "REDHEXX",
     category: "Startup · Founder",
     featured: true,
-    status: "FOUNDER · EARLY ACCESS",
-    description: "AI-native security review platform for the MCP and AI-agent attack surface. Founder — currently in early access.",
+    status: "EARLY ACCESS",
+    description: "AI-native security review platform for the MCP and AI-agent attack surface. Founder - currently in early access.",
     tech: ["AI Security", "MCP", "LLM Agents", "Prompt Injection", "Pentesting"],
     gradient: "from-red-800 via-red-950 to-black",
     logo: "/redhexx.png",
     links: [
-      { label: "Visit REDHEXX", url: "https://redhexx.com" },
+      { label: "Visit", url: "https://redhexx.com" },
     ],
-    fullDescription: `REDHEXX is an early-stage startup I'm building — an AI-native security review platform focused on the new attack surface created by AI agents and Model Context Protocol (MCP) servers.
+    fullDescription: `REDHEXX is an early-stage startup I'm building - an AI-native security review platform focused on the new attack surface created by AI agents and Model Context Protocol (MCP) servers.
 
 The Problem:
 Teams are shipping AI agents and MCP integrations fast, but traditional pentests rarely reason about prompt-injection-to-tool-abuse or privilege chains between agents. That leaves a new class of exposure unaddressed.
 
 What It Does:
-A hands-on security review of your MCP and agent configuration, run in a scoped test environment — no production access required. It surfaces:
+A hands-on security review of your MCP and agent configuration, run in a scoped test environment - no production access required. It surfaces:
 • Unauthenticated tools that agents can invoke without authorization
 • Over-scoped permissions granting excessive capability
 • Injection paths that turn prompt attacks into privileged actions
@@ -47,9 +47,43 @@ A hands-on security review of your MCP and agent configuration, run in a scoped 
 Deliverables: a configuration scan, ranked vulnerability findings, and clear remediation guidance.
 
 Status:
-Pre-launch / early access — building the platform, refining the methodology, and working with first design partners.
+Pre-launch / early access - building the platform, refining the methodology, and working with first design partners.
 
-Role: Founder — product direction, security research, and engineering.`,
+Role: Founder - product direction, security research, and engineering.`,
+  },
+  {
+    title: "TuitionCreep",
+    category: "Web App · Founder",
+    featured: true,
+    status: "LIVE",
+    description: "College cost tool that projects your real four-year tuition bill - accounting for the annual increases that offer letters hide while scholarships stay flat. Compare aid packages across schools.",
+    tech: ["Web App", "IPEDS Data", "College Cost", "EdTech"],
+    gradient: "from-red-900 via-red-950 to-black",
+    logo: "/TuitionCreep.png",
+    links: [
+      { label: "Visit", url: "https://tuitioncreep.org" },
+    ],
+    fullDescription: `TuitionCreep is a product I built to expose the true four-year cost of college - the number offer letters never show you.
+
+The Problem:
+Colleges advertise freshman-year tuition, but tuition compounds every year while most scholarships stay flat. Families commit based on year-one numbers and get blindsided by a much larger bill in years 3 and 4.
+
+What It Does:
+• Projects your total four-year cost using real tuition-growth rates
+• Compares up to four schools side by side, each with its own aid package
+• Year-by-year cost breakdowns so you see exactly where the increases land
+• "Guaranteed tuition" resource highlighting schools with frozen pricing
+• A financial-aid questions guide for families evaluating offers
+
+Data:
+Search across 3,478 US schools, powered by federal IPEDS data through 2023.
+
+Who It's For:
+High school seniors and families comparing college options and financial aid offers.
+
+Tagline: "Know your senior-year bill before you enroll."
+
+Role: Founder - product, data, and engineering.`,
   },
   {
     title: "SpecterAI",
@@ -62,7 +96,6 @@ Role: Founder — product direction, security research, and engineering.`,
     logo: "/SpecterAI.png",
     links: [
       { label: "Live Tool", url: "https://hiratinspace.github.io/specter-ai/" },
-      { label: "GitHub", url: "https://github.com/hiratinspace/specter-ai" },
     ],
     fullDescription: `An AI-powered penetration testing reconnaissance tool that automates the first phase of a security assessment.
 
@@ -71,22 +104,22 @@ User inputs a target domain → 4 recon modules run in parallel → Results aggr
 Web is deployed through render. So it might take some time deploying at first.
 
 Recon Modules:
-• DNS / WHOIS — IP addresses, DNS records, subdomains, registrar info
-• Port Scanner — Open TCP ports, running services, service banners
-• HTTP Probe — Tech stack, missing security headers, cookie flags, redirects
-• SSL/TLS — Certificate expiry, weak ciphers, self-signed certs, HTTP→HTTPS
+• DNS / WHOIS - IP addresses, DNS records, subdomains, registrar info
+• Port Scanner - Open TCP ports, running services, service banners
+• HTTP Probe - Tech stack, missing security headers, cookie flags, redirects
+• SSL/TLS - Certificate expiry, weak ciphers, self-signed certs, HTTP→HTTPS
 
 AI Analysis:
 Claude Sonnet acts as an experienced pentester. It doesn't just return raw data, it interprets findings, assigns a risk level, summarizes the attack surface, and provides prioritized next steps in structured JSON.
 
 Key Features:
-• Parallel scanning — all 4 modules run simultaneously for speed
-• Two interfaces — CLI for terminal users, web dashboard for visual reporting
+• Parallel scanning - all 4 modules run simultaneously for speed
+• Two interfaces - CLI for terminal users, web dashboard for visual reporting
 • Real-time progress streaming via Server-Sent Events (SSE)
-• Scan history — every scan persisted and accessible anytime also downloadable
-• JSON export — raw API endpoint for every report
-• Graceful error handling — one failing module never crashes the scan
-• Ethical use built in — authorized-use disclaimer on every report
+• Scan history - every scan persisted and accessible anytime also downloadable
+• JSON export - raw API endpoint for every report
+• Graceful error handling - one failing module never crashes the scan
+• Ethical use built in - authorized-use disclaimer on every report
 
 Tech Stack:
 Backend: Python 3.9+, Flask, concurrent.futures, socket, ssl, SSE
@@ -232,7 +265,7 @@ const FeaturedCard = ({ project, onClick }) => (
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-6 sm:p-8 flex flex-col gap-3 min-w-0">
+      <div className="flex-1 p-5 sm:p-6 flex flex-col gap-2.5 min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <span className="px-3 py-1 bg-black/60 border border-red-900/50 text-xs text-red-400" style={{ fontFamily: FONT }}>
             {project.category}
@@ -243,9 +276,35 @@ const FeaturedCard = ({ project, onClick }) => (
             </span>
           )}
         </div>
-        <h3 className="text-2xl sm:text-3xl font-bold text-white group-hover:text-red-400 transition-colors" style={{ fontFamily: FONT }}>
-          {project.title}
-        </h3>
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-red-400 transition-colors" style={{ fontFamily: FONT }}>
+            {project.title}
+          </h3>
+          {project.links && (
+            <div className="flex flex-wrap gap-2">
+              {project.links.map((link, i) => {
+                const safeUrl = sanitizeUrl(link.url);
+                if (!safeUrl) return null;
+                return (
+                  <a
+                    key={i}
+                    href={safeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    referrerPolicy="no-referrer"
+                    onClick={e => e.stopPropagation()}
+                    className="px-3 py-1.5 bg-black/60 hover:bg-red-900/60 border border-red-800 text-red-300 hover:text-white text-xs flex items-center gap-1 transition-all"
+                    style={{ fontFamily: FONT }}
+                    aria-label={`${link.label} (opens in new tab)`}
+                  >
+                    {link.label}
+                    <ChevronRight className="w-3 h-3" aria-hidden="true" />
+                  </a>
+                );
+              })}
+            </div>
+          )}
+        </div>
         <p className="text-gray-400 text-sm leading-relaxed">{project.description}</p>
         <div className="flex flex-wrap gap-2">
           {project.tech.map((tech, i) => (
@@ -254,30 +313,6 @@ const FeaturedCard = ({ project, onClick }) => (
             </span>
           ))}
         </div>
-        {project.links && (
-          <div className="flex flex-wrap gap-3 mt-1">
-            {project.links.map((link, i) => {
-              const safeUrl = sanitizeUrl(link.url);
-              if (!safeUrl) return null;
-              return (
-                <a
-                  key={i}
-                  href={safeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  referrerPolicy="no-referrer"
-                  onClick={e => e.stopPropagation()}
-                  className="px-4 py-2 bg-black/60 hover:bg-red-900/60 border border-red-800 text-red-300 hover:text-white text-sm flex items-center gap-1 transition-all"
-                  style={{ fontFamily: FONT }}
-                  aria-label={`${link.label} (opens in new tab)`}
-                >
-                  {link.label}
-                  <ChevronRight className="w-3 h-3" aria-hidden="true" />
-                </a>
-              );
-            })}
-          </div>
-        )}
       </div>
     </div>
   </div>
@@ -440,11 +475,11 @@ const ProjectsPage = () => {
         .pulse-dot { animation: navPulse 1.8s ease-in-out infinite; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .card-anim { animation: fadeInUp 0.4s ease forwards; }
-        .featured-banner { width: 40%; min-height: 260px; flex-shrink: 0; }
+        .featured-banner { width: 40%; min-height: 150px; flex-shrink: 0; }
         @media (max-width: 640px) {
           .portfolio-label { display: none !important; }
           .featured-card-inner { flex-direction: column; }
-          .featured-banner { width: 100%; min-height: 180px; }
+          .featured-banner { width: 100%; min-height: 130px; }
         }
         ::-webkit-scrollbar { width: 4px; background: #080103; }
         ::-webkit-scrollbar-thumb { background: rgba(180,0,30,0.5); border-radius: 2px; }
@@ -486,7 +521,7 @@ const ProjectsPage = () => {
         }}>
           <div style={{ maxWidth: 980, margin: '0 auto', padding: '12px 24px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
 
-            {/* Left — back to portfolio */}
+            {/* Left - back to portfolio */}
             <button
               onClick={() => navigate('/')}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: 'rgba(200,180,180,0.45)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 1.5, justifySelf: 'start', transition: 'color 0.15s' }}
@@ -497,13 +532,13 @@ const ProjectsPage = () => {
               <span style={{ display: 'inline', fontSize: 15, letterSpacing: 1.5 }} className="portfolio-label">PORTFOLIO</span>
             </button>
 
-            {/* Centre — page label */}
+            {/* Centre - page label */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 18px', border: '1px solid rgba(180,0,30,0.4)', background: 'rgba(180,0,30,0.07)' }}>
               <Code size={14} style={{ color: 'rgba(200,140,140,0.8)' }} />
               <span style={{ color: 'rgba(200,140,140,0.8)', fontSize: 12, fontWeight: 700, letterSpacing: 3, fontFamily: FONT }}>PROJECTS</span>
             </div>
 
-            {/* Right — hamburger */}
+            {/* Right - hamburger */}
             <button
               onClick={() => setSideNavOpen(o => !o)}
               style={{ justifySelf: 'end', background: 'none', border: '1px solid rgba(180,0,30,0.4)', padding: '6px 8px', cursor: 'pointer', color: '#ff6b6b', display: 'flex', alignItems: 'center', transition: 'border-color 0.15s' }}
@@ -572,7 +607,7 @@ const ProjectsPage = () => {
             </button>
           </nav>
 
-          {/* Drawer footer — back to portfolio */}
+          {/* Drawer footer - back to portfolio */}
           <div style={{ padding: '14px 20px', borderTop: '1px solid rgba(180,0,30,0.25)' }}>
             <button
               onClick={() => navigate('/')}
@@ -604,7 +639,7 @@ const ProjectsPage = () => {
               PROJECTS
             </h1>
             <p style={{ color: 'rgba(200,180,180,0.5)', fontSize: 13, maxWidth: 520, lineHeight: 1.7 }}>
-              Featured work up top — my security startup and a live AI recon tool — with CTF tooling and applied research below. Click any card for full details.
+              Featured work up top - my security startup and a live AI recon tool - with CTF tooling and applied research below. Click any card for full details.
             </p>
             <div style={{ marginTop: 16, width: 48, height: 2, background: 'linear-gradient(to right, #ef4444, transparent)' }} />
           </div>

@@ -1,4 +1,4 @@
-// Static portfolio content — defined once at module level (not inside a
+// Static portfolio content - defined once at module level (not inside a
 // component body, so it is never re-created on render) and deep-frozen so
 // it cannot be mutated at runtime. (Security audit Findings 8 & 10.)
 import { Briefcase, Cpu, Network, Building2, Megaphone, Users } from 'lucide-react';

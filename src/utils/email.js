@@ -1,5 +1,5 @@
 /**
- * Email obfuscation — decoded at runtime so the address never
+ * Email obfuscation - decoded at runtime so the address never
  * appears as a literal string in the HTML source or JS bundle.
  * Defeats static scrapers and harvesting bots.
  *

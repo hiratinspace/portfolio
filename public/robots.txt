@@ -1,4 +1,4 @@
-# hiratrahi.com — personal portfolio
+# hiratrahi.com - personal portfolio
 # Open to search engines and social preview bots; closed to AI training crawlers.
 
 # Default: allow all crawling

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 
 /**
- * Error Boundary — catches any runtime error in the component
+ * Error Boundary - catches any runtime error in the component
  * tree and renders a graceful fallback instead of a blank page.
  * Must be a class component; hooks cannot catch render errors.
  * Console logging is dev-only to avoid leaking stack traces.

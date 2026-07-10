@@ -120,7 +120,7 @@ const QRLandingPage = () => {
             </div>
             <Terminal className="w-3 h-3 mr-2" style={{ color: '#dc2626' }} />
             <span className="text-s tracking-widest" style={{ color: '#dc2626' }}>
-              redhexx@kali — bash — 80×24
+              redhexx@kali - bash - 80×24
             </span>
           </div>
 
@@ -154,7 +154,7 @@ const QRLandingPage = () => {
                       Congrats!!
                     </p>
                     <p className="leading-relaxed" style={{ fontSize: '0.95rem', color: 'rgb(255, 255, 255)' }}>
-                      You scanned a random QR code you found somewhere — and got teleported to a stranger's website.
+                      You scanned a random QR code you found somewhere - and got teleported to a stranger's website.
                       That's giving very{' '}
                       <span style={{ color: '#f87171' }}>main character in a cybercrime documentary</span> energy.
                     </p>
@@ -175,10 +175,10 @@ const QRLandingPage = () => {
               <div className="mt-6 pt-5" style={{ borderTop: '1px solid rgba(153,27,27,0.3)' }}>
                 <div className="flex items-center space-x-2 mb-4">
                   <Shield className="w-5 h-5" style={{ color: '#dc2626' }} />
-                  <span className="text-lg tracking-wider" style={{ color: '#991b1b' }}>— redhexx</span>
+                  <span className="text-lg tracking-wider" style={{ color: '#991b1b' }}>- redhexx</span>
                 </div>
                 <p className="mb-5" style={{ fontSize: '0.95rem', color: 'rgb(255, 255, 255)' }}>
-                  Since you're already here and clearly curious — the person behind this QR code builds
+                  Since you're already here and clearly curious - the person behind this QR code builds
                   security tools and breaks things for fun 'ethically'. Might as well make the click worth it.
                 </p>
                 <button

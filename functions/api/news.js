@@ -1,12 +1,12 @@
 /**
- * /functions/api/news.js  — Cloudflare Pages Function
+ * /functions/api/news.js  - Cloudflare Pages Function
  *
  * Fetches cybersecurity RSS feeds in parallel, strips them down to
  * title + description + link, then sends a single batch request to
  * Claude to categorize every item and add a severity tag.
  *
  * Environment variables needed (set in Cloudflare Pages dashboard):
- *   ANTHROPIC_API_KEY   — your Anthropic API key
+ *   ANTHROPIC_API_KEY   - your Anthropic API key
  *
  * Response is cached at the edge for 20 minutes so Claude isn't
  * called on every page load.
@@ -20,7 +20,7 @@ const FEEDS = [
   { source: 'Schneier on Security', url: 'https://www.schneier.com/feed/atom/',                  limit: 2 },
 ];
 
-// ── Minimal XML parser — extracts <item> / <entry> blocks from RSS/Atom ──────
+// ── Minimal XML parser - extracts <item> / <entry> blocks from RSS/Atom ──────
 function parseItems(xml, limit) {
   const items = [];
   // Support both RSS <item> and Atom <entry>
@@ -71,7 +71,7 @@ async function fetchFeed({ source, url, limit }) {
 // ── Ask Claude to categorize and summarize all items in one batch call ────────
 async function enrichWithClaude(items, apiKey) {
   if (!apiKey) {
-    // No API key — return items with neutral tags so the UI still works
+    // No API key - return items with neutral tags so the UI still works
     return items.map(item => ({
       ...item,
       severity: 'INFO',
@@ -85,12 +85,12 @@ async function enrichWithClaude(items, apiKey) {
 - "category": one short label from: Ransomware | Vulnerability | Data Breach | Malware | APT | Patch | Policy | Research | Other
 - "summary": one sentence (max 20 words) summarising the security significance
 
-Be conservative with CRITICAL — only use it for actively exploited 0-days, major breaches, or widespread ransomware campaigns.
+Be conservative with CRITICAL - only use it for actively exploited 0-days, major breaches, or widespread ransomware campaigns.
 
 Respond ONLY with a valid JSON array, no markdown, no preamble.
 
 Items:
-${items.map((item, i) => `${i}. [${item.source}] ${item.title} — ${item.description}`).join('\n')}`;
+${items.map((item, i) => `${i}. [${item.source}] ${item.title} - ${item.description}`).join('\n')}`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -107,7 +107,7 @@ ${items.map((item, i) => `${i}. [${item.source}] ${item.title} — ${item.descri
   });
 
   if (!res.ok) {
-    // Claude call failed — return items as-is with neutral tags
+    // Claude call failed - return items as-is with neutral tags
     return items.map(item => ({ ...item, severity: 'INFO', category: 'General', summary: item.description || item.title }));
   }
 
@@ -153,7 +153,7 @@ export async function onRequest(context) {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'public, max-age=1200', // 20 min browser + edge cache
-      // Restrict to your own domain — same policy as /api/cves
+      // Restrict to your own domain - same policy as /api/cves
       'Access-Control-Allow-Origin': 'https://hiratrahi.com',
     },
   });

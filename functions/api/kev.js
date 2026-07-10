@@ -1,4 +1,4 @@
-// Cloudflare Pages Function — proxies the CISA Known Exploited Vulnerabilities
+// Cloudflare Pages Function - proxies the CISA Known Exploited Vulnerabilities
 // (KEV) catalog. KEV lists CVEs with CONFIRMED active exploitation in the wild,
 // which is distinct from the raw NVD disclosure feed. Proxied server-side to
 // avoid CORS, trim the ~1MB payload to the most recent entries, and cache at
@@ -54,7 +54,7 @@ export async function onRequest(context) {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        // Restrict to your own domain — same policy as /api/cves and /api/news
+        // Restrict to your own domain - same policy as /api/cves and /api/news
         'Access-Control-Allow-Origin': 'https://hiratrahi.com',
         'Cache-Control': 'public, max-age=3600', // 1h browser + edge cache
       },

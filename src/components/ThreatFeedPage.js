@@ -51,7 +51,7 @@ const ScoreBar = ({ score }) => {
   );
 };
 
-// ── CVE card — log-entry style ────────────────────────────────────────────────
+// ── CVE card - log-entry style ────────────────────────────────────────────────
 const CVECard = ({ cve, index }) => {
   const [expanded, setExpanded] = useState(false);
   const id    = cve.cve?.id ?? 'CVE-UNKNOWN';
@@ -61,7 +61,7 @@ const CVECard = ({ cve, index }) => {
   const cfg   = SEVERITY_CONFIG[sev];
   const published = cve.cve?.published
     ? new Date(cve.cve.published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    : '—';
+    : '-';
   const shortDesc = desc.length > 200 ? desc.slice(0, 200) + '…' : desc;
 
   return (
@@ -97,7 +97,7 @@ const CVECard = ({ cve, index }) => {
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 14 }}>
         <div style={{ flex: 1, minWidth: 0 }}>
 
-          {/* Top row — ID, badge, date, score */}
+          {/* Top row - ID, badge, date, score */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 8 }}>
             <span style={{
               color: '#f0f0f0', fontWeight: 700, fontSize: 13, letterSpacing: 0.5,
@@ -212,7 +212,7 @@ const CategoryPanel = ({ cves, category }) => {
                 onMouseEnter={e => { e.currentTarget.style.background = cfg.bg; e.currentTarget.style.boxShadow = cfg.glow; }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.boxShadow = 'none'; }}
               >
-                LOAD MORE — {filtered.length - visibleCount} REMAINING
+                LOAD MORE - {filtered.length - visibleCount} REMAINING
               </button>
               <button
                 onClick={() => setVisibleCount(filtered.length)}
@@ -272,7 +272,7 @@ const CategoryTile = ({ label, count, isActive, onClick, loading }) => {
         }
       }}
     >
-      {/* Count — always in severity color */}
+      {/* Count - always in severity color */}
       <div style={{
         color: cfg.color,
         fontSize: 38, fontWeight: 700, lineHeight: 1,
@@ -280,10 +280,10 @@ const CategoryTile = ({ label, count, isActive, onClick, loading }) => {
         transition: 'all 0.18s',
         marginBottom: 10,
       }}>
-        {loading ? '—' : count}
+        {loading ? '-' : count}
       </div>
 
-      {/* Label + chevron — always in severity color */}
+      {/* Label + chevron - always in severity color */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{
           color: isActive ? cfg.color : `${cfg.color}cc`,
@@ -411,7 +411,7 @@ const ThreatFeedPage = () => {
   return (
     <div style={{ background: '#07010400', minHeight: '100vh', fontFamily: FONT, color: '#f0e8e8', position: 'relative', overflowX: 'hidden' }}>
       <style>{`
-        /* Page background — deep red-black with a faint grid */
+        /* Page background - deep red-black with a faint grid */
         body { background: #080103 !important; }
 
         .intel-bg {
@@ -469,7 +469,7 @@ const ThreatFeedPage = () => {
         ::-webkit-scrollbar { width: 4px; background: #080103; }
         ::-webkit-scrollbar-thumb { background: rgba(180,0,30,0.5); border-radius: 2px; }
 
-        /* Tiles — 5 columns desktop, 2 columns mobile */
+        /* Tiles - 5 columns desktop, 2 columns mobile */
         .tiles-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
 
         @media (max-width: 640px) {
@@ -482,7 +482,7 @@ const ThreatFeedPage = () => {
       {/* ── Page wrapper with grid bg ── */}
       <div className="intel-bg" style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
 
-        {/* Matrix rain — full visibility */}
+        {/* Matrix rain - full visibility */}
         <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 3 }}>
           {matrixColumns.map(col => (
             <div key={col.id} style={{ position: 'absolute', left: col.x, top: col.y, fontFamily: FONT, fontSize: 12, lineHeight: 1.4, transform: 'translateZ(0)', willChange: 'transform' }}>
@@ -500,7 +500,7 @@ const ThreatFeedPage = () => {
           ))}
         </div>
 
-        {/* Center dimming overlay — fades the matrix behind the content column,
+        {/* Center dimming overlay - fades the matrix behind the content column,
             leaves both side edges fully visible */}
         <div style={{
           position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 4,
@@ -516,7 +516,7 @@ const ThreatFeedPage = () => {
         }}>
           <div style={{ maxWidth: 980, margin: '0 auto', padding: '12px 24px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
 
-            {/* Left — back to portfolio */}
+            {/* Left - back to portfolio */}
             <button
               onClick={() => navigate('/')}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: 'rgba(200,180,180,0.45)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 1.5, justifySelf: 'start', transition: 'color 0.15s' }}
@@ -527,13 +527,13 @@ const ThreatFeedPage = () => {
               <span style={{ display: 'inline', fontSize: 15, letterSpacing: 1.5 }} className="portfolio-label">PORTFOLIO</span>
             </button>
 
-            {/* Centre — current page label, not a link */}
+            {/* Centre - current page label, not a link */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 18px', border: '1px solid rgba(180,0,30,0.4)', background: 'rgba(180,0,30,0.07)' }}>
               <span style={{ color: 'rgba(200,140,140,0.8)', fontSize: 12, fontWeight: 700, letterSpacing: 3, fontFamily: FONT }}>INTEL</span>
               <span className="pulse-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: '#ff4444', display: 'inline-block', flexShrink: 0 }} />
             </div>
 
-            {/* Right — hamburger */}
+            {/* Right - hamburger */}
             <button
               onClick={() => setSideNavOpen(o => !o)}
               style={{ justifySelf: 'end', background: 'none', border: '1px solid rgba(180,0,30,0.4)', padding: '6px 8px', cursor: 'pointer', color: '#ff6b6b', display: 'flex', alignItems: 'center', transition: 'border-color 0.15s' }}
@@ -651,7 +651,7 @@ const ThreatFeedPage = () => {
               </div>
             </div>
             <p style={{ color: 'rgba(243, 235, 235, 0.92)', fontSize: 13, lineHeight: 1.7, fontFamily: FONT, maxWidth: 600 }}>
-              Newly <strong style={{ color: '#fff', fontWeight: 700 }}>disclosed</strong> CRITICAL &amp; HIGH severity CVEs from the past 7 days, ranked by CVSS score — the raw feed of what's being reported, most of it not yet seen in active attacks. Click a severity tile to drill down.
+              Newly <strong style={{ color: '#fff', fontWeight: 700 }}>disclosed</strong> CRITICAL &amp; HIGH severity CVEs from the past 7 days, ranked by CVSS score - the raw feed of what's being reported, most of it not yet seen in active attacks. Click a severity tile to drill down.
             </p>
           </div>
 

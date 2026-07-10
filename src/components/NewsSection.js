@@ -69,7 +69,7 @@ const NewsCard = ({ item, index }) => {
             {item.title}
           </p>
 
-          {/* AI summary — always visible */}
+          {/* AI summary - always visible */}
           <p style={{ color: 'rgba(209,213,219,0.7)', fontSize: 12, lineHeight: 1.6, fontFamily: FONT }}>
             {item.summary}
           </p>
@@ -116,7 +116,7 @@ const NewsSection = () => {
     try {
       const res = await fetch('/api/news');
         if (res.headers.get('content-type')?.includes('text/html')) {
-        throw new Error('News API only available on deployed site — not in local dev');
+        throw new Error('News API only available on deployed site - not in local dev');
         }
       if (!res.ok) throw new Error(`News API error: ${res.status}`);
       const data = await res.json();

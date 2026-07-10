@@ -73,7 +73,7 @@ const Portfolio = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, [showResume]);
 
-  // Matrix rain — reinitializes on window resize (debounced)
+  // Matrix rain - reinitializes on window resize (debounced)
   useEffect(() => {
     const buildColumns = (width) => {
       const chars = '0123456789ABCDEF'.split('');
@@ -189,7 +189,7 @@ const Portfolio = () => {
           </div>
         ))}
       </div>
-      {/* Scroll-driven dim layer — keeps the matrix rain vivid on the hero,
+      {/* Scroll-driven dim layer - keeps the matrix rain vivid on the hero,
           fades it back for every section below. Opacity set in handleScroll. */}
       <div
         ref={dimOverlayRef}
@@ -201,7 +201,7 @@ const Portfolio = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
 
-            {/* LEFT — logo */}
+            {/* LEFT - logo */}
             <button
               onClick={() => scrollToSection('home')}
               className="flex items-center space-x-2 cursor-pointer group justify-self-start"
@@ -234,7 +234,7 @@ const Portfolio = () => {
               </span>
             </button>
 
-            {/* CENTRE — page links */}
+            {/* CENTRE - page links */}
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => navigate('/projects')}
@@ -262,7 +262,7 @@ const Portfolio = () => {
               </button>
             </div>
 
-            {/* RIGHT — nav links on desktop, hamburger on mobile */}
+            {/* RIGHT - nav links on desktop, hamburger on mobile */}
             <div className="justify-self-end flex items-center">
               {/* Desktop nav links */}
               <div className="hidden sm:flex items-center space-x-3 sm:space-x-6">
@@ -300,7 +300,7 @@ const Portfolio = () => {
         `}</style>
       </nav>
 
-      {/* Mobile nav sidebar — backdrop */}
+      {/* Mobile nav sidebar - backdrop */}
       {navOpen && (
         <div
           className="fixed inset-0 sm:hidden"
@@ -309,7 +309,7 @@ const Portfolio = () => {
         />
       )}
 
-      {/* Mobile nav sidebar — drawer (slides from right) */}
+      {/* Mobile nav sidebar - drawer (slides from right) */}
       <div
         className="fixed top-0 bottom-0 sm:hidden"
         style={{
@@ -596,7 +596,7 @@ const Portfolio = () => {
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-              {/* Email decoded at runtime — address never appears as a literal in source */}
+              {/* Email decoded at runtime - address never appears as a literal in source */}
               <a href={`mailto:${getEmail()}`}
                 className="flex flex-col items-center p-8 border border-red-900/50 hover:border-red-700 hover:bg-red-950/20 transition-all group"
                 referrerPolicy="no-referrer"
@@ -696,7 +696,7 @@ const Portfolio = () => {
                 src="/resume.pdf"
                 className="w-full"
                 style={{ height: 'calc(90vh - 52px)' }}
-                title="Resume — Hirat Rahman Rahi"
+                title="Resume - Hirat Rahman Rahi"
               />
           </div>
         </div>
@@ -706,7 +706,7 @@ const Portfolio = () => {
   );
 };
 
-// ErrorBoundary wraps the entire app — any runtime error shows a
+// ErrorBoundary wraps the entire app - any runtime error shows a
 // fallback instead of a blank page
 const App = () => (
   <Routes>

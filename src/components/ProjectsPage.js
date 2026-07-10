@@ -23,6 +23,8 @@ const PROJECTS = [
   {
     title: "REDHEXX",
     category: "Startup · Founder",
+    featured: true,
+    status: "FOUNDER · EARLY ACCESS",
     description: "AI-native security review platform for the MCP and AI-agent attack surface. Founder — currently in early access.",
     tech: ["AI Security", "MCP", "LLM Agents", "Prompt Injection", "Pentesting"],
     gradient: "from-red-800 via-red-950 to-black",
@@ -52,6 +54,8 @@ Role: Founder — product direction, security research, and engineering.`,
   {
     title: "SpecterAI",
     category: "AI-Powered Security Tool",
+    featured: true,
+    status: "LIVE",
     description: "AI-powered penetration testing reconnaissance tool. Input a target domain, get a full recon scan analyzed by Claude AI, and receive a professional pentest report. All in one command.",
     tech: ["Python", "Flask", "Claude AI", "DNS", "SSL/TLS", "SSE", "REST API"],
     gradient: "from-red-950 via-red-900 to-black",
@@ -205,6 +209,76 @@ const ProjectCard = ({ project, onClick }) => (
           {tech}
         </span>
       ))}
+    </div>
+  </div>
+);
+
+// ─── Featured Card (full-width, flagship projects) ────────────────────────────
+const FeaturedCard = ({ project, onClick }) => (
+  <div
+    className="group cursor-pointer border border-red-900/50 hover:border-red-600 transition-all bg-black/40"
+    onClick={() => onClick(project)}
+  >
+    <div className="featured-card-inner flex">
+      {/* Banner / logo */}
+      <div className={`featured-banner relative overflow-hidden bg-gradient-to-br ${project.gradient}`}>
+        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          {project.logo
+            ? <img src={project.logo} alt={project.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+            : <Terminal className="w-16 h-16 text-red-400/50 group-hover:text-red-400 transition-all group-hover:scale-110" />
+          }
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 p-6 sm:p-8 flex flex-col gap-3 min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="px-3 py-1 bg-black/60 border border-red-900/50 text-xs text-red-400" style={{ fontFamily: FONT }}>
+            {project.category}
+          </span>
+          {project.status && (
+            <span className="px-3 py-1 bg-red-950/60 border border-red-700 text-xs text-red-300 font-bold tracking-widest" style={{ fontFamily: FONT }}>
+              {project.status}
+            </span>
+          )}
+        </div>
+        <h3 className="text-2xl sm:text-3xl font-bold text-white group-hover:text-red-400 transition-colors" style={{ fontFamily: FONT }}>
+          {project.title}
+        </h3>
+        <p className="text-gray-400 text-sm leading-relaxed">{project.description}</p>
+        <div className="flex flex-wrap gap-2">
+          {project.tech.map((tech, i) => (
+            <span key={i} className="text-xs px-2 py-1 bg-red-950/30 border border-red-900/50 text-red-400" style={{ fontFamily: FONT }}>
+              {tech}
+            </span>
+          ))}
+        </div>
+        {project.links && (
+          <div className="flex flex-wrap gap-3 mt-1">
+            {project.links.map((link, i) => {
+              const safeUrl = sanitizeUrl(link.url);
+              if (!safeUrl) return null;
+              return (
+                <a
+                  key={i}
+                  href={safeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  referrerPolicy="no-referrer"
+                  onClick={e => e.stopPropagation()}
+                  className="px-4 py-2 bg-black/60 hover:bg-red-900/60 border border-red-800 text-red-300 hover:text-white text-sm flex items-center gap-1 transition-all"
+                  style={{ fontFamily: FONT }}
+                  aria-label={`${link.label} (opens in new tab)`}
+                >
+                  {link.label}
+                  <ChevronRight className="w-3 h-3" aria-hidden="true" />
+                </a>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   </div>
 );
@@ -366,8 +440,11 @@ const ProjectsPage = () => {
         .pulse-dot { animation: navPulse 1.8s ease-in-out infinite; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .card-anim { animation: fadeInUp 0.4s ease forwards; }
+        .featured-banner { width: 40%; min-height: 260px; flex-shrink: 0; }
         @media (max-width: 640px) {
           .portfolio-label { display: none !important; }
+          .featured-card-inner { flex-direction: column; }
+          .featured-banner { width: 100%; min-height: 180px; }
         }
         ::-webkit-scrollbar { width: 4px; background: #080103; }
         ::-webkit-scrollbar-thumb { background: rgba(180,0,30,0.5); border-radius: 2px; }
@@ -527,22 +604,43 @@ const ProjectsPage = () => {
               PROJECTS
             </h1>
             <p style={{ color: 'rgba(200,180,180,0.5)', fontSize: 13, maxWidth: 520, lineHeight: 1.7 }}>
-              What I build — from an early-stage security startup to hands-on tools, CTF solvers, and applied research. Click any card to view full details.
+              Featured work up top — my security startup and a live AI recon tool — with CTF tooling and applied research below. Click any card for full details.
             </p>
             <div style={{ marginTop: 16, width: 48, height: 2, background: 'linear-gradient(to right, #ef4444, transparent)' }} />
           </div>
 
-          {/* Project grid */}
+          {/* Featured projects */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+            <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4, fontFamily: FONT }}>{'// FEATURED'}</span>
+            <div style={{ flex: 1, height: 1, background: 'rgba(180,0,30,0.25)' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 28, marginBottom: 56 }}>
+            {PROJECTS.filter(p => p.featured).map((project, idx) => (
+              <div
+                key={project.title}
+                className="card-anim"
+                style={{ animationDelay: `${idx * 80}ms`, animationFillMode: 'both' }}
+              >
+                <FeaturedCard project={project} onClick={setSelectedProject} />
+              </div>
+            ))}
+          </div>
+
+          {/* CTF & research grid */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+            <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4, fontFamily: FONT }}>{'// CTF & RESEARCH'}</span>
+            <div style={{ flex: 1, height: 1, background: 'rgba(180,0,30,0.25)' }} />
+          </div>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: 28,
           }}>
-            {PROJECTS.map((project, idx) => (
+            {PROJECTS.filter(p => !p.featured).map((project, idx) => (
               <div
-                key={idx}
+                key={project.title}
                 className="card-anim"
-                style={{ animationDelay: `${idx * 80}ms`, animationFillMode: 'both' }}
+                style={{ animationDelay: `${(idx + 2) * 80}ms`, animationFillMode: 'both' }}
               >
                 <ProjectCard project={project} onClick={setSelectedProject} />
               </div>

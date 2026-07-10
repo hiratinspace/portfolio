@@ -1,0 +1,8 @@
+# security.txt for hiratrahi.com (RFC 9116)
+# Responsible disclosure: if you find a security issue with this site, reach out.
+
+Contact: https://linkedin.com/in/hiratrahi
+Expires: 2027-07-10T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://hiratrahi.com/.well-known/security.txt
+Hiring: https://hiratrahi.com

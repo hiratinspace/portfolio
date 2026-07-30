@@ -1,170 +1,118 @@
-# 🔐 Personal Portfolio - Hirat Rahman Rahi
+# Hirat Rahman Rahi, Portfolio
 
-Hey! This is my personal portfolio website showcasing my work in cybersecurity, software development, and my journey as a Computer Science & Neuroscience student at Illinois Wesleyan University.
+Personal site and project showcase for Hirat Rahman Rahi, a Computer Science and Neuroscience student at Illinois Wesleyan University focused on offensive security, automation, and applied AI tooling.
 
-🌐 **Live Site:** [hiratrahi.com](https://hiratrahi.com)
+**Live site:** [hiratrahi.com](https://hiratrahi.com)
 
-## 📸 Preview
+![Homepage hero section](docs/screenshots/homepage-hero.png)
 
-A modern, dark-themed portfolio with a burgundy and red color scheme designed to reflect my focus on offensive security and red team operations.
+---
 
-## 🎯 What's Inside
+## About This Project
 
-- **Hero Section** - Introduction with my focus on offensive security
-- **About** - My background, education, and what drives me
-- **Skills** - Technical skills including binary exploitation, web security, and more
-- **Experience** - My internships and work experience
-- **Projects** - Security projects I've worked on (CTF challenges, exploitation frameworks, etc.)
-- **Contact** - Ways to reach me
+This repository is the source for my personal portfolio: a React single-page application deployed on Cloudflare Pages. Beyond the standard "about me" layout, it includes a couple of functional tools built on Cloudflare Pages Functions, namely a live security threat intelligence feed and a project showcase with detailed case studies.
 
-## 🛠️ Built With
+The goal was to build something that reads less like a template and more like a working piece of software: real API integrations, a documented security posture, and content that reflects actual projects and experience rather than placeholder copy.
 
-- **React** - Frontend framework
-- **Tailwind CSS** - For styling (with custom burgundy theme)
-- **Lucide React** - Icons
-- **GitHub Pages** - Source
-- **Cloudflare** - Hosting + Deployment platform
+## Pages and Features
 
-## 🎨 Design Choices
+| Page | Route | What it does |
+|---|---|---|
+| **Home** | `/` | Hero, about, skills, experience/leadership timeline, and contact sections |
+| **Projects** | `/projects` | Case studies for shipped work, including REDHEXX, TuitionCreep, and SpecterAI, with tech stacks and links |
+| **Intel** | `/intel` | Live security intelligence dashboard, see below |
+| **Scan** | `/scan` | A small easter egg landing page for a QR code on my resume/business card |
 
-- **Burgundy/Red Theme** - Represents power, sophistication, and the "red team" focus in cybersecurity
-- **Monospace Font** - Gives that terminal/hacker aesthetic
-- **Dark Mode** - Easier on the eyes and fits the security theme
-- **Animated Elements** - Floating hex codes and smooth transitions for a modern feel
+### Live Threat Intelligence Feed (`/intel`)
 
-## 📁 Project Structure
+The Intel page pulls from two independent, live security data sources through Cloudflare Pages Functions:
+
+- **NVD Threat Feed:** recently published CVEs pulled from the National Vulnerability Database (NIST), for general vulnerability awareness.
+- **CISA Known Exploited Vulnerabilities (KEV):** vulnerabilities CISA has confirmed are being actively exploited in the wild, which is a stricter and more urgent signal than "just disclosed."
+- **Security News:** a rolling feed of current cybersecurity headlines.
+
+These are served through backend functions (`functions/api/cves.js`, `functions/api/kev.js`, `functions/api/news.js`) rather than called directly from the client, which keeps API keys off the frontend.
+
+## Tech Stack
+
+**Frontend**
+- React 18
+- React Router 7
+- Tailwind CSS (custom burgundy/red theme)
+- Lucide React (icons)
+
+**Backend / Infrastructure**
+- Cloudflare Pages (hosting)
+- Cloudflare Pages Functions (serverless API routes for CVE, KEV, and news data)
+
+## Security Posture
+
+Since this is a cybersecurity-focused portfolio, the site's own security hygiene matters. Notable measures in place:
+
+- Content Security Policy, HSTS, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, and a restrictive `Permissions-Policy`, all defined in [`public/_headers`](public/_headers)
+- A published [`security.txt`](public/.well-known/security.txt) at `/.well-known/security.txt` (RFC 9116) for responsible disclosure
+- No plaintext credentials or secrets in client-side code; third-party API calls are proxied through Pages Functions
+- An internal audit trail documenting findings and remediations lives in [`SECURITY_AUDIT_v2.md`](SECURITY_AUDIT_v2.md)
+
+## Project Structure
 
 ```
-portfolio/
+hr-portfolio/
 ├── public/
-│   ├── index.html
-│   └── favicon.svg
+│   ├── .well-known/security.txt
+│   ├── _headers                 # Security headers config
+│   ├── robots.txt
+│   └── sitemap.xml
+├── functions/
+│   └── api/
+│       ├── cves.js              # NVD CVE feed proxy
+│       ├── kev.js                # CISA KEV feed proxy
+│       └── news.js               # Security news feed proxy
 ├── src/
-│   ├── App.js          # Main portfolio component
-│   ├── index.js        # Entry point
-│   └── index.css       # Tailwind config
-├── package.json
-└── tailwind.config.js
+│   ├── App.js                    # Home page: hero, about, skills, experience, contact
+│   ├── components/
+│   │   ├── ProjectsPage.js       # /projects
+│   │   ├── ThreatFeedPage.js     # /intel (NVD feed + layout)
+│   │   ├── KevSection.js         # CISA KEV section within /intel
+│   │   ├── NewsSection.js        # Security news section within /intel
+│   │   ├── QRLandingPage.js      # /scan
+│   │   ├── CertTracker.js        # Certification/practice-platform progress
+│   │   └── ErrorBoundary.js
+│   ├── data/
+│   │   └── portfolio.js          # Experience, leadership, and skills content
+│   └── utils/
+├── docs/
+│   └── screenshots/
+└── package.json
 ```
 
-## 📝 TODO
+## Getting Started
 
-- [ ] Add a blog section for writeups
-- [ ] removing inline styles (to avoid injection risks)
+**Requirements:** Node 20.x (see `.nvmrc`)
 
-## 📝 How to Add More Projects:
-- Just add new objects to the projects array with this format:
+```bash
+# Install dependencies
+npm install
 
-```
-{
-  title: "Your Project Name",
-  category: "Category (e.g., Web Security)",
-  description: "Short preview description",
-  tech: ["Tech1", "Tech2", "Tech3"],
-  gradient: "from-red-900 via-burgundy-900 to-black",
-  fullDescription: `Full detailed description here.
-  
-  **You can use:**
-  • Bullet points
-  • Multiple paragraphs
-  
-  **Sections** with bold headers`,
-  links: [
-    { label: "GitHub", url: "https://github.com/..." },
-    { label: "Live Demo", url: "https://..." }
-  ]
-}
+# Start the local dev server
+npm start
+
+# Production build
+npm run build
 ```
 
-## How to Commit (since the merge is required)
+Note: the live data feeds (`/api/cves`, `/api/kev`, `/api/news`) run as Cloudflare Pages Functions and are only available on a deployed environment (or via `wrangler pages dev`), not the plain `react-scripts` dev server.
 
-- Daily workflow (keep update-projects)
- - Start work: sync both branches
+## Deployment
 
-```
-# ── STEP 1: Start of every work session ───────────────────────────────────────
+The site deploys to Cloudflare Pages. Production builds run through `npm run build`, and the `functions/` directory is picked up automatically as Pages Functions.
 
-git fetch origin
-
-git checkout main
-git pull origin main
-
-git checkout update-projects
-git pull origin update-projects
-git merge main                # keep your branch in sync with main
-git push                      # push the sync if anything came in
-
-
-# ── STEP 2: Do the work ──────────────────────────────────────────────────────
-
-# edit files, build, test locally...
-
-
-# ── STEP 3: Commit and push ───────────────────────────────────────────────────
-
-git status                    # check what changed
-git add -A
-git commit -m "describe what you changed"
-git push
-
-
-# ── STEP 4: After merging the PR on GitHub ────────────────────────────────────
-
-git fetch origin
-
-git checkout main
-git pull origin main
-
-git checkout update-projects
-git pull origin update-projects
-git merge main
-git push
-
-# you're back to a clean state — both branches identical
-# repeat from Step 2 for your next change
-```
-
-- When you want it live: create a PR (update-projects → main)
-
-```
-On GitHub:
-
-Pull requests → New pull request
-
-base: main
-
-compare: update-projects
-
-Create PR → approvals → merge
-
-check the status: 
-git log --oneline origin/main..origin/update-projects
-```
-
-## 🎨 Features for Future Projects:
-
-- Add screenshots/images by including an images array
-- Add date completed
-- Add GitHub stars or metrics
-- Add collaborators
-- Add status (In Progress, Completed, etc.)
-
-## 🤝 Contributing
-
-This is a personal portfolio, but if you find bugs or have suggestions, feel free to open an issue!
-
-## 📧 Contact
+## Contact
 
 - **Email:** hrahi@iwu.edu
 - **LinkedIn:** [linkedin.com/in/hiratrahman](https://linkedin.com/in/hiratrahi)
 - **GitHub:** [github.com/hiratinspace](https://github.com/hiratinspace)
 
-## 📄 License
+## License
 
-All rights reserved. This is my personal portfolio - feel free to use it as inspiration for your own, but please don't copy it directly. Make it your own!
-
----
-
-Made with ☕ and late nights by a college student who probably should be studying for exams 😅
-
-**Fun fact:** The floating hex codes in the background are randomly generated on each page load!
+All rights reserved. Feel free to use this project as a reference or inspiration for your own portfolio, but please do not copy it directly.

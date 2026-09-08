@@ -86,6 +86,45 @@ Tagline: "Know your senior-year bill before you enroll."
 Role: Founder - product, data, and engineering.`,
   },
   {
+    title: "interninbox",
+    category: "CLI Tool · Open Source",
+    featured: true,
+    status: "LIVE",
+    description: "Open-source CLI that finds internships from your terminal. Scans company job boards (Greenhouse, Lever, Ashby, and more), community lists, and the USAJOBS API. Zero API keys, no telemetry, and an MCP server so AI agents can run it too.",
+    tech: ["Python", "CLI", "MCP", "PyPI", "Open Source"],
+    gradient: "from-black via-black to-black",
+    logo: "/interninbox.png",
+    logoFit: "contain",
+    links: [
+      { label: "GitHub", url: "https://github.com/hiratinspace/interninbox" },
+      { label: "PyPI", url: "https://pypi.org/project/interninbox/" },
+    ],
+    fullDescription: `interninbox is an open-source command-line tool I built and published to PyPI. It finds internships from your terminal - no accounts, no API keys, and nothing leaves your machine.
+
+The Problem:
+Internship hunting means checking dozens of career pages over and over. Job aggregators are noisy, require accounts, and often show stale listings. The freshest data lives on each company's own job board.
+
+What It Does:
+List your target companies once, then get every matching internship in one command. It reads the documented public board APIs of Greenhouse, Lever, Ashby, SmartRecruiters, Workable, and Recruitee - the same endpoints each company's careers page calls - plus the official USAJOBS API for federal Pathways internships.
+
+Key Features:
+• Search by location with smart aliases: "California" finds boards that wrote "CA", and vice versa
+• Nine curated role presets (software, cybersecurity, finance, and more) or custom keywords
+• Eligibility filters for visa sponsorship, season, and degree level
+• A curated registry of 100+ live-verified companies, plus community lists like SimplifyJobs
+• A first-run wizard that asks three questions and scans immediately
+• --new-only mode turns scheduled scans into a personal internship feed
+• An MCP server (interninbox mcp) that hands the whole scanner to Claude or any MCP-capable agent
+
+Privacy and Ethics:
+No accounts, no API keys, no LLMs, no telemetry. Sequential, rate-limited requests with an honest User-Agent against documented public APIs only - no scraping.
+
+Tech Stack:
+Python, published on PyPI with CI via GitHub Actions. MIT licensed.
+
+Role: Creator - design, engineering, and maintenance.`,
+  },
+  {
     title: "SpecterAI",
     category: "AI-Powered Security Tool",
     featured: true,
@@ -219,7 +258,7 @@ const ProjectCard = ({ project, onClick }) => (
       <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all" />
       <div className="absolute inset-0 flex items-center justify-center">
         {project.logo
-          ? <img src={project.logo} alt={project.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+          ? <img src={project.logo} alt={project.title} className={`absolute inset-0 w-full h-full ${project.logoFit === 'contain' ? 'object-contain p-4' : 'object-cover'} group-hover:scale-105 transition-all duration-300`} />
           : <Terminal className="w-16 h-16 text-red-400/50 group-hover:text-red-400 transition-all group-hover:scale-110" />
         }
       </div>
@@ -258,7 +297,7 @@ const FeaturedCard = ({ project, onClick }) => (
         <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all" />
         <div className="absolute inset-0 flex items-center justify-center">
           {project.logo
-            ? <img src={project.logo} alt={project.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+            ? <img src={project.logo} alt={project.title} className={`absolute inset-0 w-full h-full ${project.logoFit === 'contain' ? 'object-contain p-4' : 'object-cover'} group-hover:scale-105 transition-all duration-300`} />
             : <Terminal className="w-16 h-16 text-red-400/50 group-hover:text-red-400 transition-all group-hover:scale-110" />
           }
         </div>

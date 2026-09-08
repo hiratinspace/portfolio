@@ -47,7 +47,7 @@ export const leaderships = deepFreeze([
     title: "Resident Advisor",
     company: "IWU Office of Residential Life",
     period: "Aug 2024 – Present",
-    description: "Resident Advisor for three consecutive years, mentoring and supporting 58+ residents annually across first-year and upper-division communities, including a suite-style hall. Promote well-being, engagement, and accountability while upholding university policies as part of an on-call rotation covering up to five residence halls and 300+ residents. Collaborate with hall staff and campus resources to respond to emergencies, conflicts, and student concerns.",
+    description: "Resident Advisor for three consecutive years, mentoring and supporting 58+ residents annually across first-year and upper-division communities, including a suite-style hall. Promote well-being, engagement, and accountability while upholding university policies as part of an on-call rotation covering up to five residence halls and 350+ residents. Collaborate with hall staff and campus resources to respond to emergencies, conflicts, and student concerns.",
     icon: Building2
   },
   {

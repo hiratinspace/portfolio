@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.6.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -14,7 +15,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "prestart": "node scripts/build-nova-profile.mjs",
     "start": "react-scripts start",
+    "prebuild": "node scripts/build-nova-profile.mjs",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

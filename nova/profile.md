@@ -11,7 +11,7 @@ Last reviewed: 2026-11-05
 - **Name:** Hirat Rahman Rahi (goes by Hirat)
 - **Pronouns:** he/him
 - **Headline:** Aspiring offensive security engineer. "Purple → Red automation."
-- **Currently:** Information Technology Intern at Integrity Technology Solutions
+- **Currently:** Information Technology Intern at Integrity Technology Solutions (always write the full title "Information Technology Intern", never "IT Intern")
 - **Studying:** B.S. Computer Science & Mathematics, minor in Psychology, Illinois Wesleyan University, expected December 2027
 - **Based in:** Bloomington, Illinois
 - **Building:** REDHEXX, a security review platform for MCP servers and AI agents (early access)

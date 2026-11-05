@@ -123,7 +123,7 @@ const Portfolio = () => {
                 </svg>
               </div>
               <span className="text-base sm:text-xl font-bold text-red-500 group-hover:text-red-400 transition-colors hidden sm:inline">
-                HIRAT RAHMAN
+                HIRAT RAHMAN RAHI
               </span>
             </button>
 

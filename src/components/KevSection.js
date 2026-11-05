@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ExternalLink, RefreshCw, Crosshair, ChevronDown, Skull } from 'lucide-react';
 
-const FONT = "'Monaco', 'Courier New', monospace";
+const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 
 const fmtDate = (s) => {
   if (!s) return '';
@@ -22,16 +22,13 @@ const KevCard = ({ item, index }) => {
       onClick={() => setOpen(!open)}
       style={{
         background: open ? accentBg : 'rgba(10,0,0,0.55)',
-        borderLeft: `3px solid ${open ? accent : 'rgba(180,0,30,0.4)'}`,
-        borderTop: '1px solid rgba(139,0,0,0.3)',
-        borderRight: '1px solid rgba(139,0,0,0.3)',
-        borderBottom: '1px solid rgba(139,0,0,0.3)',
+        border: `1px solid ${open ? accentBorder : 'rgba(139,0,0,0.3)'}`,
         padding: '14px 18px', cursor: 'pointer', transition: 'all 0.2s',
         fontFamily: FONT,
         animation: `kevAppear 0.3s ease ${index * 45}ms both`,
       }}
-      onMouseEnter={e => { e.currentTarget.style.borderLeftColor = accent; e.currentTarget.style.background = accentBg; }}
-      onMouseLeave={e => { if (!open) { e.currentTarget.style.borderLeftColor = 'rgba(180,0,30,0.4)'; e.currentTarget.style.background = 'rgba(10,0,0,0.55)'; } }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = accentBorder; e.currentTarget.style.background = accentBg; }}
+      onMouseLeave={e => { if (!open) { e.currentTarget.style.borderColor = 'rgba(139,0,0,0.3)'; e.currentTarget.style.background = 'rgba(10,0,0,0.55)'; } }}
     >
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -46,10 +43,10 @@ const KevCard = ({ item, index }) => {
                 <Skull size={9} /> RANSOMWARE
               </span>
             )}
-            <span style={{ color: 'rgba(209,213,219,0.5)', fontSize: 11 }}>
+            <span style={{ color: 'rgba(209,213,219,0.7)', fontSize: 11 }}>
               {item.vendorProject}{item.product ? ` · ${item.product}` : ''}
             </span>
-            <span style={{ color: 'rgba(209,213,219,0.3)', fontSize: 11 }}>· added {fmtDate(item.dateAdded)}</span>
+            <span style={{ color: 'rgba(209,213,219,0.7)', fontSize: 11 }}>· added {fmtDate(item.dateAdded)}</span>
           </div>
 
           {/* Vulnerability name */}
@@ -75,7 +72,7 @@ const KevCard = ({ item, index }) => {
             </p>
           )}
           {item.dueDate && (
-            <p style={{ color: 'rgba(209,213,219,0.45)', fontSize: 11, marginBottom: 10, fontFamily: FONT, letterSpacing: 1 }}>
+            <p style={{ color: 'rgba(209,213,219,0.7)', fontSize: 11, marginBottom: 10, fontFamily: FONT, letterSpacing: 1 }}>
               REMEDIATION DUE: {fmtDate(item.dueDate)}
             </p>
           )}
@@ -148,7 +145,7 @@ const KevSection = () => {
             <h2 style={{ fontFamily: FONT, fontSize: 'clamp(1.6rem,4vw,2.25rem)', fontWeight: 700, color: '#fff', letterSpacing: 1 }}>
               EXPLOITED IN THE WILD
             </h2>
-            <p style={{ color: 'rgba(209,213,219,0.5)', fontSize: 11, letterSpacing: 3, marginTop: 3, fontFamily: FONT }}>
+            <p style={{ color: 'rgba(209,213,219,0.7)', fontSize: 11, letterSpacing: 3, marginTop: 3, fontFamily: FONT }}>
               KNOWN EXPLOITED VULNERABILITIES CATALOG
             </p>
           </div>
@@ -183,8 +180,8 @@ const KevSection = () => {
 
       {/* Loading */}
       {loading && (
-        <div style={{ textAlign: 'center', padding: '40px 0', color: 'rgba(209,213,219,0.45)', fontFamily: FONT, fontSize: 12, letterSpacing: 2 }}>
-          <Crosshair size={28} style={{ color: 'rgba(239,68,68,0.35)', margin: '0 auto 12px' }} />
+        <div style={{ textAlign: 'center', padding: '40px 0', color: 'rgba(209,213,219,0.7)', fontFamily: FONT, fontSize: 12, letterSpacing: 2 }}>
+          <Crosshair size={28} style={{ color: '#f87171', margin: '0 auto 12px' }} />
           QUERYING CISA KEV CATALOG…
         </div>
       )}
@@ -201,7 +198,7 @@ const KevSection = () => {
       {!loading && !error && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           {filtered.length === 0
-            ? <div style={{ color: 'rgba(209,213,219,0.35)', textAlign: 'center', padding: 40, fontSize: 12, fontFamily: FONT }}>
+            ? <div style={{ color: 'rgba(209,213,219,0.7)', textAlign: 'center', padding: 40, fontSize: 12, fontFamily: FONT }}>
                 NO ENTRIES
               </div>
             : <>
@@ -221,9 +218,9 @@ const KevSection = () => {
                     </button>
                     <button
                       onClick={() => setVisibleCount(filtered.length)}
-                      style={{ padding: '10px 24px', background: 'transparent', border: '1px solid rgba(139,0,0,0.3)', color: 'rgba(209,213,219,0.45)', fontFamily: FONT, fontSize: 12, letterSpacing: 1.5, cursor: 'pointer', transition: 'all 0.2s' }}
+                      style={{ padding: '10px 24px', background: 'transparent', border: '1px solid rgba(139,0,0,0.3)', color: 'rgba(209,213,219,0.7)', fontFamily: FONT, fontSize: 12, letterSpacing: 1.5, cursor: 'pointer', transition: 'all 0.2s' }}
                       onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.borderColor = 'rgba(139,0,0,0.5)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(209,213,219,0.45)'; e.currentTarget.style.borderColor = 'rgba(139,0,0,0.3)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(209,213,219,0.7)'; e.currentTarget.style.borderColor = 'rgba(139,0,0,0.3)'; }}
                     >
                       LOAD ALL
                     </button>
@@ -235,7 +232,7 @@ const KevSection = () => {
       )}
 
       {!loading && !error && items.length > 0 && (
-        <div style={{ marginTop: 14, color: 'rgba(209,213,219,0.25)', fontSize: 10, textAlign: 'center', fontFamily: FONT, letterSpacing: 1 }}>
+        <div style={{ marginTop: 14, color: 'rgba(209,213,219,0.7)', fontSize: 10, textAlign: 'center', fontFamily: FONT, letterSpacing: 1 }}>
           SOURCE: CISA KNOWN EXPLOITED VULNERABILITIES CATALOG · PUBLIC DOMAIN
         </div>
       )}

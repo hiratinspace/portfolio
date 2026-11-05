@@ -10,7 +10,7 @@
 
 body {
   margin: 0;
-  font-family: 'Monaco', 'Courier New', monospace;
+  font-family: 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #000;
@@ -20,4 +20,23 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+/* Visible keyboard focus on the dark UI (the browser default is a thin blue
+   ring that nearly disappears on black and red). */
+:focus-visible {
+  outline: 2px solid #f87171;
+  outline-offset: 3px;
+}
+
+/* Respect the OS "reduce motion" setting: entrance, pulse, and spinner
+   animations finish instantly. The matrix rain is paused in JS. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

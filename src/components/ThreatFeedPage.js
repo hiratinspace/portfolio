@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MatrixRain from './MatrixRain';
 import {
   AlertTriangle, RefreshCw, ExternalLink, ChevronRight,
   Database, ArrowLeft, ChevronDown, Shield, Menu, X
@@ -7,7 +8,7 @@ import {
 import NewsSection from './NewsSection';
 import KevSection from './KevSection';
 
-const FONT = "'Monaco', 'Courier New', monospace";
+const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 
 const SEVERITY_CONFIG = {
   CRITICAL: { color: '#ff4444', bg: 'rgba(255,68,68,0.08)',   border: '#ff4444', glow: '0 0 20px rgba(255,68,68,0.4)',   dim: 'rgba(255,68,68,0.4)'   },
@@ -70,10 +71,7 @@ const CVECard = ({ cve, index }) => {
       className="cve-entry"
       style={{
         background: expanded ? cfg.bg : 'rgba(15,3,8,0.95)',
-        borderLeft: `3px solid ${expanded ? cfg.color : 'rgba(180,0,30,0.4)'}`,
-        borderTop: '1px solid rgba(180,0,30,0.2)',
-        borderRight: '1px solid rgba(180,0,30,0.2)',
-        borderBottom: '1px solid rgba(180,0,30,0.2)',
+        border: `1px solid ${expanded ? cfg.color : 'rgba(180,0,30,0.25)'}`,
         padding: '14px 18px',
         cursor: 'pointer',
         transition: 'all 0.18s ease',
@@ -83,13 +81,13 @@ const CVECard = ({ cve, index }) => {
       }}
       onMouseEnter={e => {
         e.currentTarget.style.background = cfg.bg;
-        e.currentTarget.style.borderLeftColor = cfg.color;
-        e.currentTarget.style.boxShadow = `inset 3px 0 0 ${cfg.color}, ${cfg.glow}`;
+        e.currentTarget.style.borderColor = cfg.color;
+        e.currentTarget.style.boxShadow = cfg.glow;
       }}
       onMouseLeave={e => {
         if (!expanded) {
           e.currentTarget.style.background = 'rgba(15,3,8,0.95)';
-          e.currentTarget.style.borderLeftColor = 'rgba(180,0,30,0.4)';
+          e.currentTarget.style.borderColor = 'rgba(180,0,30,0.25)';
           e.currentTarget.style.boxShadow = 'none';
         }
       }}
@@ -112,7 +110,7 @@ const CVECard = ({ cve, index }) => {
               letterSpacing: 2, boxShadow: cfg.glow,
             }}>{sev}</span>
 
-            <span style={{ color: 'rgba(200,180,180,0.45)', fontSize: 11 }}>{published}</span>
+            <span style={{ color: 'rgba(200,180,180,0.75)', fontSize: 11 }}>{published}</span>
 
             <ScoreBar score={score} />
           </div>
@@ -169,9 +167,8 @@ const CategoryPanel = ({ cves, category }) => {
 
   return (
     <div ref={panelRef} className="panel-drop" style={{
-      borderLeft: `2px solid ${cfg.color}`,
-      borderRight: '1px solid rgba(180,0,30,0.25)',
-      borderBottom: '1px solid rgba(180,0,30,0.25)',
+      border: '1px solid rgba(180,0,30,0.25)',
+      borderTop: `2px solid ${cfg.color}`,
       background: 'rgba(10,1,5,0.97)',
       padding: '20px 20px 18px',
     }}>
@@ -183,13 +180,13 @@ const CategoryPanel = ({ cves, category }) => {
             {category} VULNERABILITIES
           </span>
         </div>
-        <span style={{ color: 'rgba(200,180,180,0.3)', fontFamily: FONT, fontSize: 10, letterSpacing: 2 }}>
+        <span style={{ color: 'rgba(200,180,180,0.75)', fontFamily: FONT, fontSize: 10, letterSpacing: 2 }}>
           {filtered.length} ENTRIES
         </span>
       </div>
 
       {filtered.length === 0 ? (
-        <div style={{ color: 'rgba(200,180,180,0.3)', textAlign: 'center', padding: '36px 0', fontSize: 11, fontFamily: FONT, letterSpacing: 3 }}>
+        <div style={{ color: 'rgba(200,180,180,0.75)', textAlign: 'center', padding: '36px 0', fontSize: 11, fontFamily: FONT, letterSpacing: 3 }}>
           NO {category} ENTRIES IN CURRENT FEED
         </div>
       ) : (
@@ -218,11 +215,11 @@ const CategoryPanel = ({ cves, category }) => {
                 onClick={() => setVisibleCount(filtered.length)}
                 style={{
                   padding: '9px 20px', background: 'transparent',
-                  border: '1px solid rgba(180,0,30,0.35)', color: 'rgba(200,180,180,0.35)',
+                  border: '1px solid rgba(180,0,30,0.35)', color: 'rgba(200,180,180,0.75)',
                   fontFamily: FONT, fontSize: 11, letterSpacing: 2, cursor: 'pointer', transition: 'all 0.15s',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.color = cfg.color; e.currentTarget.style.borderColor = cfg.border; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,180,180,0.35)'; e.currentTarget.style.borderColor = 'rgba(180,0,30,0.35)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,180,180,0.75)'; e.currentTarget.style.borderColor = 'rgba(180,0,30,0.35)'; }}
               >
                 LOAD ALL
               </button>
@@ -252,7 +249,6 @@ const CategoryTile = ({ label, count, isActive, onClick, loading }) => {
         transition: 'all 0.18s ease',
         boxShadow: isActive ? cfg.glow : 'none',
         fontFamily: FONT,
-        outline: 'none',
         opacity: loading ? 0.35 : 1,
       }}
       onMouseEnter={e => {
@@ -286,7 +282,7 @@ const CategoryTile = ({ label, count, isActive, onClick, loading }) => {
       {/* Label + chevron - always in severity color */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{
-          color: isActive ? cfg.color : `${cfg.color}cc`,
+          color: cfg.color,
           fontSize: 12, letterSpacing: 2, fontWeight: 700,
           transition: 'color 0.18s',
         }}>
@@ -310,36 +306,8 @@ const ThreatFeedPage = () => {
   const [error, setError]                   = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
   const [refreshing, setRefreshing]         = useState(false);
-  const [matrixColumns, setMatrixColumns]   = useState([]);
   const [sideNavOpen, setSideNavOpen]       = useState(false);
   const [activeSection, setActiveSection]   = useState('threat-feed');
-  // Matrix rain
-  useEffect(() => {
-    const columns = Math.floor(window.innerWidth / 28);
-    const chars = '0123456789ABCDEF'.split('');
-    const terms = ['0x','PWN','ROP','NOP','JMP','XOR','DEP','PIE','root@','sudo','nc','sh','bin'];
-    const init = Array.from({ length: columns }, (_, i) => ({
-      id: i, x: i * 28, y: Math.random() * -2000, speed: 0.8 + Math.random() * 2.5,
-      chars: Array.from({ length: 14 + Math.floor(Math.random() * 12) }, () =>
-        Math.random() > 0.7 ? terms[Math.floor(Math.random() * terms.length)] : chars[Math.floor(Math.random() * chars.length)]
-      ),
-    }));
-    setMatrixColumns(init);
-    const interval = setInterval(() => {
-      setMatrixColumns(prev => prev.map(col => {
-        const newY = col.y + col.speed;
-        if (newY > window.innerHeight + 200) {
-          return { ...col, y: -200 - Math.random() * 500, speed: 0.8 + Math.random() * 2.5,
-            chars: Array.from({ length: 14 + Math.floor(Math.random() * 12) }, () =>
-              Math.random() > 0.7 ? terms[Math.floor(Math.random() * terms.length)] : chars[Math.floor(Math.random() * chars.length)]
-            ),
-          };
-        }
-        return { ...col, y: newY };
-      }));
-    }, 50);
-    return () => clearInterval(interval);
-  }, []);
 
   const fetchWithRetry = async (url, options = {}, retries = 3) => {
     for (let i = 0; i < retries; i++) {
@@ -483,22 +451,7 @@ const ThreatFeedPage = () => {
       <div className="intel-bg" style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
 
         {/* Matrix rain - full visibility */}
-        <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 3 }}>
-          {matrixColumns.map(col => (
-            <div key={col.id} style={{ position: 'absolute', left: col.x, top: col.y, fontFamily: FONT, fontSize: 12, lineHeight: 1.4, transform: 'translateZ(0)', willChange: 'transform' }}>
-              {col.chars.map((char, idx) => {
-                const opacity = Math.max(0.15, 1 - idx / col.chars.length);
-                return (
-                  <div key={idx} style={{
-                    color: idx === 0 ? '#ff6666' : `rgba(220,38,38,${opacity})`,
-                    textShadow: idx === 0 ? '0 0 6px rgba(255,68,68,0.9)' : 'none',
-                    opacity, fontWeight: idx === 0 ? 700 : 400,
-                  }}>{char}</div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+        <MatrixRain variant="page" style={{ zIndex: 3 }} />
 
         {/* Center dimming overlay - fades the matrix behind the content column,
             leaves both side edges fully visible */}
@@ -519,9 +472,9 @@ const ThreatFeedPage = () => {
             {/* Left - back to portfolio */}
             <button
               onClick={() => navigate('/')}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: 'rgba(200,180,180,0.45)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 1.5, justifySelf: 'start', transition: 'color 0.15s' }}
+              aria-label="Back to portfolio" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: 'rgba(200,180,180,0.75)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 1.5, justifySelf: 'start', transition: 'color 0.15s', padding: '10px 8px 10px 0', minHeight: 44 }}
               onMouseEnter={e => e.currentTarget.style.color = '#ff6b6b'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(200,180,180,0.45)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(200,180,180,0.75)'}
             >
               <ArrowLeft size={20} />
               <span style={{ display: 'inline', fontSize: 15, letterSpacing: 1.5 }} className="portfolio-label">PORTFOLIO</span>
@@ -539,7 +492,9 @@ const ThreatFeedPage = () => {
               style={{ justifySelf: 'end', background: 'none', border: '1px solid rgba(180,0,30,0.4)', padding: '6px 8px', cursor: 'pointer', color: '#ff6b6b', display: 'flex', alignItems: 'center', transition: 'border-color 0.15s' }}
               onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,68,68,0.7)'}
               onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(180,0,30,0.4)'}
-              aria-label="Toggle navigation"
+              aria-label={sideNavOpen ? 'Close navigation' : 'Open navigation'}
+              aria-expanded={sideNavOpen}
+              aria-controls="intel-nav-drawer"
             >
               {sideNavOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
@@ -556,7 +511,7 @@ const ThreatFeedPage = () => {
         )}
 
         {/* Side drawer */}
-        <div style={{
+        <div id="intel-nav-drawer" aria-hidden={!sideNavOpen} inert={sideNavOpen ? undefined : ''} style={{
           position: 'fixed', top: 0, right: 0, height: '100vh', width: 260,
           background: 'rgba(6,0,2,0.98)', borderLeft: '1px solid rgba(180,0,30,0.5)',
           zIndex: 301, fontFamily: FONT,
@@ -567,7 +522,7 @@ const ThreatFeedPage = () => {
           {/* Drawer header */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid rgba(180,0,30,0.35)' }}>
             <span style={{ color: '#ff6b6b', fontSize: 11, letterSpacing: 3, fontWeight: 700 }}>NAVIGATION</span>
-            <button onClick={() => setSideNavOpen(false)} style={{ background: 'none', border: 'none', color: 'rgba(200,140,140,0.6)', cursor: 'pointer', display: 'flex' }}>
+            <button onClick={() => setSideNavOpen(false)} aria-label="Close navigation" style={{ background: 'none', border: 'none', color: 'rgba(220,170,170,0.85)', cursor: 'pointer', display: 'flex', padding: 6 }}>
               <X size={16} />
             </button>
           </div>
@@ -577,7 +532,7 @@ const ThreatFeedPage = () => {
             {/* Threat Feed */}
             <button
               onClick={() => { setSideNavOpen(false); setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 260); }}
-              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: activeSection === 'threat-feed' ? 'rgba(239,68,68,0.06)' : 'none', border: 'none', padding: '10px 20px', color: activeSection === 'threat-feed' ? '#ef4444' : 'rgba(200,140,140,0.55)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 2, textAlign: 'left', transition: 'all 0.15s', borderLeft: `2px solid ${activeSection === 'threat-feed' ? '#ef4444' : 'transparent'}` }}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: activeSection === 'threat-feed' ? 'rgba(239,68,68,0.06)' : 'none', border: 'none', padding: '10px 20px', color: activeSection === 'threat-feed' ? '#ef4444' : 'rgba(200,140,140,0.85)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 2, textAlign: 'left', transition: 'all 0.15s' }}
             >
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: activeSection === 'threat-feed' ? '#ef4444' : 'rgba(200,140,140,0.4)', boxShadow: activeSection === 'threat-feed' ? '0 0 6px rgba(239,68,68,0.9)' : 'none', display: 'inline-block', flexShrink: 0, transition: 'all 0.15s' }} />
               THREAT FEED
@@ -586,7 +541,7 @@ const ThreatFeedPage = () => {
             {/* Exploited in the Wild (KEV) */}
             <button
               onClick={() => { setSideNavOpen(false); setTimeout(() => { const el = document.getElementById('kev-feed'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 260); }}
-              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: activeSection === 'kev-feed' ? 'rgba(239,68,68,0.06)' : 'none', border: 'none', padding: '10px 20px', color: activeSection === 'kev-feed' ? '#ef4444' : 'rgba(200,140,140,0.55)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 2, textAlign: 'left', transition: 'all 0.15s', borderLeft: `2px solid ${activeSection === 'kev-feed' ? '#ef4444' : 'transparent'}` }}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: activeSection === 'kev-feed' ? 'rgba(239,68,68,0.06)' : 'none', border: 'none', padding: '10px 20px', color: activeSection === 'kev-feed' ? '#ef4444' : 'rgba(200,140,140,0.85)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 2, textAlign: 'left', transition: 'all 0.15s' }}
             >
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: activeSection === 'kev-feed' ? '#ef4444' : 'rgba(200,140,140,0.4)', boxShadow: activeSection === 'kev-feed' ? '0 0 6px rgba(239,68,68,0.9)' : 'none', display: 'inline-block', flexShrink: 0, transition: 'all 0.15s' }} />
               EXPLOITED (KEV)
@@ -595,7 +550,7 @@ const ThreatFeedPage = () => {
             {/* Security News */}
             <button
               onClick={() => { setSideNavOpen(false); setTimeout(() => { const el = document.getElementById('security-news'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 260); }}
-              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: activeSection === 'security-news' ? 'rgba(239,68,68,0.06)' : 'none', border: 'none', padding: '10px 20px', color: activeSection === 'security-news' ? '#ef4444' : 'rgba(200,140,140,0.55)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 2, textAlign: 'left', transition: 'all 0.15s', borderLeft: `2px solid ${activeSection === 'security-news' ? '#ef4444' : 'transparent'}` }}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: activeSection === 'security-news' ? 'rgba(239,68,68,0.06)' : 'none', border: 'none', padding: '10px 20px', color: activeSection === 'security-news' ? '#ef4444' : 'rgba(200,140,140,0.85)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 2, textAlign: 'left', transition: 'all 0.15s' }}
             >
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: activeSection === 'security-news' ? '#ef4444' : 'rgba(200,140,140,0.4)', boxShadow: activeSection === 'security-news' ? '0 0 6px rgba(239,68,68,0.9)' : 'none', display: 'inline-block', flexShrink: 0, transition: 'all 0.15s' }} />
               SECURITY NEWS
@@ -607,9 +562,9 @@ const ThreatFeedPage = () => {
           <div style={{ padding: '14px 20px', borderTop: '1px solid rgba(180,0,30,0.25)' }}>
             <button
               onClick={() => navigate('/')}
-              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: '1px solid rgba(180,0,30,0.35)', padding: '8px 14px', color: 'rgba(200,140,140,0.55)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 1.5, transition: 'all 0.15s' }}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: '1px solid rgba(180,0,30,0.35)', padding: '8px 14px', color: 'rgba(200,140,140,0.85)', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 1.5, transition: 'all 0.15s' }}
               onMouseEnter={e => { e.currentTarget.style.color = '#ff6b6b'; e.currentTarget.style.borderColor = 'rgba(255,68,68,0.5)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,140,140,0.55)'; e.currentTarget.style.borderColor = 'rgba(180,0,30,0.35)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,140,140,0.85)'; e.currentTarget.style.borderColor = 'rgba(180,0,30,0.35)'; }}
             >
               <ArrowLeft size={13} /> BACK TO PORTFOLIO
             </button>
@@ -618,7 +573,7 @@ const ThreatFeedPage = () => {
 
 
         {/* ── Content ────────────────────────────────────────────────────── */}
-        <div style={{ position: 'relative', zIndex: 10, paddingTop: 70 }}>
+        <main style={{ position: 'relative', zIndex: 10, paddingTop: 70 }}>
           <div style={{ maxWidth: 860, margin: '0 auto', padding: '52px 24px 100px' }}>
 
             {/* Hero */}
@@ -631,10 +586,10 @@ const ThreatFeedPage = () => {
                     <span className="pulse-dot" style={{ width: 6, height: 6, borderRadius: '50%', background: '#ef4444', boxShadow: '0 0 6px rgba(239,68,68,0.8)', display: 'inline-block', flexShrink: 0 }} />
                     <span style={{ color: '#ef4444', fontSize: 10, letterSpacing: 3, fontFamily: FONT }}>LIVE NVD NIST</span>
                   </div>
-                  <h2 style={{ fontFamily: FONT, fontSize: 'clamp(1.6rem,4vw,2.25rem)', fontWeight: 700, color: '#fff', letterSpacing: 1 }}>
+                  <h1 style={{ fontFamily: FONT, fontSize: 'clamp(1.6rem,4vw,2.25rem)', fontWeight: 700, color: '#fff', letterSpacing: 1, margin: 0 }}>
                     THREAT FEED
-                  </h2>
-                  <p style={{ color: 'rgba(209,213,219,0.5)', fontSize: 11, letterSpacing: 3, marginTop: 3, fontFamily: FONT }}>
+                  </h1>
+                  <p style={{ color: 'rgba(209,213,219,0.7)', fontSize: 11, letterSpacing: 3, marginTop: 3, fontFamily: FONT }}>
                     NATIONAL VULNERABILITY DATABASE
                   </p>
                 </div>
@@ -657,19 +612,19 @@ const ThreatFeedPage = () => {
 
             {/* Error */}
             {error && (
-              <div style={{ borderLeft: '3px solid #ff4444', border: '1px solid rgba(255,68,68,0.4)', background: 'rgba(255,68,68,0.06)', padding: '16px 20px', marginBottom: 28 }}>
+              <div style={{ border: '1px solid rgba(255,68,68,0.4)', background: 'rgba(255,68,68,0.06)', padding: '16px 20px', marginBottom: 28 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#ff6060', fontSize: 12, marginBottom: 5 }}>
                   <AlertTriangle size={14} /> ERROR: {error}
                 </div>
-                <div style={{ color: 'rgba(255,96,96,0.5)', fontSize: 11 }}>NVD may be rate-limiting. Try refreshing in a moment.</div>
+                <div style={{ color: '#f87171', fontSize: 11 }}>NVD may be rate-limiting. Try refreshing in a moment.</div>
               </div>
             )}
 
             {/* Loading */}
             {loading && (
               <div style={{ textAlign: 'center', padding: '90px 0' }}>
-                <Database size={30} style={{ color: 'rgba(255,68,68,0.3)', display: 'block', margin: '0 auto 16px' }} />
-                <div style={{ color: 'rgba(210,185,185,0.3)', fontSize: 11, letterSpacing: 4 }}>QUERYING NVD…</div>
+                <Database size={30} style={{ color: '#f87171', display: 'block', margin: '0 auto 16px' }} />
+                <div style={{ color: 'rgba(210,185,185,0.75)', fontSize: 11, letterSpacing: 4 }}>QUERYING NVD…</div>
               </div>
             )}
 
@@ -679,7 +634,7 @@ const ThreatFeedPage = () => {
 
                 {/* Label */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-                  <span style={{ color: 'rgba(249, 239, 239, 0.55)', fontSize: 11, letterSpacing: 4, fontWeight: 700, flexShrink: 0 }}>
+                  <span style={{ color: 'rgba(249,239,239,0.7)', fontSize: 11, letterSpacing: 4, fontWeight: 700, flexShrink: 0 }}>
                     SEVERITY FILTER
                   </span>
                   <div style={{ flex: 1, height: 1, background: 'linear-gradient(to right, rgba(180,0,30,0.5), transparent)' }} />
@@ -701,7 +656,7 @@ const ThreatFeedPage = () => {
                 {activeCategory
                   ? <CategoryPanel cves={cves} category={activeCategory} />
                   : (
-                    <div style={{ textAlign: 'center', padding: '24px 0 4px', color: 'rgba(249, 239, 239, 0.55)', fontSize: 10, letterSpacing: 1, lineHeight: 2, borderTop: '1px solid rgba(180,0,30,0.2)', paddingTop: 15 }}>
+                    <div style={{ textAlign: 'center', padding: '24px 0 4px', color: 'rgba(249,239,239,0.7)', fontSize: 10, letterSpacing: 1, lineHeight: 2, borderTop: '1px solid rgba(180,0,30,0.2)', paddingTop: 15 }}>
                       THIS PRODUCT USES THE NVD API BUT IS NOT ENDORSED OR CERTIFIED BY THE NVD
                     </div>
                   )
@@ -721,7 +676,7 @@ const ThreatFeedPage = () => {
             </div>
 
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );

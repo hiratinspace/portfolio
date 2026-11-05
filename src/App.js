@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Shield, Terminal, Code, Briefcase, Radio, GraduationCap, User, Mail, Linkedin, ChevronRight, Lock } from 'lucide-react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import ThreatFeedPage from './components/ThreatFeedPage';
 import ProjectsPage from './components/ProjectsPage';
 import CertTracker from './components/CertTracker';
@@ -237,13 +237,13 @@ const Portfolio = () => {
             {/* CENTRE - page links */}
             <div className="flex items-center space-x-2">
               <button
-                onClick={() => navigate('/projects')}
+                onClick={() => navigate('/products')}
                 className="flex items-center space-x-2 px-4 py-1.5 border border-red-900/60 hover:border-red-600 hover:bg-red-950/30 transition-all group"
                 style={{ fontFamily: "'Monaco', 'Courier New', monospace" }}
               >
                 <Code className="w-3.5 h-3.5 text-red-600 group-hover:text-red-400 transition-colors" />
                 <span className="text-xs font-bold tracking-widest text-red-600 group-hover:text-red-400 transition-colors">
-                  PROJECTS
+                  PRODUCTS
                 </span>
               </button>
               <button
@@ -351,9 +351,9 @@ const Portfolio = () => {
           </button>
         ))}
 
-        {/* PROJECTS link in sidebar */}
+        {/* PRODUCTS link in sidebar */}
         <button
-          onClick={() => { navigate('/projects'); setNavOpen(false); }}
+          onClick={() => { navigate('/products'); setNavOpen(false); }}
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             background: 'none', border: 'none', cursor: 'pointer',
@@ -362,7 +362,7 @@ const Portfolio = () => {
             transition: 'color 0.15s', textAlign: 'left', width: '100%',
           }}
         >
-          PROJECTS
+          PRODUCTS
         </button>
 
         {/* INTEL link in sidebar */}
@@ -402,7 +402,7 @@ const Portfolio = () => {
               </h1>
               <p className="text-gray-400 text-base sm:text-lg mb-8 leading-relaxed">
                 Hi, I’m Hirat. I build and document security projects across web security, reverse engineering,
-                and CTF-style problem solving, and apply the same discipline to data and automation work through my internships.
+                and CTF-style problem solving, and bring the same discipline to security operations, IT, and data work through my internships.
               </p>
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                 <button
@@ -451,13 +451,14 @@ const Portfolio = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="space-y-6">
               <p className="text-gray-300 leading-relaxed">
-                I’m Hirat Rahman Rahi, a Computer Science & Neuroscience double major at Illinois Wesleyan University
-                focused on offensive security. I identify and validate weaknesses in web applications and systems through
-                hands-on practice, CTFs, labs, and clearly documented writeups, and I build Python automation for
-                reconnaissance, testing, and reporting so results are consistent, repeatable, and easy to act on.
-                My goal is straightforward: help organizations find real risks before attackers do, and communicate
-                them in terms that support clear decisions. My neuroscience background adds useful perspective on the
-                human side of security, from social engineering to how people actually make decisions under pressure.
+                I’m Hirat Rahman Rahi, a Computer Science & Mathematics double major with a minor in Psychology at
+                Illinois Wesleyan University, focused on offensive security. I identify and validate weaknesses in web
+                applications and systems through hands-on practice, CTFs, labs, and clearly documented writeups, and I
+                build Python automation for reconnaissance, testing, and reporting so results are consistent, repeatable,
+                and easy to act on. My goal is straightforward: help organizations find real risks before attackers do,
+                and communicate them in terms that support clear decisions. Mathematics gives me the foundation for
+                cryptography and rigorous problem solving, and psychology adds perspective on the human side of
+                security, from social engineering to how people actually make decisions under pressure.
               </p>
             </div>
 
@@ -467,13 +468,14 @@ const Portfolio = () => {
                 <h3 className="text-xl font-bold mb-3 text-red-400">Education</h3>
                 <div className="text-gray-300">
                   <p className="font-semibold">Illinois Wesleyan University</p>
-                  <p className="text-sm text-gray-400">B.S. Computer Science & Neuroscience</p>
+                  <p className="text-sm text-gray-400">B.S. Computer Science & Mathematics</p>
+                  <p className="text-sm text-gray-400">Minor in Psychology</p>
                   <p className="text-sm text-gray-400">Expected Dec 2027</p>
                 </div>
                 <div className="mt-4 pt-4 border-t border-red-900/30">
                   <p className="text-sm text-gray-400 mb-2">Relevant Coursework:</p>
                   <div className="flex flex-wrap gap-2">
-                    {['Algorithm Design & Analysis', 'Data Structures', 'Software Development', 'Discrete Math', 'Logic, Sets & Recursion'].map((course, i) => (
+                    {['Algorithms', 'Data Structures', 'Software Development', 'Database Systems', 'Discrete Math'].map((course, i) => (
                       <span key={i} className="text-xs px-3 py-1 bg-red-950/50 border border-red-900/50 text-red-400">
                         {course}
                       </span>
@@ -712,7 +714,9 @@ const App = () => (
   <Routes>
     <Route path="/"      element={<ErrorBoundary><Portfolio /></ErrorBoundary>} />
     <Route path="/intel" element={<ThreatFeedPage />} />
-    <Route path="/projects"  element={<ProjectsPage />} />
+    <Route path="/products" element={<ProjectsPage />} />
+    {/* Old URL, kept so previously shared links still work */}
+    <Route path="/projects" element={<Navigate to="/products" replace />} />
     <Route path="/scan"  element={<ErrorBoundary><QRLandingPage /></ErrorBoundary>} />
   </Routes>
 );

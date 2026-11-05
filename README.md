@@ -1,6 +1,6 @@
 # Hirat Rahman Rahi, Portfolio
 
-Personal site and project showcase for Hirat Rahman Rahi, a Computer Science and Neuroscience student at Illinois Wesleyan University focused on offensive security, automation, and applied AI tooling.
+Personal site and project showcase for Hirat Rahman Rahi, a Computer Science and Mathematics student (Psychology minor) at Illinois Wesleyan University focused on offensive security, automation, and applied AI tooling.
 
 **Live site:** [hiratrahi.com](https://hiratrahi.com)
 

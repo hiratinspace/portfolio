@@ -86,6 +86,38 @@ Tagline: "Know your senior-year bill before you enroll."
 Role: Founder - product, data, and engineering.`,
   },
   {
+    title: "PassMyResume",
+    category: "Web App · Founder",
+    featured: true,
+    status: "LIVE",
+    description: "ATS resume scanner and internship search. Scores your resume against any job posting with a published, deterministic formula and ranks the fixes by how much they raise your score. No sign-up to start.",
+    tech: ["TypeScript", "Next.js", "React", "Neon Postgres", "Stripe", "Claude API", "Vercel"],
+    gradient: "from-black via-red-950 to-black",
+    logo: "/PassMyResume.png",
+    links: [
+      { label: "Visit", url: "https://passmyresume.com" },
+    ],
+    fullDescription: `PassMyResume is a live platform I built and launched that shows you your resume the way an applicant tracking system (ATS) sees it.
+
+The Problem:
+Most resumes are filtered by software before a person ever reads them, and most "ATS score" tools are black boxes that never explain where the number comes from or what to fix first.
+
+What It Does:
+• Parses PDF and DOCX resumes and scores them against any job posting
+• Uses a published, deterministic formula weighted across 12 fields, so the same inputs always give the same score
+• Shows matched and missing keywords and the hard requirements you meet
+• Ranks suggested fixes by how much each one raises your score
+• Internship search built on interninbox, my open-source PyPI scanner and MCP server, pulling from 6 ATS job-board APIs and USAJOBS across 100+ companies with a rate-limited, robots.txt-respecting fetcher
+
+Privacy:
+Resumes aren't stored unless you choose to save them, and they're never used for model training. A built-in check flags any AI rewrite that adds numbers, skills, or employers that weren't in your original resume.
+
+Tech Stack:
+TypeScript, Next.js 16, React 19, Tailwind CSS v4, Neon Postgres, Better Auth, Stripe, Resend, Anthropic Claude API, deployed on Vercel.
+
+Role: Founder - product, design, and engineering.`,
+  },
+  {
     title: "interninbox",
     category: "CLI Tool · Open Source",
     featured: true,
@@ -574,7 +606,7 @@ const ProjectsPage = () => {
             {/* Centre - page label */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 18px', border: '1px solid rgba(180,0,30,0.4)', background: 'rgba(180,0,30,0.07)' }}>
               <Code size={14} style={{ color: 'rgba(200,140,140,0.8)' }} />
-              <span style={{ color: 'rgba(200,140,140,0.8)', fontSize: 12, fontWeight: 700, letterSpacing: 3, fontFamily: FONT }}>PROJECTS</span>
+              <span style={{ color: 'rgba(200,140,140,0.8)', fontSize: 12, fontWeight: 700, letterSpacing: 3, fontFamily: FONT }}>PRODUCTS</span>
             </div>
 
             {/* Right - hamburger */}
@@ -624,7 +656,7 @@ const ProjectsPage = () => {
               borderLeft: '2px solid #ef4444',
             }}>
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#ef4444', boxShadow: '0 0 6px rgba(239,68,68,0.9)', display: 'inline-block', flexShrink: 0 }} />
-              PROJECTS
+              PRODUCTS
             </div>
 
             {/* INTEL link */}
@@ -672,13 +704,13 @@ const ProjectsPage = () => {
           <div style={{ marginBottom: 48 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
               <Code size={20} style={{ color: '#ef4444' }} />
-              <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4 }}>SECURITY PROJECTS</span>
+              <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4 }}>BUILT & SHIPPED</span>
             </div>
             <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', fontWeight: 700, color: '#fff', margin: '0 0 12px', letterSpacing: 1 }}>
-              PROJECTS
+              PRODUCTS
             </h1>
             <p style={{ color: 'rgba(200,180,180,0.5)', fontSize: 13, maxWidth: 520, lineHeight: 1.7 }}>
-              Featured work up top - my security startup and a live AI recon tool - with CTF tooling and applied research below. Click any card for full details.
+              Products I've founded and shipped up top, with CTF tooling and applied research below. Click any card for full details.
             </p>
             <div style={{ marginTop: 16, width: 48, height: 2, background: 'linear-gradient(to right, #ef4444, transparent)' }} />
           </div>
@@ -724,7 +756,7 @@ const ProjectsPage = () => {
           {/* Count badge */}
           <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ color: 'rgba(200,140,140,0.35)', fontSize: 11, letterSpacing: 2, fontFamily: FONT }}>
-              {PROJECTS.length} PROJECT{PROJECTS.length !== 1 ? 'S' : ''} INDEXED
+              {PROJECTS.length} BUILD{PROJECTS.length !== 1 ? 'S' : ''} INDEXED
             </span>
           </div>
 

@@ -6,25 +6,25 @@ import deepFreeze from '../utils/deepFreeze';
 
 export const experiences = deepFreeze([
   {
-    title: "Information Technology Intern",
+    title: "IT Intern",
     company: "Integrity Technology Solutions",
     period: "Aug 2026 – Present",
-    description: "Rotational internship supporting security operations and IT service delivery for regulated clients in banking and healthcare at a NIST CSF-aligned managed security service provider.",
+    description: "Support security operations and IT service delivery at a NIST CSF-aligned managed security service provider serving 150+ regulated banking and healthcare clients under HIPAA and financial-sector compliance requirements. Troubleshoot and resolve 100+ tickets across Windows 11 endpoints, Windows Server, and Microsoft 365, including account provisioning, access issues, patching, and device setup. Monitor endpoint protection, security alerts, and patch compliance, escalating suspicious activity per the firm's incident-response procedures.",
     icon: Cpu
+  },
+  {
+    title: "Intern Analyst & Team Lead",
+    company: "Driving Forward",
+    period: "Dec 2025 – Mar 2026",
+    description: "Led a 4-member team benchmarking midsize companies’ cybersecurity and AI readiness across 10 control domains against NIST CSF and ISO 27001, producing maturity scores on a 1–5 scale. Evaluated cloud, network, and data-security controls (Azure, Palo Alto firewalls, Microsoft Sentinel SIEM, Purview DLP) through framework research and leadership interviews; presented executive reports and roadmaps targeting gaps in DLP, vendor risk, and AI governance.",
+    icon: Briefcase
   },
   {
     title: "Intern Analyst",
     company: "McLean County Government - MCRPC",
     period: "Aug 2025 – Aug 2026",
-    description: "Analyzed 5+ years of transportation and U.S. Census data to identify demographic and mobility trends supporting the 2055 Metropolitan Transportation Plan. Built automated data pipelines and interactive Tableau dashboards to enhance reporting efficiency and data-driven planning decisions.",
+    description: "Built automated data pipelines and Tableau dashboards analyzing 5+ years of transportation and U.S. Census data for the 2055 Metropolitan Transportation Plan, and developed supporting websites for planning projects.",
     icon: Cpu
-  },
-  {
-    title: "Intern Analyst (Cybersecurity)",
-    company: "Driving Forward",
-    period: "Dec 2025 – Mar 2026",
-    description: "Led a 4-member team benchmarking midsize companies’ cybersecurity and AI readiness across 10 control domains against NIST CSF and ISO 27001, producing overall maturity scores on a 1–5 scale. Evaluated cloud, network, and data security controls via framework research and leadership interviews; delivered executive reports and roadmaps targeting gaps in DLP, vendor risk, and AI governance.",
-    icon: Briefcase
   },
   {
     title: "GIS Analyst & Technical Assistant",
@@ -38,30 +38,30 @@ export const experiences = deepFreeze([
 export const leaderships = deepFreeze([
   {
     title: "President",
-    company: "ACM Chapter at IWU",
+    company: "ACM Student Chapter at IWU",
     period: "Aug 2026 – Present",
-    description: "Leading the executive board and setting the chapter's direction for the year. Organize technical workshops, industry speaker events, and social programming to build a stronger computer science community on campus, and coordinate student teams to attend hackathons nationwide.",
+    description: "Lead a 50+ member chapter hosting guest speaker panels and technical workshops, and organize team trips to hackathons nationwide.",
     icon: Users
   },
   {
-    title: "Resident Advisor",
+    title: "Senior Resident Advisor",
     company: "IWU Office of Residential Life",
     period: "Aug 2024 – Present",
-    description: "Resident Advisor for three consecutive years, mentoring and supporting 58+ residents annually across first-year and upper-division communities, including a suite-style hall. Promote well-being, engagement, and accountability while upholding university policies as part of an on-call rotation covering up to five residence halls and 350+ residents. Collaborate with hall staff and campus resources to respond to emergencies, conflicts, and student concerns.",
+    description: "Directly mentor and support 28+ students in a house-style upper-division hall. Part of an on-call rotation covering multiple residence halls, collaborating with hall staff and campus resources to respond to emergencies, conflicts, and student concerns.",
     icon: Building2
   },
   {
     title: "Founder & President",
     company: "IWU Billiards Club",
     period: "Aug 2024 – Present",
-    description: "Lead executive board of 6 members to run weekly tournament with over 60 active members.",
+    description: "Lead 7+ board members running 10+ events for 200+ participants annually.",
     icon: Users
   },
   {
-    title: "Presidential Ambassador",
+    title: "Titan Ambassador",
     company: "IWU Admissions Office",
     period: "May 2024 – Present",
-    description: "Represent Illinois Wesleyan in admissions panels and weekly campus tours; communicate academics and student life clearly to prospective students and families.",
+    description: "Lead panel sessions each fall for 500+ prospective students and family members, communicating academics and student life at Illinois Wesleyan.",
     icon: Megaphone
   },
   {
@@ -74,8 +74,8 @@ export const leaderships = deepFreeze([
 ]);
 
 export const skills = deepFreeze({
-  "Offensive Security": ["Web Application Security", "Reverse Engineering", "Cryptography", "CTF Competitions", "Security Writeups"],
-  "Automation & Scripting": ["Python Automation", "Recon & Reporting Scripts", "Web Scraping", "REST APIs", "Bash"],
-  "Languages": ["Python", "Java", "C++", "SQL"],
-  "Tools & Frameworks": ["Linux", "Git", "Flask", "HTML/CSS", "Tableau"]
+  "Security": ["Security Operations", "Incident Triage", "Reconnaissance", "Penetration Testing", "Reverse Engineering", "CTF Competitions", "MCP & AI-Agent Security"],
+  "Frameworks & Compliance": ["NIST CSF", "ISO 27001", "HIPAA", "DLP", "DNS", "SSL/TLS Analysis"],
+  "Languages": ["Python", "JavaScript", "TypeScript", "Java", "SQL", "HTML/CSS"],
+  "Systems & Tools": ["Windows 11", "Windows Server", "Microsoft 365", "Linux", "PowerShell", "Bash", "Flask", "Next.js", "React", "PostgreSQL", "Git", "GitHub Actions", "Claude API"]
 });

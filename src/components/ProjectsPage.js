@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useDialogFocus from '../utils/useDialogFocus';
+import MatrixRain from './MatrixRain';
 import {
   ArrowLeft, Terminal, ChevronRight, Code,
   Menu, X,
 } from 'lucide-react';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-const FONT = "'Monaco', 'Courier New', monospace";
+const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 
 const ALLOWED_PROTOCOLS = new Set(['https:', 'http:', 'mailto:']);
 const sanitizeUrl = (url) => {
@@ -21,6 +23,39 @@ const sanitizeUrl = (url) => {
 // ─── Project data - add new projects here ─────────────────────────────────────
 const PROJECTS = [
   {
+    title: "PassMyResume",
+    category: "Web App · Founder",
+    featured: true,
+    status: "LIVE",
+    description: "ATS resume scanner and internship search. Scores your resume against any job posting with a published, deterministic formula and ranks the fixes by how much they raise your score. No sign-up to start.",
+    tech: ["TypeScript", "Next.js", "React", "Neon Postgres", "Stripe", "Claude API", "Vercel"],
+    gradient: "from-black via-black to-black",
+    logo: "/PassMyResume.png",
+    logoFit: "contain",
+    links: [
+      { label: "Visit", url: "https://passmyresume.com" },
+    ],
+    fullDescription: `PassMyResume is a live platform I built and launched that shows you your resume the way an applicant tracking system (ATS) sees it.
+
+The Problem:
+Most resumes are filtered by software before a person ever reads them, and most "ATS score" tools are black boxes that never explain where the number comes from or what to fix first.
+
+What It Does:
+• Parses PDF and DOCX resumes and scores them against any job posting
+• Uses a published, deterministic formula weighted across 12 fields, so the same inputs always give the same score
+• Shows matched and missing keywords and the hard requirements you meet
+• Ranks suggested fixes by how much each one raises your score
+• Internship search built on interninbox, my open-source PyPI scanner and MCP server, pulling from 6 ATS job-board APIs and USAJOBS across 100+ companies with a rate-limited, robots.txt-respecting fetcher
+
+Privacy:
+Resumes aren't stored unless you choose to save them, and they're never used for model training. A built-in check flags any AI rewrite that adds numbers, skills, or employers that weren't in your original resume.
+
+Tech Stack:
+TypeScript, Next.js 16, React 19, Tailwind CSS v4, Neon Postgres, Better Auth, Stripe, Resend, Anthropic Claude API, deployed on Vercel.
+
+Role: Founder - product, design, and engineering.`,
+  },
+  {
     title: "REDHEXX",
     category: "Startup · Founder",
     featured: true,
@@ -28,7 +63,7 @@ const PROJECTS = [
     description: "AI-native security review platform for the MCP and AI-agent attack surface. Founder - currently in early access.",
     tech: ["AI Security", "MCP", "LLM Agents", "Prompt Injection", "Pentesting"],
     gradient: "from-red-800 via-red-950 to-black",
-    logo: "/redhexx.png",
+    logo: "/redhexx.webp",
     links: [
       { label: "Visit", url: "https://redhexx.com" },
     ],
@@ -59,7 +94,7 @@ Role: Founder - product direction, security research, and engineering.`,
     description: "College cost tool that projects your real four-year tuition bill - accounting for the annual increases that offer letters hide while scholarships stay flat. Compare aid packages across schools.",
     tech: ["Web App", "IPEDS Data", "College Cost", "EdTech"],
     gradient: "from-red-900 via-red-950 to-black",
-    logo: "/TuitionCreep.png",
+    logo: "/TuitionCreep.webp",
     links: [
       { label: "Visit", url: "https://tuitioncreep.org" },
     ],
@@ -86,38 +121,6 @@ Tagline: "Know your senior-year bill before you enroll."
 Role: Founder - product, data, and engineering.`,
   },
   {
-    title: "PassMyResume",
-    category: "Web App · Founder",
-    featured: true,
-    status: "LIVE",
-    description: "ATS resume scanner and internship search. Scores your resume against any job posting with a published, deterministic formula and ranks the fixes by how much they raise your score. No sign-up to start.",
-    tech: ["TypeScript", "Next.js", "React", "Neon Postgres", "Stripe", "Claude API", "Vercel"],
-    gradient: "from-black via-red-950 to-black",
-    logo: "/PassMyResume.png",
-    links: [
-      { label: "Visit", url: "https://passmyresume.com" },
-    ],
-    fullDescription: `PassMyResume is a live platform I built and launched that shows you your resume the way an applicant tracking system (ATS) sees it.
-
-The Problem:
-Most resumes are filtered by software before a person ever reads them, and most "ATS score" tools are black boxes that never explain where the number comes from or what to fix first.
-
-What It Does:
-• Parses PDF and DOCX resumes and scores them against any job posting
-• Uses a published, deterministic formula weighted across 12 fields, so the same inputs always give the same score
-• Shows matched and missing keywords and the hard requirements you meet
-• Ranks suggested fixes by how much each one raises your score
-• Internship search built on interninbox, my open-source PyPI scanner and MCP server, pulling from 6 ATS job-board APIs and USAJOBS across 100+ companies with a rate-limited, robots.txt-respecting fetcher
-
-Privacy:
-Resumes aren't stored unless you choose to save them, and they're never used for model training. A built-in check flags any AI rewrite that adds numbers, skills, or employers that weren't in your original resume.
-
-Tech Stack:
-TypeScript, Next.js 16, React 19, Tailwind CSS v4, Neon Postgres, Better Auth, Stripe, Resend, Anthropic Claude API, deployed on Vercel.
-
-Role: Founder - product, design, and engineering.`,
-  },
-  {
     title: "interninbox",
     category: "CLI Tool · Open Source",
     featured: true,
@@ -125,7 +128,7 @@ Role: Founder - product, design, and engineering.`,
     description: "Open-source CLI that finds internships from your terminal. Scans company job boards (Greenhouse, Lever, Ashby, and more), community lists, and the USAJOBS API. Zero API keys, no telemetry, and an MCP server so AI agents can run it too.",
     tech: ["Python", "CLI", "MCP", "PyPI", "Open Source"],
     gradient: "from-black via-black to-black",
-    logo: "/interninbox.png",
+    logo: "/interninbox.webp",
     logoFit: "contain",
     links: [
       { label: "GitHub", url: "https://github.com/hiratinspace/interninbox" },
@@ -164,15 +167,16 @@ Role: Creator - design, engineering, and maintenance.`,
     description: "AI-powered penetration testing reconnaissance tool. Input a target domain, get a full recon scan analyzed by Claude AI, and receive a professional pentest report. All in one command.",
     tech: ["Python", "Flask", "Claude AI", "DNS", "SSL/TLS", "SSE", "REST API"],
     gradient: "from-red-950 via-red-900 to-black",
-    logo: "/SpecterAI.png",
+    logo: "/SpecterAI.webp",
     links: [
       { label: "Live Tool", url: "https://hiratinspace.github.io/specter-ai/" },
+      { label: "GitHub", url: "https://github.com/hiratinspace/specter-ai" },
     ],
     fullDescription: `An AI-powered penetration testing reconnaissance tool that automates the first phase of a security assessment.
 
 How It Works:
 User inputs a target domain → 4 recon modules run in parallel → Results aggregated → Sent to Claude AI (acts as an experienced pentester) → AI returns risk level + findings + next steps → Markdown report generated → Visual web dashboard displays everything
-Web is deployed through render. So it might take some time deploying at first.
+The web dashboard runs on a free Render instance, so the first scan after a quiet period can take a minute while it wakes up.
 
 Recon Modules:
 • DNS / WHOIS - IP addresses, DNS records, subdomains, registrar info
@@ -187,7 +191,7 @@ Key Features:
 • Parallel scanning - all 4 modules run simultaneously for speed
 • Two interfaces - CLI for terminal users, web dashboard for visual reporting
 • Real-time progress streaming via Server-Sent Events (SSE)
-• Scan history - every scan persisted and accessible anytime also downloadable
+• Scan history - every scan is saved and can be reopened or downloaded
 • JSON export - raw API endpoint for every report
 • Graceful error handling - one failing module never crashes the scan
 • Ethical use built in - authorized-use disclaimer on every report
@@ -195,7 +199,7 @@ Key Features:
 Tech Stack:
 Backend: Python 3.9+, Flask, concurrent.futures, socket, ssl, SSE
 Libraries: anthropic, dnspython, python-whois, requests, python-dotenv
-Frontend: Pure HTML/CSS/JS - terminal/hacker aesthetic 
+Frontend: Pure HTML/CSS/JS - terminal/hacker aesthetic
 AI: Claude Sonnet via Anthropic API
 
 Security & Compliance:
@@ -204,87 +208,104 @@ Apache 2.0 license. API keys secured via .env + python-dotenv. .gitignore exclud
 Built with Python and Claude AI (Anthropic) for both the AI analysis feature and to assist in building the tool itself.`,
   },
   {
-    title: "Binary Exploitation Framework",
-    category: "Offensive Security",
-    description: "Developed custom exploitation tools for CTF competitions, focusing on stack and heap vulnerabilities in compiled binaries.",
-    tech: ["Python", "C++", "GDB", "Pwntools"],
+    title: "Conjure",
+    category: "Accessibility · Hackathon",
+    description: "Webcam mouse for people with limited hand mobility. Hand tracking moves the cursor; clicks come from a pinch, holding still, or a gesture you record yourself. Built solo in 16 hours at a University of Michigan hackathon.",
+    tech: ["Python", "MediaPipe", "Computer Vision", "Accessibility", "macOS"],
     gradient: "from-red-900 via-burgundy-900 to-black",
-    fullDescription: `A comprehensive framework for exploiting binary vulnerabilities in CTF competitions and security research.
+    links: [
+      { label: "GitHub", url: "https://github.com/hiratinspace/Conjure" },
+    ],
+    fullDescription: `Conjure turns a standard laptop webcam into an alternative pointer for people who can lift one hand but find a mouse hard or painful: tremor, arthritis, partial paralysis, or repetitive strain injury.
+
+The Idea:
+Most webcam pointers ship a fixed set of gestures and expect your hand to adapt. Conjure inverts that: any motion your hand can repeat reliably becomes a click.
 
 Key Features:
-• Automated ROP chain generation for bypassing DEP/NX
-• Custom shellcode development and testing environment
-• Heap exploitation utilities for use-after-free and double-free bugs
-• Integration with GDB and Pwntools for streamlined exploitation
+• Natural pinch to click, with feedback when a pinch isn't counted
+• Record your own click gesture three times and Conjure learns it
+• Dwell clicking (hold still) for anyone who can't pinch
+• A tremor filter that ignores tremor-speed motion so the cursor stays steady
+• Per-user tuning of tremor threshold and pinch sensitivity
+• Input pauses automatically when the hand leaves the frame
 
-Technical Highlights:
-Built primarily in Python with C++ for performance-critical components. The framework handles common exploitation patterns including buffer overflows, format string vulnerabilities, and return-oriented programming (ROP).
+Measured Results (from recorded sessions, reproducible with the test suite):
+• 0 false clicks in 2.4 minutes of ordinary pointing, versus 17 for a typical tutorial approach
+• Cursor shake at rest of 1.3 px, versus 4.8 px
+• 308 passing tests
 
-Challenges Overcome:
-One of the biggest challenges was creating reliable exploits that work across different system configurations. I implemented multiple payload strategies that adapt to different security mitigations like ASLR, stack canaries, and PIE.
+Privacy:
+Video is processed on the laptop and never stored or sent. No account, no cloud.
 
-Results:
-Successfully used in 10+ CTF competitions with a 70% solve rate on binary exploitation challenges.`,
+Tech Stack:
+Python 3.11+, MediaPipe hand tracking, One Euro filter smoothing, macOS (Apple Silicon).
+
+Role: Solo builder - design, engineering, and testing.`,
   },
   {
-    title: "Web Application Penetration Testing Suite",
-    category: "Red Team Tools",
-    description: "Automated reconnaissance and vulnerability assessment toolkit for web applications with focus on OWASP Top 10.",
-    tech: ["Python", "Flask", "SQL Injection", "XSS"],
+    title: "Security Monitoring Lab",
+    category: "Blue Team · Writeups",
+    description: "Windows 11 + Sysmon home lab with documented detections and a SOC-style incident report: brute-force logins, encoded PowerShell, and LOLBin abuse via rundll32.",
+    tech: ["Sysmon", "Windows Event Logs", "Kali Linux", "Detection Engineering", "Incident Response"],
     gradient: "from-burgundy-800 via-red-800 to-black",
-    fullDescription: `An automated penetration testing suite designed to identify and exploit common web application vulnerabilities.
+    links: [
+      { label: "GitHub", url: "https://github.com/hiratinspace/cyber-portfolio" },
+    ],
+    fullDescription: `A hands-on lab documenting how common attacks show up in Windows telemetry, and how to detect and write them up.
 
-Core Capabilities:
-• Automated SQL injection detection and exploitation
-• XSS (Cross-Site Scripting) vulnerability scanner
-• CSRF token analysis and bypass techniques
-• Authentication and session management testing
-• Directory traversal and file inclusion testing
+Lab Setup:
+Windows 11 victim and Kali Linux attacker VMs in VMware Fusion, with Sysmon and Windows Event Viewer for telemetry.
 
-Architecture:
-Built with Flask for the web interface and Python for the scanning engine. Uses multithreading for concurrent testing of multiple endpoints. Includes a custom reporting system that generates detailed vulnerability reports with remediation steps.
+Detections and Writeups:
+• Brute-force login: a spike of failed logons (Event ID 4625) followed by a success (4624)
+• Encoded PowerShell execution caught through Sysmon process-creation events
+• LOLBin abuse: suspicious rundll32.exe execution
 
-Real-World Applications:
-Used this suite in authorized penetration tests for educational purposes and CTF web challenges. It's helped me understand both offensive and defensive perspectives of web security.
+Incident Report:
+A SOC-style investigation of the brute-force login with a timeline, evidence, severity rating, and recommendations such as account lockout thresholds and correlation with endpoint telemetry.
 
-Learning Experience:
-This project taught me the importance of responsible disclosure and ethical hacking. Every vulnerability found is an opportunity to improve security.`,
+Why It Matters:
+Understanding what attacks look like from the defender's side makes offensive work sharper, and it maps directly to day-to-day security operations work.`,
   },
   {
-    title: "Cryptographic Challenge Solver",
-    category: "Cryptography",
-    description: "Built automated solvers for common cryptographic challenges including RSA, AES, and classical ciphers.",
-    tech: ["Python", "PyCrypto", "Mathematics"],
+    title: "Crypto-Solver",
+    category: "CTF Tooling",
+    description: "Python helper for CTF cryptography challenges. Brute-forces Caesar shifts and ranks candidate plaintexts by English letter-frequency scoring, plus ROT13. A small, growing toolkit.",
+    tech: ["Python", "Cryptography", "CTF"],
     gradient: "from-black via-burgundy-900 to-red-900",
-    fullDescription: `A collection of tools and algorithms for solving cryptographic puzzles commonly found in CTF competitions.
+    links: [
+      { label: "GitHub", url: "https://github.com/hiratinspace/crypto-solver" },
+    ],
+    fullDescription: `A small Python toolkit I use for the classical-cipher side of CTF cryptography challenges.
 
-Supported Cryptosystems:
-• RSA (small exponent attacks, Wiener's attack, Fermat factorization)
-• Classical ciphers (Caesar, Vigenère, substitution ciphers)
-• AES modes of operation and padding oracle attacks
-• Hash function analysis and collision detection
-• ECB/CBC mode exploitation
+What It Does Today:
+• Brute-forces all 25 Caesar shifts
+• Scores each candidate against English letter frequencies and ranks the most readable plaintexts first
+• ROT13 decoding
 
-Mathematical Foundations:
-Implements number theory algorithms including:
-- Extended Euclidean algorithm for modular arithmetic
-- Chinese Remainder Theorem for solving systems
-- Pollard's rho algorithm for integer factorization
-- Baby-step giant-step for discrete logarithms
-
-Automation Features:
-The toolkit automatically identifies cipher types and applies appropriate attack strategies. It includes frequency analysis for classical ciphers and automated parameter recovery for modern cryptosystems.
-
-CTF Success:
-This toolkit has been instrumental in solving 50+ cryptography challenges across various CTF platforms including picoCTF, HackTheBox, and TryHackMe.`,
+How It Fits:
+I compete in CTFs across binary exploitation, web exploitation, reverse engineering, and cryptography. This repo is where I turn repeated manual steps from crypto challenges into reusable code, starting with classical ciphers.`,
   },
 ];
+
+// Cards contain their own links, so they can't be <button>s; give them button
+// semantics and Enter/Space activation instead.
+const cardProps = (project, onClick) => ({
+  role: 'button',
+  tabIndex: 0,
+  'aria-label': `${project.title}: view details`,
+  onClick: () => onClick(project),
+  onKeyDown: (e) => {
+    if (e.target !== e.currentTarget) return;
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(project); }
+  },
+});
 
 // ─── Project Card ─────────────────────────────────────────────────────────────
 const ProjectCard = ({ project, onClick }) => (
   <div
     className="group cursor-pointer"
-    onClick={() => onClick(project)}
+    {...cardProps(project, onClick)}
   >
     <div className={`h-48 bg-gradient-to-br ${project.gradient} mb-4 relative overflow-hidden border border-red-900/50 group-hover:border-red-600 transition-all`}>
       <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all" />
@@ -321,7 +342,7 @@ const ProjectCard = ({ project, onClick }) => (
 const FeaturedCard = ({ project, onClick }) => (
   <div
     className="group cursor-pointer border border-red-900/50 hover:border-red-600 transition-all bg-black/40"
-    onClick={() => onClick(project)}
+    {...cardProps(project, onClick)}
   >
     <div className="featured-card-inner flex">
       {/* Banner / logo */}
@@ -390,37 +411,25 @@ const FeaturedCard = ({ project, onClick }) => (
 );
 
 // ─── Project Modal ────────────────────────────────────────────────────────────
-const ProjectModal = ({ project, onClose, matrixColumns }) => {
+const ProjectModal = ({ project, onClose }) => {
+  const panelRef = useDialogFocus(onClose);
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', onKey);
-    };
-  }, [onClose]);
+    return () => { document.body.style.overflow = ''; };
+  }, []);
 
   return (
     <div
-      className="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto"
       style={{ zIndex: 400, backgroundColor: 'rgba(0,0,0,0.88)', fontFamily: FONT }}
       onClick={onClose}
     >
-      {/* Matrix heads in background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {matrixColumns.map((col) => (
-          <div
-            key={`modal-${col.id}`}
-            className="absolute font-mono text-sm font-bold"
-            style={{ left: col.x, top: col.y, color: '#ffffff', textShadow: '0 0 10px rgba(220,38,38,0.8)', opacity: 0.5, transform: 'translateZ(0)' }}
-          >
-            {col.chars[0]}
-          </div>
-        ))}
-      </div>
-
       <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="project-dialog-title"
+        tabIndex={-1}
         className="bg-gradient-to-br from-burgundy-950/95 to-black border-2 border-red-900/50 max-w-4xl w-full my-8 relative"
         style={{ zIndex: 1 }}
         onClick={(e) => e.stopPropagation()}
@@ -428,9 +437,10 @@ const ProjectModal = ({ project, onClose, matrixColumns }) => {
         {/* Close */}
         <button
           onClick={onClose}
+          aria-label="Close details"
           className="absolute top-4 right-4 w-10 h-10 bg-red-900/50 border border-red-800 hover:bg-red-900 hover:border-red-600 transition-all flex items-center justify-center group z-10"
         >
-          <span className="text-2xl text-red-400 group-hover:text-red-300">×</span>
+          <span className="text-2xl text-red-400 group-hover:text-red-300" aria-hidden="true">×</span>
         </button>
 
         {/* Header */}
@@ -440,7 +450,7 @@ const ProjectModal = ({ project, onClose, matrixColumns }) => {
             <span className="px-4 py-2 bg-black/60 border border-red-900/50 text-sm text-red-400 backdrop-blur">
               {project.category}
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white text-center">{project.title}</h2>
+            <h2 id="project-dialog-title" className="text-3xl sm:text-4xl font-bold text-white text-center">{project.title}</h2>
             {project.links && (
               <div className="flex flex-wrap justify-center gap-3 mt-1">
                 {project.links.map((link, i) => {
@@ -498,37 +508,8 @@ const ProjectModal = ({ project, onClose, matrixColumns }) => {
 const ProjectsPage = () => {
   const navigate = useNavigate();
   const [selectedProject, setSelectedProject] = useState(null);
-  const [matrixColumns, setMatrixColumns] = useState([]);
   const [sideNavOpen, setSideNavOpen] = useState(false);
 
-  // Matrix rain
-  useEffect(() => {
-    const columns = Math.floor(window.innerWidth / 28);
-    const chars = '0123456789ABCDEF'.split('');
-    const terms = ['0x','PWN','ROP','NOP','JMP','XOR','DEP','PIE','root@','sudo','nc','sh','bin'];
-    const init = Array.from({ length: columns }, (_, i) => ({
-      id: i, x: i * 28, y: Math.random() * -2000, speed: 0.8 + Math.random() * 2.5,
-      chars: Array.from({ length: 14 + Math.floor(Math.random() * 12) }, () =>
-        Math.random() > 0.7 ? terms[Math.floor(Math.random() * terms.length)] : chars[Math.floor(Math.random() * chars.length)]
-      ),
-    }));
-    setMatrixColumns(init);
-    const interval = setInterval(() => {
-      setMatrixColumns(prev => prev.map(col => {
-        const newY = col.y + col.speed;
-        if (newY > window.innerHeight + 200) {
-          return {
-            ...col, y: -200 - Math.random() * 500, speed: 0.8 + Math.random() * 2.5,
-            chars: Array.from({ length: 14 + Math.floor(Math.random() * 12) }, () =>
-              Math.random() > 0.7 ? terms[Math.floor(Math.random() * terms.length)] : chars[Math.floor(Math.random() * chars.length)]
-            ),
-          };
-        }
-        return { ...col, y: newY };
-      }));
-    }, 50);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div style={{ background: '#07010400', minHeight: '100vh', fontFamily: FONT, color: '#f0e8e8', position: 'relative', overflowX: 'hidden' }}>
@@ -560,22 +541,7 @@ const ProjectsPage = () => {
       <div className="projects-bg" style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
 
         {/* Matrix rain */}
-        <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 3 }}>
-          {matrixColumns.map(col => (
-            <div key={col.id} style={{ position: 'absolute', left: col.x, top: col.y, fontFamily: FONT, fontSize: 12, lineHeight: 1.4, transform: 'translateZ(0)', willChange: 'transform' }}>
-              {col.chars.map((char, idx) => {
-                const opacity = Math.max(0.15, 1 - idx / col.chars.length);
-                return (
-                  <div key={idx} style={{
-                    color: idx === 0 ? '#ff6666' : `rgba(220,38,38,${opacity})`,
-                    textShadow: idx === 0 ? '0 0 6px rgba(255,68,68,0.9)' : 'none',
-                    opacity, fontWeight: idx === 0 ? 700 : 400,
-                  }}>{char}</div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+        <MatrixRain variant="page" style={{ zIndex: 3 }} />
 
         {/* Center dimming overlay */}
         <div style={{
@@ -595,9 +561,9 @@ const ProjectsPage = () => {
             {/* Left - back to portfolio */}
             <button
               onClick={() => navigate('/')}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: 'rgba(200,180,180,0.45)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 1.5, justifySelf: 'start', transition: 'color 0.15s' }}
+              aria-label="Back to portfolio" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: 'rgba(200,180,180,0.75)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, fontFamily: FONT, letterSpacing: 1.5, justifySelf: 'start', transition: 'color 0.15s', padding: '10px 8px 10px 0', minHeight: 44 }}
               onMouseEnter={e => e.currentTarget.style.color = '#ff6b6b'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(200,180,180,0.45)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(200,180,180,0.75)'}
             >
               <ArrowLeft size={20} />
               <span style={{ display: 'inline', fontSize: 15, letterSpacing: 1.5 }} className="portfolio-label">PORTFOLIO</span>
@@ -615,7 +581,9 @@ const ProjectsPage = () => {
               style={{ justifySelf: 'end', background: 'none', border: '1px solid rgba(180,0,30,0.4)', padding: '6px 8px', cursor: 'pointer', color: '#ff6b6b', display: 'flex', alignItems: 'center', transition: 'border-color 0.15s' }}
               onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,68,68,0.7)'}
               onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(180,0,30,0.4)'}
-              aria-label="Toggle navigation"
+              aria-label={sideNavOpen ? 'Close navigation' : 'Open navigation'}
+              aria-expanded={sideNavOpen}
+              aria-controls="products-nav-drawer"
             >
               {sideNavOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
@@ -632,7 +600,7 @@ const ProjectsPage = () => {
         )}
 
         {/* Side drawer */}
-        <div style={{
+        <div id="products-nav-drawer" aria-hidden={!sideNavOpen} inert={sideNavOpen ? undefined : ''} style={{
           position: 'fixed', top: 0, right: 0, height: '100vh', width: 260,
           background: 'rgba(6,0,2,0.98)', borderLeft: '1px solid rgba(180,0,30,0.5)',
           zIndex: 301, fontFamily: FONT,
@@ -642,7 +610,7 @@ const ProjectsPage = () => {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid rgba(180,0,30,0.35)' }}>
             <span style={{ color: '#ff6b6b', fontSize: 11, letterSpacing: 3, fontWeight: 700 }}>NAVIGATION</span>
-            <button onClick={() => setSideNavOpen(false)} style={{ background: 'none', border: 'none', color: 'rgba(200,140,140,0.6)', cursor: 'pointer', display: 'flex' }}>
+            <button onClick={() => setSideNavOpen(false)} aria-label="Close navigation" style={{ background: 'none', border: 'none', color: 'rgba(220,170,170,0.85)', cursor: 'pointer', display: 'flex', padding: 6 }}>
               <X size={16} />
             </button>
           </div>
@@ -653,7 +621,6 @@ const ProjectsPage = () => {
               width: '100%', display: 'flex', alignItems: 'center', gap: 8,
               background: 'rgba(239,68,68,0.06)', padding: '10px 20px',
               color: '#ef4444', fontSize: 11, fontFamily: FONT, letterSpacing: 2,
-              borderLeft: '2px solid #ef4444',
             }}>
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#ef4444', boxShadow: '0 0 6px rgba(239,68,68,0.9)', display: 'inline-block', flexShrink: 0 }} />
               PRODUCTS
@@ -665,12 +632,12 @@ const ProjectsPage = () => {
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: 8,
                 background: 'none', border: 'none', padding: '10px 20px',
-                color: 'rgba(200,140,140,0.55)', cursor: 'pointer', fontSize: 11,
+                color: 'rgba(200,140,140,0.85)', cursor: 'pointer', fontSize: 11,
                 fontFamily: FONT, letterSpacing: 2, textAlign: 'left',
-                transition: 'all 0.15s', borderLeft: '2px solid transparent',
+                transition: 'all 0.15s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.borderLeftColor = '#ef4444'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,140,140,0.55)'; e.currentTarget.style.borderLeftColor = 'transparent'; }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,140,140,0.85)'; }}
             >
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(200,140,140,0.4)', display: 'inline-block', flexShrink: 0 }} />
               INTEL
@@ -709,15 +676,15 @@ const ProjectsPage = () => {
             <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', fontWeight: 700, color: '#fff', margin: '0 0 12px', letterSpacing: 1 }}>
               PRODUCTS
             </h1>
-            <p style={{ color: 'rgba(200,180,180,0.5)', fontSize: 13, maxWidth: 520, lineHeight: 1.7 }}>
-              Products I've founded and shipped up top, with CTF tooling and applied research below. Click any card for full details.
+            <p style={{ color: 'rgba(200,180,180,0.75)', fontSize: 13, maxWidth: 520, lineHeight: 1.7 }}>
+              Products I've founded and shipped up top, with hackathon builds, labs, and CTF tooling below. Click any card for full details.
             </p>
             <div style={{ marginTop: 16, width: 48, height: 2, background: 'linear-gradient(to right, #ef4444, transparent)' }} />
           </div>
 
           {/* Featured projects */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-            <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4, fontFamily: FONT }}>{'// FEATURED'}</span>
+            <h2 style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4, fontFamily: FONT, margin: 0 }}>{'// FEATURED'}</h2>
             <div style={{ flex: 1, height: 1, background: 'rgba(180,0,30,0.25)' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 28, marginBottom: 56 }}>
@@ -732,9 +699,9 @@ const ProjectsPage = () => {
             ))}
           </div>
 
-          {/* CTF & research grid */}
+          {/* Labs, hackathon & CTF grid */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-            <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4, fontFamily: FONT }}>{'// CTF & RESEARCH'}</span>
+            <h2 style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4, fontFamily: FONT, margin: 0 }}>{'// LABS, HACKATHONS & CTF'}</h2>
             <div style={{ flex: 1, height: 1, background: 'rgba(180,0,30,0.25)' }} />
           </div>
           <div style={{
@@ -755,7 +722,7 @@ const ProjectsPage = () => {
 
           {/* Count badge */}
           <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ color: 'rgba(200,140,140,0.35)', fontSize: 11, letterSpacing: 2, fontFamily: FONT }}>
+            <span style={{ color: 'rgba(200,140,140,0.85)', fontSize: 11, letterSpacing: 2, fontFamily: FONT }}>
               {PROJECTS.length} BUILD{PROJECTS.length !== 1 ? 'S' : ''} INDEXED
             </span>
           </div>
@@ -769,7 +736,6 @@ const ProjectsPage = () => {
         <ProjectModal
           project={selectedProject}
           onClose={() => setSelectedProject(null)}
-          matrixColumns={matrixColumns}
         />
       )}
 

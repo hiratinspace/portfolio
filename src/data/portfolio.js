@@ -1,37 +1,32 @@
 // Static portfolio content - defined once at module level (not inside a
 // component body, so it is never re-created on render) and deep-frozen so
 // it cannot be mutated at runtime. (Security audit Findings 8 & 10.)
-import { Briefcase, Cpu, Network, Building2, Megaphone, Users } from 'lucide-react';
 import deepFreeze from '../utils/deepFreeze';
 
 export const experiences = deepFreeze([
   {
-    title: "IT Intern",
+    title: "Information Technology Intern",
     company: "Integrity Technology Solutions",
     period: "Aug 2026 – Present",
-    description: "Support security operations and IT service delivery at a NIST CSF-aligned managed security service provider serving 150+ regulated banking and healthcare clients under HIPAA and financial-sector compliance requirements. Troubleshoot and resolve 100+ tickets across Windows 11 endpoints, Windows Server, and Microsoft 365, including account provisioning, access issues, patching, and device setup. Monitor endpoint protection, security alerts, and patch compliance, escalating suspicious activity per the firm's incident-response procedures.",
-    icon: Cpu
+    description: "Support security operations and IT service delivery at a NIST CSF-aligned managed security service provider serving 150+ regulated banking and healthcare clients under HIPAA and financial-sector compliance requirements. Troubleshoot and resolve 100+ tickets across Windows 11 endpoints, Windows Server, and Microsoft 365, including account provisioning, access issues, patching, and device setup. Monitor endpoint protection, security alerts, and patch compliance, escalating suspicious activity per the firm's incident-response procedures."
   },
   {
     title: "Intern Analyst & Team Lead",
     company: "Driving Forward",
     period: "Dec 2025 – Mar 2026",
-    description: "Led a 4-member team benchmarking midsize companies’ cybersecurity and AI readiness across 10 control domains against NIST CSF and ISO 27001, producing maturity scores on a 1–5 scale. Evaluated cloud, network, and data-security controls (Azure, Palo Alto firewalls, Microsoft Sentinel SIEM, Purview DLP) through framework research and leadership interviews; presented executive reports and roadmaps targeting gaps in DLP, vendor risk, and AI governance.",
-    icon: Briefcase
+    description: "Led a 4-member team benchmarking midsize companies’ cybersecurity and AI readiness across 10 control domains against NIST CSF and ISO 27001, producing maturity scores on a 1–5 scale. Evaluated cloud, network, and data-security controls (Azure, Palo Alto firewalls, Microsoft Sentinel SIEM, Purview DLP) through framework research and leadership interviews; presented executive reports and roadmaps targeting gaps in DLP, vendor risk, and AI governance."
   },
   {
     title: "Intern Analyst",
     company: "McLean County Government - MCRPC",
     period: "Aug 2025 – Aug 2026",
-    description: "Built automated data pipelines and Tableau dashboards analyzing 5+ years of transportation and U.S. Census data for the 2055 Metropolitan Transportation Plan, and developed supporting websites for planning projects.",
-    icon: Cpu
+    description: "Built automated data pipelines and Tableau dashboards analyzing 5+ years of transportation and U.S. Census data for the 2055 Metropolitan Transportation Plan, and developed supporting websites for planning projects."
   },
   {
     title: "GIS Analyst & Technical Assistant",
     company: "Illinois Wesleyan Physical Plant",
     period: "May 2025 – Aug 2025",
-    description: "Built and maintained indoor geodatabases for 8 campus buildings, improving data accuracy by ~40% and creating automated validation scripts to reduce manual QA.",
-    icon: Network
+    description: "Built and maintained indoor geodatabases for 8 campus buildings, improving data accuracy by ~40% and creating automated validation scripts to reduce manual QA."
   }
 ]);
 
@@ -40,36 +35,31 @@ export const leaderships = deepFreeze([
     title: "President",
     company: "ACM Student Chapter at IWU",
     period: "Aug 2026 – Present",
-    description: "Lead a 50+ member chapter hosting guest speaker panels and technical workshops, and organize team trips to hackathons nationwide.",
-    icon: Users
+    description: "Lead a 50+ member chapter hosting guest speaker panels and technical workshops, and organize team trips to hackathons nationwide."
   },
   {
     title: "Senior Resident Advisor",
     company: "IWU Office of Residential Life",
     period: "Aug 2024 – Present",
-    description: "Directly mentor and support 28+ students in a house-style upper-division hall. Part of an on-call rotation covering multiple residence halls, collaborating with hall staff and campus resources to respond to emergencies, conflicts, and student concerns.",
-    icon: Building2
+    description: "Directly mentor and support 28+ students in a house-style upper-division hall. Part of an on-call rotation covering multiple residence halls, collaborating with hall staff and campus resources to respond to emergencies, conflicts, and student concerns."
   },
   {
     title: "Founder & President",
     company: "IWU Billiards Club",
     period: "Aug 2024 – Present",
-    description: "Lead 7+ board members running 10+ events for 200+ participants annually.",
-    icon: Users
+    description: "Lead a board of 7+ members running weekly play sessions for the club's general members."
   },
   {
     title: "Titan Ambassador",
     company: "IWU Admissions Office",
     period: "May 2024 – Present",
-    description: "Lead panel sessions each fall for 500+ prospective students and family members, communicating academics and student life at Illinois Wesleyan.",
-    icon: Megaphone
+    description: "Lead panel sessions each fall for 500+ prospective students and family members, communicating academics and student life at Illinois Wesleyan."
   },
   {
     title: "President",
     company: "IWU MSA",
     period: "Aug 2024 – Aug 2026",
-    description: "Led executive board totaling 7+ members and organized 10+ interfaith and cultural events reaching 200+ participants, fostering inclusive communities and promoting diversity.",
-    icon: Users
+    description: "Led executive board totaling 7+ members and organized 10+ interfaith and cultural events reaching 200+ participants, fostering inclusive communities and promoting diversity."
   }
 ]);
 

@@ -1,22 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Shield, Terminal, Code, Briefcase, Radio, GraduationCap, User, Mail, Linkedin, ChevronRight, Lock } from 'lucide-react';
+import { Shield, Terminal, Code, Briefcase, Radio, GraduationCap, User, Users, Mail, Linkedin, ChevronRight, Lock } from 'lucide-react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import ThreatFeedPage from './components/ThreatFeedPage';
 import ProjectsPage from './components/ProjectsPage';
 import CertTracker from './components/CertTracker';
+import GitHubActivity from './components/GitHubActivity';
+import MatrixRain from './components/MatrixRain';
 import QRLandingPage from './components/QRLandingPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import { getEmail } from './utils/email';
+import useDialogFocus from './utils/useDialogFocus';
 import { experiences, leaderships, skills } from './data/portfolio';
 
 const Portfolio = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
-  const [matrixColumns, setMatrixColumns] = useState([]);
   const [showResume, setShowResume] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
-  const prevWidthRef = useRef(window.innerWidth);
   const dimOverlayRef = useRef(null);
 
   useEffect(() => {
@@ -65,72 +66,6 @@ const Portfolio = () => {
     return () => { document.body.style.overflow = ''; };
   }, [showResume]);
 
-  // Close resume modal on Escape
-  useEffect(() => {
-    if (!showResume) return;
-    const onKey = (e) => { if (e.key === 'Escape') setShowResume(false); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [showResume]);
-
-  // Matrix rain - reinitializes on window resize (debounced)
-  useEffect(() => {
-    const buildColumns = (width) => {
-      const chars = '0123456789ABCDEF'.split('');
-      const terms = ['0x', 'PWN', 'ROP', 'NOP', 'JMP', 'XOR', 'DEP', 'PIE', 'root@', 'sudo', 'nc', 'sh', 'bin'];
-      return Array.from({ length: Math.floor(width / 25) }, (_, i) => ({
-        id: i, x: i * 25, y: Math.random() * -2000, speed: 1 + Math.random() * 3,
-        chars: Array.from({ length: 15 + Math.floor(Math.random() * 15) }, () =>
-          Math.random() > 0.7
-            ? terms[Math.floor(Math.random() * terms.length)]
-            : chars[Math.floor(Math.random() * chars.length)]
-        )
-      }));
-    };
-
-    setMatrixColumns(buildColumns(window.innerWidth));
-
-    const interval = setInterval(() => {
-      setMatrixColumns(prev => prev.map(col => {
-        const newY = col.y + col.speed;
-        if (newY > window.innerHeight + 200) {
-          const chars = '0123456789ABCDEF'.split('');
-          const terms = ['0x', 'PWN', 'ROP', 'NOP', 'JMP', 'XOR', 'DEP', 'PIE', 'root@', 'sudo', 'nc', 'sh', 'bin'];
-          return {
-            ...col,
-            y: -200 - Math.random() * 500,
-            speed: 1 + Math.random() * 3,
-            chars: Array.from({ length: 15 + Math.floor(Math.random() * 15) }, () =>
-              Math.random() > 0.7
-                ? terms[Math.floor(Math.random() * terms.length)]
-                : chars[Math.floor(Math.random() * chars.length)]
-            )
-          };
-        }
-        return { ...col, y: newY };
-      }));
-    }, 50);
-
-    let resizeTimer;
-    const handleResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        const w = window.innerWidth;
-        if (Math.abs(w - prevWidthRef.current) > 50) {
-          prevWidthRef.current = w;
-          setMatrixColumns(buildColumns(w));
-        }
-      }, 200);
-    };
-    window.addEventListener('resize', handleResize, { passive: true });
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(resizeTimer);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -146,49 +81,7 @@ const Portfolio = () => {
   return (
     <div className="bg-black text-gray-100 min-h-screen font-mono relative overflow-hidden">
       {/* Matrix Rain Background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1 }}>
-        {matrixColumns.map((col) => (
-          <div
-            key={col.id}
-            className="absolute font-mono text-sm leading-tight"
-            style={{
-              left: `${col.x}px`,
-              top: `${col.y}px`,
-              transform: 'translateZ(0)',
-              willChange: 'transform'
-            }}
-          >
-            {col.chars.map((char, idx) => {
-              const opacity = Math.max(0.1, 1 - (idx / col.chars.length));
-              const isHead = idx === 0;
-              const isTail = idx === col.chars.length - 1;
-
-              return (
-                <div
-                  key={idx}
-                  className="transition-opacity duration-100"
-                  style={{
-                    color: isHead
-                      ? '#ffffff'
-                      : isTail
-                        ? '#450a0a'
-                        : `rgba(220, 38, 38, ${opacity})`,
-                    textShadow: isHead
-                      ? '0 0 8px rgba(220, 38, 38, 0.8), 0 0 12px rgba(220, 38, 38, 0.6)'
-                      : isTail
-                        ? 'none'
-                        : `0 0 6px rgba(220, 38, 38, ${opacity * 0.6})`,
-                    opacity: opacity,
-                    fontWeight: isHead ? '700' : '400'
-                  }}
-                >
-                  {char}
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
+      <MatrixRain variant="home" style={{ zIndex: 1 }} />
       {/* Scroll-driven dim layer - keeps the matrix rain vivid on the hero,
           fades it back for every section below. Opacity set in handleScroll. */}
       <div
@@ -229,8 +122,8 @@ const Portfolio = () => {
                     stroke="url(#letterGrad)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                 </svg>
               </div>
-              <span className="text-base sm:text-xl font-bold bg-gradient-to-r from-red-500 via-burgundy-600 to-burgundy-900 bg-clip-text text-transparent group-hover:from-red-400 group-hover:via-burgundy-500 transition-all hidden sm:inline">
-                HIRAT RAHMAN RAHI
+              <span className="text-base sm:text-xl font-bold text-red-500 group-hover:text-red-400 transition-colors hidden sm:inline">
+                HIRAT RAHMAN
               </span>
             </button>
 
@@ -239,20 +132,20 @@ const Portfolio = () => {
               <button
                 onClick={() => navigate('/products')}
                 className="flex items-center space-x-2 px-4 py-1.5 border border-red-900/60 hover:border-red-600 hover:bg-red-950/30 transition-all group"
-                style={{ fontFamily: "'Monaco', 'Courier New', monospace" }}
+                style={{ fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace" }}
               >
-                <Code className="w-3.5 h-3.5 text-red-600 group-hover:text-red-400 transition-colors" />
-                <span className="text-xs font-bold tracking-widest text-red-600 group-hover:text-red-400 transition-colors">
+                <Code className="w-3.5 h-3.5 text-red-400 group-hover:text-red-300 transition-colors" />
+                <span className="text-xs font-bold tracking-widest text-red-400 group-hover:text-red-300 transition-colors">
                   PRODUCTS
                 </span>
               </button>
               <button
                 onClick={() => navigate('/intel')}
                 className="flex items-center space-x-2 px-4 py-1.5 border border-red-900/60 hover:border-red-600 hover:bg-red-950/30 transition-all group"
-                style={{ fontFamily: "'Monaco', 'Courier New', monospace" }}
+                style={{ fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace" }}
               >
-                <Radio className="w-3.5 h-3.5 text-red-600 group-hover:text-red-400 transition-colors" />
-                <span className="text-xs font-bold tracking-widest text-red-600 group-hover:text-red-400 transition-colors">
+                <Radio className="w-3.5 h-3.5 text-red-400 group-hover:text-red-300 transition-colors" />
+                <span className="text-xs font-bold tracking-widest text-red-400 group-hover:text-red-300 transition-colors">
                   INTEL
                 </span>
                 <span style={{
@@ -275,17 +168,25 @@ const Portfolio = () => {
                   <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
-                    className={`text-xs sm:text-sm transition-colors hover:text-red-500 ${activeSection === item.id ? 'text-red-500' : 'text-gray-400'}`}
+                    className={`text-xs sm:text-sm py-2 transition-colors hover:text-red-400 ${activeSection === item.id ? 'text-red-400' : 'text-gray-300'}`}
                   >
                     {item.label}
                   </button>
                 ))}
+                <button
+                  onClick={() => setShowResume(true)}
+                  className="text-xs sm:text-sm px-3 py-1.5 border border-red-800 text-red-300 hover:text-white hover:border-red-500 hover:bg-red-950/40 transition-colors"
+                >
+                  RESUME
+                </button>
               </div>
               {/* Mobile hamburger */}
               <button
                 className="sm:hidden flex flex-col gap-1.5 p-1 ml-2"
                 onClick={() => setNavOpen(o => !o)}
-                aria-label="Open navigation"
+                aria-label={navOpen ? 'Close navigation' : 'Open navigation'}
+                aria-expanded={navOpen}
+                aria-controls="mobile-nav-drawer"
               >
                 <span style={{ display: 'block', width: 22, height: 2, background: navOpen ? '#ef4444' : 'rgba(220,180,180,0.7)', transition: 'all 0.22s', transform: navOpen ? 'translateY(7px) rotate(45deg)' : 'none' }} />
                 <span style={{ display: 'block', width: 22, height: 2, background: navOpen ? 'transparent' : 'rgba(220,180,180,0.7)', transition: 'all 0.22s' }} />
@@ -311,7 +212,10 @@ const Portfolio = () => {
 
       {/* Mobile nav sidebar - drawer (slides from right) */}
       <div
+        id="mobile-nav-drawer"
         className="fixed top-0 bottom-0 sm:hidden"
+        aria-hidden={!navOpen}
+        inert={navOpen ? undefined : ''}
         style={{
           right: 0, width: 240, zIndex: 110,
           background: 'rgba(4,0,1,0.98)',
@@ -323,7 +227,7 @@ const Portfolio = () => {
           padding: '80px 28px 40px',
         }}
       >
-        <div style={{ color: 'rgba(127,29,29,0.7)', fontSize: 9, letterSpacing: 4, fontFamily: "'Monaco','Courier New',monospace", fontWeight: 700, marginBottom: 24 }}>
+        <div style={{ color: 'rgba(220,180,180,0.75)', fontSize: 10, letterSpacing: 4, fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace", fontWeight: 700, marginBottom: 24 }}>
           NAVIGATE
         </div>
         {[
@@ -339,7 +243,7 @@ const Portfolio = () => {
               display: 'flex', alignItems: 'center', gap: 10,
               background: 'none', border: 'none', cursor: 'pointer',
               color: activeSection === item.id ? '#ef4444' : 'rgba(220,180,180,0.65)',
-              fontFamily: "'Monaco','Courier New',monospace",
+              fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
               fontSize: 13, letterSpacing: 2,
               padding: '13px 0',
               borderBottom: '1px solid rgba(127,29,29,0.15)',
@@ -351,13 +255,28 @@ const Portfolio = () => {
           </button>
         ))}
 
+        {/* RESUME link in sidebar */}
+        <button
+          onClick={() => { setShowResume(true); setNavOpen(false); }}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: '#fca5a5', fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
+            fontSize: 13, letterSpacing: 2, padding: '13px 0',
+            borderBottom: '1px solid rgba(127,29,29,0.15)',
+            transition: 'color 0.15s', textAlign: 'left', width: '100%',
+          }}
+        >
+          RESUME
+        </button>
+
         {/* PRODUCTS link in sidebar */}
         <button
           onClick={() => { navigate('/products'); setNavOpen(false); }}
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             background: 'none', border: 'none', cursor: 'pointer',
-            color: 'rgba(239,68,68,0.8)', fontFamily: "'Monaco','Courier New',monospace",
+            color: 'rgba(239,68,68,0.8)', fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
             fontSize: 13, letterSpacing: 2, padding: '13px 0',
             transition: 'color 0.15s', textAlign: 'left', width: '100%',
           }}
@@ -371,7 +290,7 @@ const Portfolio = () => {
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             background: 'none', border: 'none', cursor: 'pointer',
-            color: 'rgba(239,68,68,0.8)', fontFamily: "'Monaco','Courier New',monospace",
+            color: 'rgba(239,68,68,0.8)', fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
             fontSize: 13, letterSpacing: 2, padding: '13px 0',
             transition: 'color 0.15s', textAlign: 'left', width: '100%',
             marginTop: 8,
@@ -382,6 +301,7 @@ const Portfolio = () => {
         </button>
       </div>
 
+      <main>
       {/* Hero Section */}
       <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 px-4 sm:px-6" style={{ zIndex: 10 }}>
         <div className="absolute inset-0 bg-gradient-to-br from-black via-burgundy-950/50 to-black" style={{ zIndex: 2 }}></div>
@@ -393,16 +313,19 @@ const Portfolio = () => {
                 <Terminal className="text-red-500 w-5 h-5 sm:w-6 sm:h-6" />
                 <span className="text-red-500 text-xs sm:text-sm font-bold tracking-wider">ASPIRING OFFENSIVE SECURITY ENGINEER</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                <span className="bg-gradient-to-r from-red-500 via-burgundy-500 to-red-600 bg-clip-text text-transparent">
-                  PURPLE → RED
-                </span>
-                <br />
-                <span className="text-white">AUTOMATION</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-3 leading-tight text-white" style={{ textWrap: 'balance' }}>
+                Hirat Rahman
               </h1>
-              <p className="text-gray-400 text-base sm:text-lg mb-8 leading-relaxed">
-                Hi, I’m Hirat. I build and document security projects across web security, reverse engineering,
-                and CTF-style problem solving, and bring the same discipline to security operations, IT, and data work through my internships.
+              <p className="text-xl sm:text-2xl font-bold text-red-500 mb-6">
+                Purple → Red automation.
+              </p>
+              <p className="text-gray-300 text-base sm:text-lg mb-4 leading-relaxed max-w-xl">
+                Information Technology Intern at <span className="text-white">Integrity Technology Solutions</span>, a managed security
+                provider for banks and healthcare. CS &amp; Mathematics at Illinois Wesleyan, Dec 2027.
+              </p>
+              <p className="text-gray-400 text-base sm:text-lg mb-8 leading-relaxed max-w-xl">
+                I build AI-powered recon tooling, document detections in my home lab, compete in CTFs, and ship
+                products people actually use.
               </p>
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                 <button
@@ -419,14 +342,31 @@ const Portfolio = () => {
                   VIEW RESUME
                 </button>
               </div>
+              <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm" style={{ fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace" }}>
+                <span className="text-gray-400">Shipped:</span>
+                {[
+                  { label: 'PassMyResume', url: 'https://passmyresume.com' },
+                  { label: 'interninbox', url: 'https://github.com/hiratinspace/interninbox' },
+                  { label: 'TuitionCreep', url: 'https://tuitioncreep.org' },
+                  { label: 'SpecterAI', url: 'https://github.com/hiratinspace/specter-ai' },
+                ].map(p => (
+                  <a key={p.label} href={p.url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer"
+                    className="text-red-300 hover:text-white underline decoration-red-800 underline-offset-4 hover:decoration-red-400 transition-colors">
+                    {p.label}
+                  </a>
+                ))}
+                <button onClick={() => navigate('/products')} className="text-gray-300 hover:text-white transition-colors">
+                  All products →
+                </button>
+              </div>
             </div>
 
             <div className="relative mt-8 lg:mt-0">
-              <div className="relative z-10 bg-gradient-to-br from-burgundy-900/30 to-black border border-red-900/50 p-6 sm:p-8 backdrop-blur">
+              <div className="relative z-10 bg-gradient-to-br from-burgundy-900/30 to-black border border-red-900/50 p-6 sm:p-8">
                 <Shield className="text-red-500 w-12 h-12 sm:w-16 sm:h-16 mb-4" />
-                <h3 className="text-xl sm:text-2xl font-bold mb-4 text-red-400">Security Focus</h3>
+                <h2 className="text-xl sm:text-2xl font-bold mb-4 text-red-400">Security Focus</h2>
                 <ul className="space-y-3">
-                  {['Web Application Security (OWASP Top 10)', 'Reverse Engineering (fundamentals)', 'Cryptography (CTF / applied basics)', 'Python Automation & Tooling', 'CTF Competitions & Writeups'].map((item, i) => (
+                  {['Penetration Testing & Reconnaissance', 'Security Operations & Incident Triage', 'MCP & AI-Agent Security', 'Reverse Engineering & CTF Competitions', 'Python Automation & Tooling'].map((item, i) => (
                     <li key={i} className="flex items-center space-x-3 text-sm sm:text-base text-gray-300">
                       <div className="w-2 h-2 bg-red-500 rotate-45 flex-shrink-0"></div>
                       <span>{item}</span>
@@ -434,7 +374,6 @@ const Portfolio = () => {
                   ))}
                 </ul>
               </div>
-              <div className="absolute -bottom-4 -right-4 w-full h-full border border-red-900/30 hidden sm:block"></div>
             </div>
           </div>
         </div>
@@ -451,7 +390,7 @@ const Portfolio = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="space-y-6">
               <p className="text-gray-300 leading-relaxed">
-                I’m Hirat Rahman Rahi, a Computer Science & Mathematics double major with a minor in Psychology at
+                I’m Hirat Rahman, a Computer Science & Mathematics double major with a minor in Psychology at
                 Illinois Wesleyan University, focused on offensive security. I identify and validate weaknesses in web
                 applications and systems through hands-on practice, CTFs, labs, and clearly documented writeups, and I
                 build Python automation for reconnaissance, testing, and reporting so results are consistent, repeatable,
@@ -489,7 +428,7 @@ const Portfolio = () => {
       </section>
 
       {/* Skills Section */}
-      <section className="py-16 sm:py-24 bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+      <section id="skills" className="py-16 sm:py-24 bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Lock className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
@@ -513,70 +452,63 @@ const Portfolio = () => {
         </div>
       </section>
 
-      {/* Experience Section */}
-      <section className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+      {/* Experience Section - timeline */}
+      <section id="experience" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
-            <Briefcase className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
+            <Briefcase className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true" />
             <h2 className="text-3xl sm:text-4xl font-bold text-white">EXPERIENCE</h2>
           </div>
 
-          <div className="space-y-6">
+          <ol className="relative border-l border-red-900/60 ml-1.5 space-y-12">
             {experiences.map((exp, idx) => {
-              const Icon = exp.icon;
+              const current = /Present/.test(exp.period);
               return (
-                <div key={idx} className="border border-red-900/50 p-4 sm:p-6 bg-gradient-to-r from-burgundy-950/20 to-black hover:border-red-700/70 transition-all group">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 space-y-3 sm:space-y-0">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-red-900 to-burgundy-900 flex items-center justify-center border border-red-800 group-hover:border-red-600 transition-all flex-shrink-0">
-                        <Icon className="w-6 h-6 text-red-300" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-red-400 transition-colors">{exp.title}</h3>
-                        <p className="text-red-400 text-sm sm:text-base">{exp.company}</p>
-                      </div>
+                <li key={idx} className="relative pl-6 sm:pl-10">
+                  <span
+                    aria-hidden="true"
+                    className={`absolute -left-[6px] top-2 w-[11px] h-[11px] rotate-45 ${current ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]' : 'bg-black border border-red-700'}`}
+                  />
+                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6 max-w-4xl">
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-bold text-white">{exp.title}</h3>
+                      <p className="text-red-400 text-sm sm:text-base">{exp.company}</p>
                     </div>
-                    <span className="text-xs sm:text-sm text-gray-400 border border-red-900/50 px-3 py-1 self-start sm:self-auto">{exp.period}</span>
+                    <p className="text-xs sm:text-sm text-gray-400 whitespace-nowrap flex items-center gap-2">
+                      {exp.period}
+                      {current && <span className="text-red-300 border border-red-700 px-1.5 py-0.5 text-[10px] tracking-widest">NOW</span>}
+                    </p>
                   </div>
-                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base sm:ml-16">{exp.description}</p>
-                </div>
+                  <p className="mt-3 text-gray-300 leading-relaxed text-sm sm:text-base max-w-[70ch]">{exp.description}</p>
+                </li>
               );
             })}
-          </div>
+          </ol>
         </div>
       </section>
 
+      <GitHubActivity />
 
-      {/* Leadership Section */}
-      <section className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+      {/* Leadership Section - compact two-column list */}
+      <section id="leadership" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
-            <Briefcase className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
+            <Users className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true" />
             <h2 className="text-3xl sm:text-4xl font-bold text-white">LEADERSHIP</h2>
           </div>
 
-          <div className="space-y-6">
-            {leaderships.map((exp, idx) => {
-              const Icon = exp.icon;
-              return (
-                <div key={idx} className="border border-red-900/50 p-4 sm:p-6 bg-gradient-to-r from-burgundy-950/20 to-black hover:border-red-700/70 transition-all group">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 space-y-3 sm:space-y-0">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-red-900 to-burgundy-900 flex items-center justify-center border border-red-800 group-hover:border-red-600 transition-all flex-shrink-0">
-                        <Icon className="w-6 h-6 text-red-300" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-red-400 transition-colors">{exp.title}</h3>
-                        <p className="text-red-400 text-sm sm:text-base">{exp.company}</p>
-                      </div>
-                    </div>
-                    <span className="text-xs sm:text-sm text-gray-400 border border-red-900/50 px-3 py-1 self-start sm:self-auto">{exp.period}</span>
-                  </div>
-                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base sm:ml-16">{exp.description}</p>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+            {leaderships.map((item, idx) => (
+              <li key={idx} className="border-t border-red-900/60 pt-4">
+                <div className="flex items-baseline justify-between gap-4">
+                  <h3 className="text-base sm:text-lg font-bold text-white">{item.title}</h3>
+                  <span className="text-xs text-gray-400 whitespace-nowrap">{item.period}</span>
                 </div>
-              );
-            })}
-          </div>
+                <p className="text-red-400 text-sm mb-2">{item.company}</p>
+                <p className="text-gray-300 leading-relaxed text-sm max-w-[70ch]">{item.description}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -619,91 +551,91 @@ const Portfolio = () => {
               >
                 <Linkedin className="w-10 h-10 text-red-500 mb-4 group-hover:scale-110 transition-transform" />
                 <span className="text-sm text-gray-400 uppercase tracking-wider mb-2">LinkedIn</span>
-                <span className="text-white text-lg">hiratrahman</span>
+                <span className="text-white text-lg">hiratrahi</span>
               </a>
             </div>
           </div>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="border-t border-red-900/30 py-6 sm:py-8 bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
-            <p className="text-gray-500 text-xs sm:text-sm text-center sm:text-left">© 2026 Hirat Rahman Rahi. All rights reserved.</p>
+            <p className="text-gray-400 text-xs sm:text-sm text-center sm:text-left">© 2026 Hirat Rahman. All rights reserved.</p>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-              <span className="text-gray-500 text-xs sm:text-sm">Available for opportunities</span>
+              <span className="text-gray-400 text-xs sm:text-sm">Available for opportunities</span>
             </div>
           </div>
         </div>
       </footer>
 
       {/* Resume Modal */}
-      {showResume && (
-        <div
-          className="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4"
-          style={{ zIndex: 300, backgroundColor: 'rgba(0, 0, 0, 0.85)' }}
-          onClick={() => setShowResume(false)}
-        >
-          {/* Matrix rain (reused) */}
-          <div className="fixed inset-0 pointer-events-none overflow-hidden">
-            {matrixColumns.map((col) => (
-              <div
-                key={`resume-${col.id}`}
-                className="absolute font-mono text-sm font-bold"
-                style={{
-                  left: `${col.x}px`,
-                  top: `${col.y}px`,
-                  color: '#ffffff',
-                  textShadow: '0 0 10px rgba(220, 38, 38, 0.8), 0 0 20px rgba(220, 38, 38, 0.4)',
-                  opacity: 0.6,
-                  transform: 'translateZ(0)',
-                  willChange: 'transform'
-                }}
-              >
-                {col.chars[0]}
-              </div>
-            ))}
+      {showResume && <ResumeModal onClose={() => setShowResume(false)} />}
+
+    </div>
+  );
+};
+
+// Resume viewer dialog: embedded PDF plus open/download links (iOS Safari
+// renders PDFs in iframes poorly, so a direct link is always offered).
+const ResumeModal = ({ onClose }) => {
+  const panelRef = useDialogFocus(onClose);
+  return (
+    <div
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ zIndex: 300, backgroundColor: 'rgba(0, 0, 0, 0.88)' }}
+      onClick={onClose}
+    >
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="resume-dialog-title"
+        tabIndex={-1}
+        className="bg-gradient-to-br from-burgundy-950/95 to-black border-2 border-red-900/50 max-w-4xl w-full my-8 relative"
+        style={{ height: '90vh' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header bar */}
+        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3 border-b border-red-900/50">
+          <div className="flex items-center space-x-3 min-w-0">
+            <Terminal className="text-red-500 w-4 h-4 flex-shrink-0" aria-hidden="true" />
+            <h2 id="resume-dialog-title" className="text-red-400 text-xs font-bold tracking-wider truncate">RESUME // HIRAT_RAHMAN_RAHI.pdf</h2>
           </div>
-
-          <div
-            className="bg-gradient-to-br from-burgundy-950/95 to-black border-2 border-red-900/50 max-w-4xl w-full my-8 relative"
-            style={{ height: '90vh' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header bar */}
-            <div className="flex items-center justify-between px-6 py-3 border-b border-red-900/50">
-              <div className="flex items-center space-x-3">
-                <Terminal className="text-red-500 w-4 h-4" />
-                <span className="text-red-500 text-xs font-bold tracking-wider">RESUME // HIRAT_RAHMAN_RAHI.pdf</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <a
-                  href="/resume.pdf"
-                  download
-                  className="text-xs text-red-400 border border-red-900/60 px-3 py-1 hover:bg-red-950/40 transition-all"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  ↓ DOWNLOAD
-                </a>
-                <button
-                  onClick={() => setShowResume(false)}
-                  className="w-8 h-8 flex items-center justify-center border border-red-900/50 hover:bg-red-900/40 transition-all text-red-400 text-xl"
-                >×</button>
-              </div>
-            </div>
-
-              <iframe
-                src="/resume.pdf"
-                className="w-full"
-                style={{ height: 'calc(90vh - 52px)' }}
-                title="Resume - Hirat Rahman Rahi"
-              />
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-red-300 border border-red-900/60 px-3 py-2 hover:bg-red-950/40 transition-all"
+            >
+              OPEN
+            </a>
+            <a
+              href="/resume.pdf"
+              download
+              className="text-xs text-red-300 border border-red-900/60 px-3 py-2 hover:bg-red-950/40 transition-all"
+            >
+              ↓ DOWNLOAD
+            </a>
+            <button
+              onClick={onClose}
+              aria-label="Close resume"
+              className="w-9 h-9 flex items-center justify-center border border-red-900/50 hover:bg-red-900/40 transition-all text-red-300 text-xl"
+            >×</button>
           </div>
         </div>
-      )}
 
+        <iframe
+          src="/resume.pdf"
+          className="w-full"
+          style={{ height: 'calc(90vh - 60px)' }}
+          title="Resume - Hirat Rahman"
+        />
+      </div>
     </div>
   );
 };

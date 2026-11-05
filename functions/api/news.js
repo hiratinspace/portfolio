@@ -69,15 +69,13 @@ async function fetchFeed({ source, url, limit }) {
 }
 
 // ── Ask Claude to categorize and summarize all items in one batch call ────────
+const neutral = (items) =>
+  items.map(item => ({ ...item, severity: 'INFO', category: 'General', summary: item.description || item.title }));
+
 async function enrichWithClaude(items, apiKey) {
   if (!apiKey) {
     // No API key - return items with neutral tags so the UI still works
-    return items.map(item => ({
-      ...item,
-      severity: 'INFO',
-      category: 'General',
-      summary: item.description || item.title,
-    }));
+    return { items: neutral(items), status: 'no-key' };
   }
 
   const prompt = `You are a cybersecurity analyst. For each news item below, return a JSON array where each element has:
@@ -100,15 +98,17 @@ ${items.map((item, i) => `${i}. [${item.source}] ${item.title} - ${item.descript
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001', // Fast + cheap for batch categorization
+      model: 'claude-haiku-5-5', // Fast + cheap for batch categorization
       max_tokens: 1024,
       messages: [{ role: 'user', content: prompt }],
     }),
   });
 
   if (!res.ok) {
-    // Claude call failed - return items as-is with neutral tags
-    return items.map(item => ({ ...item, severity: 'INFO', category: 'General', summary: item.description || item.title }));
+    // Claude call failed - log the reason (never the key) and fall back to neutral tags
+    const detail = await res.text().catch(() => '');
+    console.error(`news: Anthropic API ${res.status}: ${detail.slice(0, 300)}`);
+    return { items: neutral(items), status: `api-${res.status}` };
   }
 
   const data = await res.json();
@@ -116,14 +116,16 @@ ${items.map((item, i) => `${i}. [${item.source}] ${item.title} - ${item.descript
 
   try {
     const enriched = JSON.parse(raw.replace(/```json|```/g, '').trim());
-    return items.map((item, i) => ({
+    const tagged = items.map((item, i) => ({
       ...item,
       severity: enriched[i]?.severity ?? 'INFO',
       category: enriched[i]?.category ?? 'General',
       summary:  enriched[i]?.summary  ?? item.description ?? item.title,
     }));
+    return { items: tagged, status: 'ok' };
   } catch {
-    return items.map(item => ({ ...item, severity: 'INFO', category: 'General', summary: item.description || item.title }));
+    console.error(`news: could not parse Claude response: ${raw.slice(0, 300)}`);
+    return { items: neutral(items), status: 'parse-error' };
   }
 }
 
@@ -142,7 +144,7 @@ export async function onRequest(context) {
   }
 
   // Enrich with Claude (single batch call)
-  const enriched = await enrichWithClaude(allItems, apiKey);
+  const { items: enriched, status: enrichment } = await enrichWithClaude(allItems, apiKey);
 
   // Sort: CRITICAL first, then HIGH, then others; within same severity by date
   const order = { CRITICAL: 0, HIGH: 1, MEDIUM: 2, INFO: 3 };
@@ -153,6 +155,8 @@ export async function onRequest(context) {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'public, max-age=1200', // 20 min browser + edge cache
+      // Why stories are or aren't AI-tagged: ok | no-key | api-<status> | parse-error
+      'X-News-Enrichment': enrichment,
       // Restrict to your own domain - same policy as /api/cves
       'Access-Control-Allow-Origin': 'https://hiratrahi.com',
     },

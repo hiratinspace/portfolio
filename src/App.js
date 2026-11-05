@@ -6,6 +6,7 @@ import ProjectsPage from './components/ProjectsPage';
 import CertTracker from './components/CertTracker';
 import GitHubActivity from './components/GitHubActivity';
 import MatrixRain from './components/MatrixRain';
+import NovaChat from './components/NovaChat';
 import QRLandingPage from './components/QRLandingPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import { getEmail } from './utils/email';
@@ -123,7 +124,7 @@ const Portfolio = () => {
                 </svg>
               </div>
               <span className="text-base sm:text-xl font-bold text-red-500 group-hover:text-red-400 transition-colors hidden sm:inline">
-                HIRAT RAHMAN
+                HIRAT RAHMAN RAHI
               </span>
             </button>
 
@@ -643,14 +644,17 @@ const ResumeModal = ({ onClose }) => {
 // ErrorBoundary wraps the entire app - any runtime error shows a
 // fallback instead of a blank page
 const App = () => (
-  <Routes>
-    <Route path="/"      element={<ErrorBoundary><Portfolio /></ErrorBoundary>} />
-    <Route path="/intel" element={<ThreatFeedPage />} />
-    <Route path="/products" element={<ProjectsPage />} />
-    {/* Old URL, kept so previously shared links still work */}
-    <Route path="/projects" element={<Navigate to="/products" replace />} />
-    <Route path="/scan"  element={<ErrorBoundary><QRLandingPage /></ErrorBoundary>} />
-  </Routes>
+  <>
+    <Routes>
+      <Route path="/"      element={<ErrorBoundary><Portfolio /></ErrorBoundary>} />
+      <Route path="/intel" element={<ThreatFeedPage />} />
+      <Route path="/products" element={<ProjectsPage />} />
+      {/* Old URL, kept so previously shared links still work */}
+      <Route path="/projects" element={<Navigate to="/products" replace />} />
+      <Route path="/scan"  element={<ErrorBoundary><QRLandingPage /></ErrorBoundary>} />
+    </Routes>
+    <NovaChat />
+  </>
 );
 
 export default App;

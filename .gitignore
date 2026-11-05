@@ -16,3 +16,6 @@ graphify-out/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Nova rules: stored as a Cloudflare secret, never committed
+nova/*.local.md

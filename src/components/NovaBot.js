@@ -1,12 +1,13 @@
 import React, { useEffect, useId, useRef } from 'react';
 
-// Nova's mascot: a little ghost. Purely decorative (aria-hidden); animations
+// Nova's mascot: a little red ghost. Purely decorative (aria-hidden); animations
 // live in index.css under .nova-bot and stop under prefers-reduced-motion.
 //
-// <NovaBot mode="idle" />  holds the edge it sits on and floats gently
-//   mode="excited"          happy eyes and little hops (hovering the card)
-//   mode="think"            tilts and looks up while Nova is answering
-//   mode="happy"            happy eyes and a hop (an answer just finished)
+// <NovaBot mode="idle" />  holds the edge it sits on, floats, and waves now and then
+//   mode="excited"          happy face (hovering the card)
+//   mode="think"            tilts its head and looks up while Nova is answering
+//   mode="happy"            happy face (an answer just finished)
+// The float never changes between modes, so switching never makes it jump.
 // Its eyes follow the visitor's cursor.
 //
 // <NovaAvatar /> is just the ghost's face, for small avatar spots.
@@ -15,16 +16,16 @@ import React, { useEffect, useId, useRef } from 'react';
 const Defs = ({ id }) => (
   <defs>
     <radialGradient id={`${id}-sheet`} cx="0.38" cy="0.3" r="0.85">
-      <stop offset="0" stopColor="#ffffff" />
-      <stop offset="0.6" stopColor="#f1f1f4" />
-      <stop offset="1" stopColor="#c9c9d1" />
+      <stop offset="0" stopColor="#fca5a5" />
+      <stop offset="0.45" stopColor="#ef4444" />
+      <stop offset="1" stopColor="#991b1b" />
     </radialGradient>
     {/* hides whatever is below the edge, so the sheet always looks tucked in */}
     <clipPath id={`${id}-above-edge`}>
       <rect x="-20" y="-20" width="120" height="80.5" />
     </clipPath>
     <filter id={`${id}-glow`} x="-40%" y="-40%" width="180%" height="180%">
-      <feDropShadow dx="0" dy="0" stdDeviation="2.2" floodColor="#ef4444" floodOpacity="0.45" />
+      <feDropShadow dx="0" dy="0" stdDeviation="2.2" floodColor="#ef4444" floodOpacity="0.55" />
     </filter>
   </defs>
 );
@@ -32,39 +33,50 @@ const Defs = ({ id }) => (
 // Head and body, floating around a point on the edge (40, 60)
 const Ghost = ({ id }) => (
   <g className="ng-body">
-    {/* sheet, with a little curl on top */}
-    <path
-      d="M20 70 V31 C20 16 29 7.5 40 7.5 C51 7.5 60 16 60 31 V70 Z"
-      fill={`url(#${id}-sheet)`}
-      filter={`url(#${id}-glow)`}
-    />
-    <path d="M39 8 C38 4.5 41 2.5 43.5 4" fill="none" stroke="#e4e4e9" strokeWidth="2.2" strokeLinecap="round" />
+    <g className="ng-tilt">
+      {/* sheet, with a little curl on top */}
+      <path
+        d="M20 70 V31 C20 16 29 7.5 40 7.5 C51 7.5 60 16 60 31 V70 Z"
+        fill={`url(#${id}-sheet)`}
+        filter={`url(#${id}-glow)`}
+      />
+      <path d="M39 8 C38 4.5 41 2.5 43.5 4" fill="none" stroke="#f87171" strokeWidth="2.2" strokeLinecap="round" />
 
-    {/* cheeks */}
-    <ellipse cx="28" cy="36.5" rx="3.4" ry="2" fill="#f87171" opacity="0.5" />
-    <ellipse cx="52" cy="36.5" rx="3.4" ry="2" fill="#f87171" opacity="0.5" />
+      {/* cheeks */}
+      <ellipse cx="27" cy="38.2" rx="3.4" ry="2" fill="#fecaca" opacity="0.45" />
+      <ellipse cx="53" cy="38.2" rx="3.4" ry="2" fill="#fecaca" opacity="0.45" />
 
-    {/* eyes: round with a shine, or happy arcs */}
-    <g className="ng-eyes">
-      <g className="ng-eyes-open">
-        <g className="ng-eye">
-          <ellipse cx="33" cy="29.5" rx="3.3" ry="4.3" fill="#141416" />
-          <circle cx="34.2" cy="27.8" r="1.2" fill="#ffffff" />
+      {/* eyes: round with a shine, or happy arcs */}
+      <g className="ng-eyes">
+        <g className="ng-eyes-open">
+          <g className="ng-eye">
+            <ellipse cx="33" cy="29.5" rx="3.3" ry="4.3" fill="#1c0606" />
+            <circle cx="34.2" cy="27.8" r="1.2" fill="#ffffff" />
+          </g>
+          <g className="ng-eye">
+            <ellipse cx="47" cy="29.5" rx="3.3" ry="4.3" fill="#1c0606" />
+            <circle cx="48.2" cy="27.8" r="1.2" fill="#ffffff" />
+          </g>
         </g>
-        <g className="ng-eye">
-          <ellipse cx="47" cy="29.5" rx="3.3" ry="4.3" fill="#141416" />
-          <circle cx="48.2" cy="27.8" r="1.2" fill="#ffffff" />
+        <g className="ng-eyes-happy" fill="none" stroke="#1c0606" strokeWidth="2" strokeLinecap="round">
+          <path d="M29.8 31 Q33 26.4 36.2 31" />
+          <path d="M43.8 31 Q47 26.4 50.2 31" />
         </g>
       </g>
-      <g className="ng-eyes-happy" fill="none" stroke="#141416" strokeWidth="2" strokeLinecap="round">
-        <path d="M29.8 31 Q33 26.4 36.2 31" />
-        <path d="M43.8 31 Q47 26.4 50.2 31" />
+
+      {/* round glasses: tinted lenses with a glint, a bridge, and arms to the sides */}
+      <g className="ng-glasses">
+        <circle cx="33" cy="29.5" r="5.8" fill="#ffffff" fillOpacity="0.14" stroke="#1c0606" strokeWidth="1.5" />
+        <circle cx="47" cy="29.5" r="5.8" fill="#ffffff" fillOpacity="0.14" stroke="#1c0606" strokeWidth="1.5" />
+        <path d="M38.8 29 Q40 27.6 41.2 29" fill="none" stroke="#1c0606" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M27.2 28.6 L20.6 27.4 M52.8 28.6 L59.4 27.4" stroke="#1c0606" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M29.6 26.4 Q31 25 32.8 24.8 M43.6 26.4 Q45 25 46.8 24.8" fill="none" stroke="#ffffff" strokeOpacity="0.7" strokeWidth="0.9" strokeLinecap="round" />
       </g>
+
+      {/* mouth: a small "boo", or a smile */}
+      <ellipse className="ng-mouth-o" cx="40" cy="38.5" rx="1.9" ry="2.4" fill="#1c0606" />
+      <path className="ng-mouth-smile" d="M36.8 37.2 Q40 41 43.2 37.2" fill="none" stroke="#1c0606" strokeWidth="1.8" strokeLinecap="round" />
     </g>
-
-    {/* mouth: a small "boo", or a smile */}
-    <ellipse className="ng-mouth-o" cx="40" cy="38.5" rx="1.9" ry="2.4" fill="#141416" />
-    <path className="ng-mouth-smile" d="M36.8 37.2 Q40 41 43.2 37.2" fill="none" stroke="#141416" strokeWidth="1.8" strokeLinecap="round" />
   </g>
 );
 
@@ -117,16 +129,21 @@ export const NovaBot = ({ mode = 'idle', className = '', style }) => {
     >
       <Defs id={id} />
 
-      {/* arms reaching out to the edge, behind the sheet */}
-      <path d="M23 45 Q15 48 15.5 57" fill="none" stroke="#dcdce2" strokeWidth="5.5" strokeLinecap="round" />
-      <path d="M57 45 Q65 48 64.5 57" fill="none" stroke="#dcdce2" strokeWidth="5.5" strokeLinecap="round" />
+      {/* left arm (on screen right) reaching out to the edge, behind the sheet */}
+      <path d="M57 45 Q65 48 64.5 57" fill="none" stroke="#b91c1c" strokeWidth="5.5" strokeLinecap="round" />
+
+      {/* right arm (on screen left): rests on the edge, and now and then
+          lifts from the shoulder (23, 45) to wave. Drawn behind the sheet. */}
+      <g className="ng-wave-arm">
+        <path d="M23 45 Q15 48 15.5 57" fill="none" stroke="#b91c1c" strokeWidth="5.5" strokeLinecap="round" />
+        <ellipse cx="15.5" cy="60" rx="4.6" ry="3.6" fill={`url(#${id}-sheet)`} />
+      </g>
 
       <g clipPath={`url(#${id}-above-edge)`}>
         <Ghost id={id} />
       </g>
 
-      {/* little hands draped over the edge */}
-      <ellipse cx="15.5" cy="60" rx="4.6" ry="3.6" fill={`url(#${id}-sheet)`} />
+      {/* left hand draped over the edge */}
       <ellipse cx="64.5" cy="60" rx="4.6" ry="3.6" fill={`url(#${id}-sheet)`} />
     </svg>
   );

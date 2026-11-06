@@ -38,7 +38,7 @@ const Portfolio = () => {
       }
 
       // Update active section based on scroll position
-      const sections = ['home', 'about', 'cert-roadmap', 'contact'];
+      const sections = ['home', 'about', 'experience', 'cert-roadmap', 'contact'];
       const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
@@ -126,7 +126,7 @@ const Portfolio = () => {
                     stroke="url(#letterGrad)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                 </svg>
               </div>
-              <span className="text-base sm:text-xl font-bold text-red-500 group-hover:text-red-400 transition-colors hidden sm:inline">
+              <span className="text-base sm:text-xl font-bold text-red-500 group-hover:text-red-400 transition-colors hidden lg:inline">
                 HIRAT RAHMAN RAHI
               </span>
             </button>
@@ -162,10 +162,11 @@ const Portfolio = () => {
             {/* RIGHT - nav links on desktop, hamburger on mobile */}
             <div className="justify-self-end flex items-center">
               {/* Desktop nav links */}
-              <div className="hidden sm:flex items-center space-x-3 sm:space-x-6">
+              <div className="hidden xl:flex items-center space-x-6">
                 {[
                   { label: 'HOME',     id: 'home'         },
                   { label: 'ABOUT',   id: 'about'        },
+                  { label: 'EXPERIENCE', id: 'experience' },
                   { label: 'PRACTICE', id: 'cert-roadmap' },
                   { label: 'CONTACT', id: 'contact'      },
                 ].map((item) => (
@@ -187,7 +188,7 @@ const Portfolio = () => {
               {/* Mobile hamburger */}
               <button
                 ref={hamburgerRef}
-                className="sm:hidden flex flex-col gap-1.5 p-1 ml-2"
+                className="xl:hidden flex flex-col gap-1.5 p-1 ml-2"
                 onClick={() => setNavOpen(o => !o)}
                 aria-label={navOpen ? 'Close navigation' : 'Open navigation'}
                 aria-expanded={navOpen}
@@ -209,7 +210,7 @@ const Portfolio = () => {
       {/* Mobile nav sidebar - backdrop */}
       {navOpen && (
         <div
-          className="fixed inset-0 sm:hidden"
+          className="fixed inset-0 xl:hidden"
           style={{ zIndex: 99, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(2px)' }}
           onClick={() => setNavOpen(false)}
         />
@@ -218,7 +219,7 @@ const Portfolio = () => {
       {/* Mobile nav sidebar - drawer (slides from right) */}
       <div
         id="mobile-nav-drawer"
-        className="fixed top-0 bottom-0 sm:hidden"
+        className="fixed top-0 bottom-0 xl:hidden"
         aria-hidden={!navOpen}
         inert={navOpen ? undefined : ''}
         style={{
@@ -249,6 +250,7 @@ const Portfolio = () => {
         {[
           { label: 'HOME',     id: 'home'         },
           { label: 'ABOUT',   id: 'about'        },
+          { label: 'EXPERIENCE', id: 'experience' },
           { label: 'PRACTICE', id: 'cert-roadmap' },
           { label: 'CONTACT', id: 'contact'      },
         ].map((item) => (
@@ -445,33 +447,8 @@ const Portfolio = () => {
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section id="skills" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center space-x-3 mb-8 sm:mb-12">
-            <Lock className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">SKILLS & TOOLKIT</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {Object.entries(skills).map(([category, items], idx) => (
-              <div key={idx} className="border border-red-900/50 p-6 bg-gradient-to-br from-burgundy-950/20 to-black hover:border-red-700/70 transition-all group">
-                <h3 className="text-xl font-bold mb-4 text-red-400 group-hover:text-red-300 transition-colors">{category}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {items.map((skill, i) => (
-                    <span key={i} className="px-3 py-1 bg-red-950/30 border border-red-900/50 text-sm text-gray-300 hover:bg-red-900/30 hover:border-red-700 transition-all cursor-default">
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Experience Section - timeline */}
-      <section id="experience" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+      <section id="experience" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Briefcase className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true" />
@@ -507,8 +484,36 @@ const Portfolio = () => {
 
       <GitHubActivity />
 
+      {/* ── Cert Roadmap ── */}
+      <CertTracker />
+
+      {/* Skills Section */}
+      <section id="skills" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center space-x-3 mb-8 sm:mb-12">
+            <Lock className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">SKILLS & TOOLKIT</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {Object.entries(skills).map(([category, items], idx) => (
+              <div key={idx} className="border border-red-900/50 p-6 bg-gradient-to-br from-burgundy-950/20 to-black hover:border-red-700/70 transition-all group">
+                <h3 className="text-xl font-bold mb-4 text-red-400 group-hover:text-red-300 transition-colors">{category}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {items.map((skill, i) => (
+                    <span key={i} className="px-3 py-1 bg-red-950/30 border border-red-900/50 text-sm text-gray-300 hover:bg-red-900/30 hover:border-red-700 transition-all cursor-default">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Leadership Section - compact two-column list */}
-      <section id="leadership" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+      <section id="leadership" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Users className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true" />
@@ -529,9 +534,6 @@ const Portfolio = () => {
           </ul>
         </div>
       </section>
-
-      {/* ── Cert Roadmap ── */}
-      <CertTracker />
 
       {/* Contact Section */}
       <section id="contact" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>

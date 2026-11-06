@@ -83,7 +83,7 @@ const GitHubActivity = () => {
   }
 
   return (
-    <section id="github" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+    <section id="github" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 sm:mb-12">
           <div className="flex items-center space-x-3">

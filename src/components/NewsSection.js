@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ExternalLink, RefreshCw, Newspaper, ChevronDown } from 'lucide-react';
 
-const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
+const FONT = "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 
 const SEVERITY_CFG = {
   CRITICAL: { color: '#ff3333', bg: 'rgba(255,51,51,0.12)',  border: 'rgba(255,51,51,0.45)',  glow: '0 0 8px rgba(255,51,51,0.35)' },

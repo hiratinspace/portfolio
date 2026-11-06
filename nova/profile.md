@@ -66,8 +66,11 @@ Security focus areas:
 **Information Technology Intern**, Integrity Technology Solutions (managed IT services and cybersecurity)
 Bloomington, IL | Aug 2026 to present
 - About the firm: Integrity is a NIST CSF-aligned managed security service provider with 150+ clients, many of them regulated banking and healthcare organizations working under HIPAA and financial-sector compliance requirements. The 150+ is the firm's client count, not a measure of Hirat's own work.
-- As an intern, Hirat helps secure client environments across a range of security tasks: responding to security alerts, policy controls, domain controls, and other day-to-day security work.
-- Do not quote a ticket count, and do not say Hirat personally monitors or secures 150+ clients.
+- Supports security operations and IT service delivery for the firm's clients.
+- Handles tasks across Windows 11 endpoints, Windows Server, and Microsoft 365 environments: account provisioning, access issues, patching, and device setup.
+- Configures advanced audit and security policies on Windows Server, and helps manage Azure and Microsoft 365 environments as part of security operations.
+- Monitors endpoint protection, security alerts, and patch compliance, and escalates suspicious activity following the firm's incident-response procedures.
+- Do not mention tickets or quote a ticket count, and do not say Hirat personally monitors or secures 150+ clients.
 
 **Intern Analyst & Team Lead**, Driving Forward (cybersecurity and AI readiness consulting)
 Chicago, IL | Dec 2025 to Mar 2026

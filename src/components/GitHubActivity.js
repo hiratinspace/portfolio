@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Github, ExternalLink } from 'lucide-react';
 
-const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
+const FONT = "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 const PROFILE_URL = 'https://github.com/hiratinspace';
 
 // Red heat scale to match the site theme (GitHub levels 0-4)
@@ -83,7 +83,7 @@ const GitHubActivity = () => {
   }
 
   return (
-    <section id="github" className="py-16 sm:py-24 bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+    <section id="github" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 sm:mb-12">
           <div className="flex items-center space-x-3">

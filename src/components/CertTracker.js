@@ -1,7 +1,7 @@
 import React from 'react';
 import { Zap } from 'lucide-react';
 
-const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
+const FONT = "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 
 // ─── Edit this data to update your progress ──────────────────────────────────
 const PLATFORM_PROGRESS = [
@@ -13,7 +13,7 @@ const PLATFORM_PROGRESS = [
 
 const CertTracker = () => {
   return (
-    <section id="cert-roadmap" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+    <section id="cert-roadmap" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}

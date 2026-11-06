@@ -8,7 +8,7 @@ import {
 import NewsSection from './NewsSection';
 import KevSection from './KevSection';
 
-const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
+const FONT = "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 
 const SEVERITY_CONFIG = {
   CRITICAL: { color: '#ff4444', bg: 'rgba(255,68,68,0.08)',   border: '#ff4444', glow: '0 0 20px rgba(255,68,68,0.4)',   dim: 'rgba(255,68,68,0.4)'   },
@@ -467,7 +467,7 @@ const ThreatFeedPage = () => {
           borderBottom: '1px solid rgba(180,0,30,0.5)',
           backdropFilter: 'blur(10px)',
         }}>
-          <div style={{ maxWidth: 980, margin: '0 auto', padding: '12px 24px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
+          <div style={{ maxWidth: 920, margin: '0 auto', padding: '12px 24px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
 
             {/* Left - back to portfolio */}
             <button
@@ -574,7 +574,7 @@ const ThreatFeedPage = () => {
 
         {/* ── Content ────────────────────────────────────────────────────── */}
         <main style={{ position: 'relative', zIndex: 10, paddingTop: 70 }}>
-          <div style={{ maxWidth: 860, margin: '0 auto', padding: '52px 24px 100px' }}>
+          <div style={{ maxWidth: 920, margin: '0 auto', padding: '52px 24px 100px' }}>
 
             {/* Hero */}
             <div style={{ marginBottom: 48, borderBottom: '1px solid rgba(139,0,0,0.3)', paddingBottom: 32 }}>
@@ -589,8 +589,8 @@ const ThreatFeedPage = () => {
                   <h1 style={{ fontFamily: FONT, fontSize: 'clamp(1.6rem,4vw,2.25rem)', fontWeight: 700, color: '#fff', letterSpacing: 1, margin: 0 }}>
                     THREAT FEED
                   </h1>
-                  <p style={{ color: 'rgba(209,213,219,0.7)', fontSize: 11, letterSpacing: 3, marginTop: 3, fontFamily: FONT }}>
-                    NATIONAL VULNERABILITY DATABASE
+                  <p style={{ color: 'rgba(209,213,219,0.75)', fontSize: 12, letterSpacing: 0.5, marginTop: 3, fontFamily: FONT }}>
+                    National Vulnerability Database
                   </p>
                 </div>
               </div>
@@ -634,7 +634,7 @@ const ThreatFeedPage = () => {
 
                 {/* Label */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-                  <span style={{ color: 'rgba(249,239,239,0.7)', fontSize: 11, letterSpacing: 4, fontWeight: 700, flexShrink: 0 }}>
+                  <span style={{ color: 'rgba(249,239,239,0.75)', fontSize: 11, letterSpacing: 2, fontWeight: 700, flexShrink: 0 }}>
                     SEVERITY FILTER
                   </span>
                   <div style={{ flex: 1, height: 1, background: 'linear-gradient(to right, rgba(180,0,30,0.5), transparent)' }} />
@@ -656,7 +656,7 @@ const ThreatFeedPage = () => {
                 {activeCategory
                   ? <CategoryPanel cves={cves} category={activeCategory} />
                   : (
-                    <div style={{ textAlign: 'center', padding: '24px 0 4px', color: 'rgba(249,239,239,0.7)', fontSize: 10, letterSpacing: 1, lineHeight: 2, borderTop: '1px solid rgba(180,0,30,0.2)', paddingTop: 15 }}>
+                    <div style={{ textAlign: 'center', padding: '24px 0 4px', color: 'rgba(249,239,239,0.75)', fontSize: 11, letterSpacing: 0.5, lineHeight: 2, borderTop: '1px solid rgba(180,0,30,0.2)', paddingTop: 15 }}>
                       THIS PRODUCT USES THE NVD API BUT IS NOT ENDORSED OR CERTIFIED BY THE NVD
                     </div>
                   )

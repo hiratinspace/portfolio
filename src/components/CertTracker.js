@@ -1,5 +1,6 @@
 import React from 'react';
 import { Zap } from 'lucide-react';
+import RadarSweep from './RadarSweep';
 
 const FONT = "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 
@@ -25,29 +26,34 @@ const CertTracker = () => {
           </div>
         </div>
 
-        {/* Terminal-style readout: raw counts, no implied maximum */}
-        <div
-          className="border border-red-900/50 bg-black/60 max-w-2xl"
-          style={{ fontFamily: FONT }}
-        >
-          <div className="px-4 py-2 border-b border-red-900/40 text-xs text-gray-400">
-            <span className="text-red-400">$</span> practice --stats
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+          {/* Terminal-style readout: raw counts, no implied maximum */}
+          <div
+            className="border border-red-900/50 bg-black/60"
+            style={{ fontFamily: FONT }}
+          >
+            <div className="px-4 py-2 border-b border-red-900/40 text-xs text-gray-400">
+              <span className="text-red-400">$</span> practice --stats
+            </div>
+            <ul className="px-4 py-3 space-y-2">
+              {PLATFORM_PROGRESS.map(p => (
+                <li key={p.name} className="flex items-baseline gap-3 text-sm sm:text-base">
+                  <span
+                    className="font-semibold py-1"
+                    style={{ color: p.color }}
+                  >
+                    {p.name}
+                  </span>
+                  <span aria-hidden="true" className="flex-1 border-b border-dotted border-red-900/70 translate-y-[-4px]" />
+                  <span className="text-white font-bold tabular-nums">{p.progress}</span>
+                  <span className="text-gray-300">{p.label}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul className="px-4 py-3 space-y-2">
-            {PLATFORM_PROGRESS.map(p => (
-              <li key={p.name} className="flex items-baseline gap-3 text-sm sm:text-base">
-                <span
-                  className="font-semibold py-1"
-                  style={{ color: p.color }}
-                >
-                  {p.name}
-                </span>
-                <span aria-hidden="true" className="flex-1 border-b border-dotted border-red-900/70 translate-y-[-4px]" />
-                <span className="text-white font-bold tabular-nums">{p.progress}</span>
-                <span className="text-gray-300">{p.label}</span>
-              </li>
-            ))}
-          </ul>
+
+          {/* Decorative radar fills the right column */}
+          <RadarSweep />
         </div>
       </div>
     </section>

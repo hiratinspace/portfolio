@@ -4,33 +4,63 @@
     <meta charset="utf-8" />
 
     <!-- Primary SEO -->
-    <title>Hirat Rahman | CS & Math | Cybersecurity</title>
+    <title>Hirat Rahman Rahi | CS & Math | Cybersecurity</title>
     <meta
       name="description"
-      content="Hirat Rahman - CS & Mathematics at Illinois Wesleyan University. IT intern at a managed security provider,
-      aspiring offensive security engineer, and founder of shipped security and career tools."
+      content="Hirat Rahman Rahi, a Computer Science & Mathematics double major at Illinois Wesleyan University. Information Technology Intern at a managed security provider, aspiring offensive security engineer, and founder of shipped security and career tools."
     />
+    <!-- One address per page for search engines (also folds www.hiratrahi.com into hiratrahi.com) -->
+    <link rel="canonical" href="https://hiratrahi.com/" id="canonical" />
+    <script>
+      document.getElementById('canonical').href = 'https://hiratrahi.com' + location.pathname.replace(/\/+$/, '') + (location.pathname === '/' ? '/' : '');
+    </script>
 
     <!-- Viewport & Theme -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#7F1D1D" />
 
-    <!-- Favicons -->
-    <link rel="icon" type="any" href="/favicon.png" />
-    <link rel="shortcut icon" type="any" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/favicon.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/hr-icon-16x16.png" />
+    <!-- Favicons (favicon.ico is what Bing and older browsers ask for) -->
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/hr-icon-48x48.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/hr-icon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/hr-icon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <!-- Open Graph (LinkedIn / Social Previews) -->
-    <meta property="og:title" content="Hirat Rahman - CS & Mathematics | Illinois Wesleyan University" />
+    <meta property="og:site_name" content="Hirat Rahman Rahi" />
+    <meta property="og:title" content="Hirat Rahman Rahi | CS & Mathematics, Illinois Wesleyan University" />
     <meta
       property="og:description"
       content="Aspiring offensive security engineer: IT and security operations internship, AI-powered recon tooling, home-lab detections, and shipped products."
     />
     <meta property="og:image" content="https://hiratrahi.com/og-image.jpg" />
-    <meta property="og:url" content="https://hiratrahi.com" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:alt" content="Hirat Rahman Rahi, portfolio" />
+    <meta property="og:url" content="https://hiratrahi.com/" />
     <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Structured data: who this site is about -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Hirat Rahman Rahi",
+        "alternateName": "Hirat Rahman",
+        "url": "https://hiratrahi.com/",
+        "image": "https://hiratrahi.com/og-image.jpg",
+        "jobTitle": "Information Technology Intern",
+        "worksFor": { "@type": "Organization", "name": "Integrity Technology Solutions" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Illinois Wesleyan University" },
+        "knowsAbout": ["Cybersecurity", "Offensive security", "Computer Science", "Mathematics"],
+        "sameAs": [
+          "https://github.com/hiratinspace",
+          "https://www.linkedin.com/in/hiratrahi"
+        ]
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

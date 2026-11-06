@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ExternalLink, RefreshCw, Crosshair, ChevronDown, Skull } from 'lucide-react';
 
-const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
+const FONT = "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 
 const fmtDate = (s) => {
   if (!s) return '';
@@ -145,8 +145,8 @@ const KevSection = () => {
             <h2 style={{ fontFamily: FONT, fontSize: 'clamp(1.6rem,4vw,2.25rem)', fontWeight: 700, color: '#fff', letterSpacing: 1 }}>
               EXPLOITED IN THE WILD
             </h2>
-            <p style={{ color: 'rgba(209,213,219,0.7)', fontSize: 11, letterSpacing: 3, marginTop: 3, fontFamily: FONT }}>
-              KNOWN EXPLOITED VULNERABILITIES CATALOG
+            <p style={{ color: 'rgba(209,213,219,0.75)', fontSize: 12, letterSpacing: 0.5, marginTop: 3, fontFamily: FONT }}>
+              Known Exploited Vulnerabilities Catalog
             </p>
           </div>
         </div>
@@ -168,10 +168,10 @@ const KevSection = () => {
             Not just disclosed - <strong style={{ color: '#fff', fontWeight: 700 }}>confirmed exploited</strong>. CVEs that CISA has verified are under active attack in the wild (of any age), which is why federal agencies are required to patch them by the listed due date.
           </p>
           <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
-            <button onClick={() => { setRansomwareOnly(false); setVisibleCount(4); }} style={{ border: `1px solid ${!ransomwareOnly ? 'rgba(239,68,68,0.7)' : 'rgba(139,0,0,0.3)'}`, background: !ransomwareOnly ? 'rgba(239,68,68,0.1)' : 'transparent', color: !ransomwareOnly ? '#ef4444' : 'rgba(209,213,219,0.55)', padding: '4px 14px', fontSize: 10, fontFamily: FONT, letterSpacing: 1.5, cursor: 'pointer', transition: 'all 0.15s' }}>
+            <button onClick={() => { setRansomwareOnly(false); setVisibleCount(4); }} style={{ border: `1px solid ${!ransomwareOnly ? 'rgba(239,68,68,0.7)' : 'rgba(139,0,0,0.3)'}`, background: !ransomwareOnly ? 'rgba(239,68,68,0.1)' : 'transparent', color: !ransomwareOnly ? '#ef4444' : 'rgba(209,213,219,0.75)', padding: '4px 14px', fontSize: 10, fontFamily: FONT, letterSpacing: 1.5, cursor: 'pointer', transition: 'all 0.15s' }}>
               ALL RECENT ({items.length})
             </button>
-            <button onClick={() => { setRansomwareOnly(true); setVisibleCount(4); }} disabled={ransomwareCount === 0} style={{ border: `1px solid ${ransomwareOnly ? 'rgba(255,51,51,0.6)' : 'rgba(139,0,0,0.3)'}`, background: ransomwareOnly ? 'rgba(255,51,51,0.12)' : 'transparent', color: ransomwareCount === 0 ? 'rgba(209,213,219,0.25)' : (ransomwareOnly ? '#ff5555' : 'rgba(209,213,219,0.55)'), padding: '4px 14px', fontSize: 10, fontFamily: FONT, letterSpacing: 1.5, cursor: ransomwareCount === 0 ? 'not-allowed' : 'pointer', transition: 'all 0.15s' }}>
+            <button onClick={() => { setRansomwareOnly(true); setVisibleCount(4); }} disabled={ransomwareCount === 0} style={{ border: `1px solid ${ransomwareOnly ? 'rgba(255,51,51,0.6)' : 'rgba(139,0,0,0.3)'}`, background: ransomwareOnly ? 'rgba(255,51,51,0.12)' : 'transparent', color: ransomwareCount === 0 ? 'rgba(209,213,219,0.5)' : (ransomwareOnly ? '#ff5555' : 'rgba(209,213,219,0.75)'), padding: '4px 14px', fontSize: 10, fontFamily: FONT, letterSpacing: 1.5, cursor: ransomwareCount === 0 ? 'not-allowed' : 'pointer', transition: 'all 0.15s' }}>
               RANSOMWARE-LINKED ({ransomwareCount})
             </button>
           </div>

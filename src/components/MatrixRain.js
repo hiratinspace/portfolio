@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 // version that re-rendered ~1,000 React nodes 20 times a second. It pauses
 // when the tab is hidden and shows a still frame when the visitor has
 // "reduce motion" turned on.
-const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
+const FONT = "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 const HEX = '0123456789ABCDEF'.split('');
 const TERMS = ['0x', 'PWN', 'ROP', 'NOP', 'JMP', 'XOR', 'DEP', 'PIE', 'root@', 'sudo', 'nc', 'sh', 'bin'];
 

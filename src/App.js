@@ -136,7 +136,7 @@ const Portfolio = () => {
               <button
                 onClick={() => navigate('/products')}
                 className="flex items-center space-x-2 px-4 py-1.5 border border-red-900/60 hover:border-red-600 hover:bg-red-950/30 transition-all group"
-                style={{ fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace" }}
+                style={{ fontFamily: "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace" }}
               >
                 <Code className="w-3.5 h-3.5 text-red-400 group-hover:text-red-300 transition-colors" />
                 <span className="text-xs font-bold tracking-widest text-red-400 group-hover:text-red-300 transition-colors">
@@ -146,7 +146,7 @@ const Portfolio = () => {
               <button
                 onClick={() => navigate('/intel')}
                 className="flex items-center space-x-2 px-4 py-1.5 border border-red-900/60 hover:border-red-600 hover:bg-red-950/30 transition-all group"
-                style={{ fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace" }}
+                style={{ fontFamily: "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace" }}
               >
                 <Radio className="w-3.5 h-3.5 text-red-400 group-hover:text-red-300 transition-colors" />
                 <span className="text-xs font-bold tracking-widest text-red-400 group-hover:text-red-300 transition-colors">
@@ -235,7 +235,7 @@ const Portfolio = () => {
       >
         {/* Header with a close button (the drawer covers the hamburger) */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '0 -12px 16px 0', padding: '14px 0', borderBottom: '1px solid rgba(127,29,29,0.35)' }}>
-          <span style={{ color: 'rgba(220,180,180,0.75)', fontSize: 10, letterSpacing: 4, fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace", fontWeight: 700 }}>
+          <span style={{ color: 'rgba(220,180,180,0.75)', fontSize: 10, letterSpacing: 4, fontFamily: "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace", fontWeight: 700 }}>
             NAVIGATE
           </span>
           <button
@@ -259,7 +259,7 @@ const Portfolio = () => {
               display: 'flex', alignItems: 'center', gap: 10,
               background: 'none', border: 'none', cursor: 'pointer',
               color: activeSection === item.id ? '#ef4444' : 'rgba(220,180,180,0.65)',
-              fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
+              fontFamily: "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
               fontSize: 13, letterSpacing: 2,
               padding: '13px 0',
               borderBottom: '1px solid rgba(127,29,29,0.15)',
@@ -277,7 +277,7 @@ const Portfolio = () => {
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             background: 'none', border: 'none', cursor: 'pointer',
-            color: '#fca5a5', fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
+            color: '#fca5a5', fontFamily: "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
             fontSize: 13, letterSpacing: 2, padding: '13px 0',
             borderBottom: '1px solid rgba(127,29,29,0.15)',
             transition: 'color 0.15s', textAlign: 'left', width: '100%',
@@ -292,7 +292,7 @@ const Portfolio = () => {
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             background: 'none', border: 'none', cursor: 'pointer',
-            color: 'rgba(239,68,68,0.8)', fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
+            color: 'rgba(239,68,68,0.8)', fontFamily: "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
             fontSize: 13, letterSpacing: 2, padding: '13px 0',
             transition: 'color 0.15s', textAlign: 'left', width: '100%',
           }}
@@ -306,7 +306,7 @@ const Portfolio = () => {
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             background: 'none', border: 'none', cursor: 'pointer',
-            color: 'rgba(239,68,68,0.8)', fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
+            color: 'rgba(239,68,68,0.8)', fontFamily: "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace",
             fontSize: 13, letterSpacing: 2, padding: '13px 0',
             transition: 'color 0.15s', textAlign: 'left', width: '100%',
             marginTop: 8,
@@ -324,12 +324,14 @@ const Portfolio = () => {
 
         <div className="max-w-6xl mx-auto relative w-full" style={{ zIndex: 10 }}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div>
+            <div className="relative">
+              {/* soft shade so the falling code doesn't run through the text */}
+              <div aria-hidden="true" className="absolute -inset-x-10 -inset-y-12 -z-10 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.75)_30%,transparent_72%)]" />
               <div className="flex items-center space-x-2 mb-4">
                 <Terminal className="text-red-500 w-5 h-5 sm:w-6 sm:h-6" />
                 <span className="text-red-500 text-xs sm:text-sm font-bold tracking-wider">ASPIRING OFFENSIVE SECURITY ENGINEER</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-3 leading-tight text-white" style={{ textWrap: 'balance' }}>
+              <h1 className="text-4xl sm:text-5xl lg:text-[clamp(3rem,6.5vh,3.75rem)] font-bold mb-3 leading-tight text-white" style={{ textWrap: 'balance' }}>
                 Hirat Rahman
               </h1>
               <p className="text-xl sm:text-2xl font-bold text-red-500 mb-6">
@@ -358,7 +360,7 @@ const Portfolio = () => {
                   VIEW RESUME
                 </button>
               </div>
-              <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm" style={{ fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace" }}>
+              <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm" style={{ fontFamily: "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace" }}>
                 <span className="text-gray-400">Shipped:</span>
                 {[
                   { label: 'PassMyResume', url: 'https://passmyresume.com' },
@@ -396,7 +398,7 @@ const Portfolio = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+      <section id="about" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <User className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
@@ -444,7 +446,7 @@ const Portfolio = () => {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-16 sm:py-24 bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+      <section id="skills" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Lock className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
@@ -469,7 +471,7 @@ const Portfolio = () => {
       </section>
 
       {/* Experience Section - timeline */}
-      <section id="experience" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+      <section id="experience" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Briefcase className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true" />
@@ -485,7 +487,7 @@ const Portfolio = () => {
                     aria-hidden="true"
                     className={`absolute -left-[6px] top-2 w-[11px] h-[11px] rotate-45 ${current ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]' : 'bg-black border border-red-700'}`}
                   />
-                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6 max-w-4xl">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6">
                     <div>
                       <h3 className="text-lg sm:text-xl font-bold text-white">{exp.title}</h3>
                       <p className="text-red-400 text-sm sm:text-base">{exp.company}</p>
@@ -506,7 +508,7 @@ const Portfolio = () => {
       <GitHubActivity />
 
       {/* Leadership Section - compact two-column list */}
-      <section id="leadership" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+      <section id="leadership" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Users className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true" />
@@ -532,20 +534,20 @@ const Portfolio = () => {
       <CertTracker />
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 sm:py-24 bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
-        <div className="max-w-4xl mx-auto">
+      <section id="contact" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
+        <div className="max-w-6xl mx-auto">
           <div className="flex items-center space-x-3 mb-8 sm:mb-12">
             <Mail className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
             <h2 className="text-3xl sm:text-4xl font-bold text-white">CONTACT</h2>
           </div>
 
-          <div className="border border-red-900/50 p-8 bg-gradient-to-br from-burgundy-950/30 to-black">
+          <div className="max-w-4xl border border-red-900/50 p-6 sm:p-8 bg-gradient-to-br from-burgundy-950/30 to-black">
             <p className="text-gray-300 text-lg mb-8 leading-relaxed">
               Interested in collaboration, have a security project, or just want to connect?
               Feel free to reach out through any of the channels below.
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
               {/* Email decoded at runtime - address never appears as a literal in source */}
               <a href={`mailto:${getEmail()}`}
                 className="flex flex-col items-center p-8 border border-red-900/50 hover:border-red-700 hover:bg-red-950/20 transition-all group"

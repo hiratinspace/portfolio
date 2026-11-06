@@ -8,9 +8,16 @@
   box-sizing: border-box;
 }
 
+/* Dark native controls and scrollbars. Windows otherwise shows its bright
+   default scrollbar on the black page and inside scrolling panels. */
+html {
+  color-scheme: dark;
+  scrollbar-color: #7f1d1d #0a0a0a;
+}
+
 body {
   margin: 0;
-  font-family: 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+  font-family: 'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #000;
@@ -111,3 +118,14 @@ code {
   to   { opacity: 1; transform: none; }
 }
 .nova-bubble { animation: nova-pop 260ms cubic-bezier(0.25, 1, 0.5, 1); transform-origin: bottom right; }
+
+/* Nova on short laptop screens (Windows at 125-150% scaling): the hint line
+   under "ask NOVA" only shows when there's room, and the ghost above the open
+   panel steps aside so it doesn't cover the navigation. */
+.nova-hint { display: none; }
+@media (min-width: 1600px) and (min-height: 900px) {
+  .nova-hint { display: block; }
+}
+@media (max-height: 700px) {
+  .nova-panel-ghost { display: none !important; }
+}

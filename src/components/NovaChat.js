@@ -13,7 +13,7 @@ import { NovaAvatar, NovaBot } from './NovaBot';
 //   - "Leave a message" emails Hirat through /api/nova-message
 //     (functions/api/nova-message.js), with the chat attached if wanted
 // The conversation is kept for the browser tab session.
-const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
+const FONT = "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 const STORAGE_KEY = 'nova-chat';
 const TEASER_KEY = 'nova-teased';
 const MAX_CHARS = 1000;
@@ -483,8 +483,10 @@ const NovaChat = () => {
     try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages)); } catch { /* storage blocked */ }
   }, [messages]);
 
+  // Follow the conversation; before the first question, keep the greeting in view
   useEffect(() => {
-    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+    const el = logRef.current;
+    if (el) el.scrollTop = messages.length ? el.scrollHeight : 0;
   }, [messages, open, error]);
 
   // Focus the input on open; hand focus back to the launcher on close
@@ -630,10 +632,10 @@ const NovaChat = () => {
           aria-describedby="nova-desc"
           onKeyDown={(e) => e.key === 'Escape' && close()}
           className="nova-panel flex flex-col bg-black border-red-900/70 shadow-2xl shadow-red-950/60
-                     fixed inset-0 sm:relative sm:inset-auto sm:border sm:w-[400px] sm:h-[min(620px,calc(100dvh-3rem))]"
+                     fixed inset-0 sm:relative sm:inset-auto sm:border sm:w-[min(370px,calc(100vw-3rem))] sm:h-[min(560px,calc(100dvh-7rem))]"
         >
           {/* The ghost holds the top edge of the panel (desktop only) */}
-          <NovaBot mode={botMode} className="hidden sm:block absolute bottom-full -mb-[6px] right-20" />
+          <NovaBot mode={botMode} className="nova-panel-ghost hidden sm:block absolute bottom-full -mb-[6px] right-20" />
 
           {/* Header, support-chat style */}
           <header className="flex items-center justify-between gap-2 pl-4 pr-2 pb-3 border-b border-red-900/60 pt-[max(0.75rem,env(safe-area-inset-top))]">
@@ -693,11 +695,11 @@ const NovaChat = () => {
             </ol>
 
             {!hasChat && (
-              <ul className="mt-5 ml-[2.375rem] flex flex-col gap-2" aria-label="Suggested questions">
+              <ul className="mt-3 ml-[2.375rem] flex flex-col gap-2" aria-label="Suggested questions">
                 {suggestions.map(({ tag, q }) => (
                   <li key={q}>
                     <button type="button" onClick={() => send(q)}
-                            className="group w-full text-left border border-red-900/60 px-3 py-2.5 hover:border-red-500 hover:bg-red-950/40 transition-colors">
+                            className="group w-full text-left border border-red-900/60 px-3 py-2 hover:border-red-500 hover:bg-red-950/40 transition-colors">
                       <span className="block text-[10px] uppercase tracking-wider text-red-400 mb-0.5">{tag}</span>
                       <span className="flex items-start justify-between gap-2 text-[13px] text-gray-200 group-hover:text-white">
                         {q}
@@ -771,7 +773,7 @@ const NovaChat = () => {
             aria-expanded={false}
             aria-controls="nova-panel"
             aria-label="Ask NOVA, Hirat's Virtual Assistant"
-            className="nova-launcher group relative flex flex-col items-start justify-center h-11 pl-3.5 pr-4 sm:w-[218px] sm:h-[60px] sm:pl-4 sm:pr-3
+            className="nova-launcher group relative flex flex-col items-start justify-center h-11 pl-3.5 pr-4 sm:w-[184px] sm:h-[48px] sm:pl-4 sm:pr-3 min-[1600px]:w-[218px]
                        bg-black border border-red-700 text-left shadow-lg shadow-red-950/60
                        hover:border-red-500 hover:bg-red-950/60 transition-colors"
           >
@@ -779,21 +781,21 @@ const NovaChat = () => {
             <div className="absolute bottom-full left-1 -mb-[4px] sm:left-2 sm:-mb-[6px] pointer-events-none">
               {teaser && (
                 <p aria-hidden="true"
-                   className="nova-bubble absolute bottom-[14px] right-full mr-1 sm:bottom-[30px]
+                   className="nova-bubble absolute bottom-[14px] right-full mr-1 sm:bottom-[22px]
                               whitespace-nowrap text-xs text-white bg-black border border-red-700 px-3 py-2">
                   psst, ask me about Hirat
                   {/* tail pointing right, at the ghost */}
                   <span className="absolute top-1/2 -mt-[5px] -right-[5px] w-2.5 h-2.5 rotate-45 bg-black border-t border-r border-red-700" />
                 </p>
               )}
-              <NovaBot mode={hovered || teaser ? 'excited' : 'idle'} className="w-14 h-[46px] sm:w-20 sm:h-[66px]" />
+              <NovaBot mode={hovered || teaser ? 'excited' : 'idle'} className="w-14 h-[46px] sm:w-16 sm:h-[53px]" />
             </div>
             <span className="flex items-center gap-2 text-sm">
               <span className="nova-dot w-2 h-2 rounded-full bg-green-500" aria-hidden="true" />
               <span className="text-gray-300 group-hover:text-white">ask</span>
               <span className="font-bold tracking-[0.2em] text-white">NOVA</span>
             </span>
-            <span aria-hidden="true" className="hidden sm:block mt-1 text-[11px] text-gray-400 truncate max-w-full">
+            <span aria-hidden="true" className="nova-hint mt-1 text-[11px] text-gray-400 truncate max-w-full">
               <span className="text-red-500">› </span>{hint}<span className="nova-caret text-red-400">▌</span>
             </span>
           </button>

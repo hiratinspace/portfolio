@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
+const FONT = "'JetBrains Mono Variable', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 
 const ALLOWED_PROTOCOLS = new Set(['https:', 'http:', 'mailto:']);
 const sanitizeUrl = (url) => {
@@ -556,7 +556,7 @@ const ProjectsPage = () => {
           borderBottom: '1px solid rgba(180,0,30,0.5)',
           backdropFilter: 'blur(10px)',
         }}>
-          <div style={{ maxWidth: 980, margin: '0 auto', padding: '12px 24px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
+          <div style={{ maxWidth: 920, margin: '0 auto', padding: '12px 24px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
 
             {/* Left - back to portfolio */}
             <button
@@ -665,14 +665,10 @@ const ProjectsPage = () => {
         </div>
 
         {/* ── Main content ── */}
-        <main style={{ position: 'relative', zIndex: 10, maxWidth: 980, margin: '0 auto', padding: '100px 24px 80px' }}>
+        <main style={{ position: 'relative', zIndex: 10, maxWidth: 920, margin: '0 auto', padding: '100px 24px 80px' }}>
 
           {/* Page header */}
           <div style={{ marginBottom: 48 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-              <Code size={20} style={{ color: '#ef4444' }} />
-              <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4 }}>BUILT & SHIPPED</span>
-            </div>
             <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', fontWeight: 700, color: '#fff', margin: '0 0 12px', letterSpacing: 1 }}>
               PRODUCTS
             </h1>
@@ -684,7 +680,7 @@ const ProjectsPage = () => {
 
           {/* Featured projects */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-            <h2 style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4, fontFamily: FONT, margin: 0 }}>{'// FEATURED'}</h2>
+            <h2 style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 2, fontFamily: FONT, margin: 0 }}>{'// FEATURED'}</h2>
             <div style={{ flex: 1, height: 1, background: 'rgba(180,0,30,0.25)' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 28, marginBottom: 56 }}>
@@ -701,7 +697,7 @@ const ProjectsPage = () => {
 
           {/* Labs, hackathon & CTF grid */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-            <h2 style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 4, fontFamily: FONT, margin: 0 }}>{'// LABS, HACKATHONS & CTF'}</h2>
+            <h2 style={{ color: '#ef4444', fontSize: 11, fontWeight: 700, letterSpacing: 2, fontFamily: FONT, margin: 0 }}>{'// LABS, HACKATHONS & CTF'}</h2>
             <div style={{ flex: 1, height: 1, background: 'rgba(180,0,30,0.25)' }} />
           </div>
           <div style={{

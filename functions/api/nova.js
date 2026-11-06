@@ -18,44 +18,21 @@
  */
 import Anthropic from '@anthropic-ai/sdk';
 import PROFILE from '../../nova/profile.generated.js';
+import { createRateLimiter, isAllowedOrigin, json, readJson } from '../../nova/http.js';
 
-const MODEL = 'claude-haiku-5-5';
+const MODEL = 'claude-sonnet-5-5';
 const MAX_REPLY_TOKENS = 1500;
 const MAX_BODY_BYTES = 20_000;
 const MAX_HISTORY = 12;          // messages sent to the model (latest first kept)
 const MAX_USER_CHARS = 1000;
 const MAX_ASSISTANT_CHARS = 4000;
 
-// Per-visitor limit. Best effort only: it is per Cloudflare isolate, so the
-// WAF rule in the dashboard is the real limit.
-const WINDOW_MS = 10 * 60 * 1000;
-const MAX_REQUESTS_PER_WINDOW = 20;
-const recentRequests = new Map();
-
-const ALLOWED_ORIGINS = [
-  /^https:\/\/(www\.)?hiratrahi\.com$/,
-  /^https:\/\/([a-z0-9-]+\.)?portfolio-evo\.pages\.dev$/,
-  /^http:\/\/localhost:(3000|8788)$/,
-];
+// 20 questions per visitor per 10 minutes
+const isRateLimited = createRateLimiter({ windowMs: 10 * 60 * 1000, max: 20 });
 
 const REFUSAL_REPLY =
   "I can't help with that one. Ask me about Hirat's work, projects, or experience, " +
   'or email him at hrahi@iwu.edu.';
-
-const json = (status, body) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
-  });
-
-function isRateLimited(ip) {
-  const now = Date.now();
-  const hits = (recentRequests.get(ip) || []).filter((t) => now - t < WINDOW_MS);
-  hits.push(now);
-  recentRequests.set(ip, hits);
-  if (recentRequests.size > 5000) recentRequests.clear(); // keep memory bounded
-  return hits.length > MAX_REQUESTS_PER_WINDOW;
-}
 
 // Accepts only a well-formed, alternating user/assistant text history that
 // ends with the visitor's question. Returns null if anything is off.
@@ -81,29 +58,18 @@ function cleanHistory(messages) {
 }
 
 export async function onRequestPost({ request, env }) {
-  const origin = request.headers.get('Origin');
-  if (origin && !ALLOWED_ORIGINS.some((re) => re.test(origin))) {
-    return json(403, { error: 'Forbidden' });
-  }
+  if (!isAllowedOrigin(request)) return json(403, { error: 'Forbidden' });
 
   if (!env.NOVA_API_KEY || !env.NOVA_RULES) {
     return json(503, { error: 'Nova is on PTO now.' });
   }
 
-  const ip = request.headers.get('CF-Connecting-IP') || 'local';
-  if (isRateLimited(ip)) {
+  if (isRateLimited(request)) {
     return json(429, { error: 'Too many messages. Try again in a few minutes.' });
   }
 
-  const raw = await request.text();
-  if (raw.length > MAX_BODY_BYTES) return json(413, { error: 'Message too long.' });
-
-  let body;
-  try {
-    body = JSON.parse(raw);
-  } catch {
-    return json(400, { error: 'Invalid request.' });
-  }
+  const { body, error } = await readJson(request, MAX_BODY_BYTES);
+  if (error) return error;
   const messages = cleanHistory(body?.messages);
   if (!messages) return json(400, { error: 'Invalid conversation.' });
 

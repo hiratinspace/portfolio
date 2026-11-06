@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowUp, Check, Copy, ExternalLink, Mail, RotateCcw, Square, X } from 'lucide-react';
+import { ArrowLeft, ArrowUp, Check, CheckCircle2, Copy, ExternalLink, Loader2, Mail, RotateCcw, Send, Square, X } from 'lucide-react';
 import { NovaAvatar, NovaBot } from './NovaBot';
 
 // Nova: Hirat's AI assistant. Answers from his public profile via /api/nova
@@ -9,7 +9,9 @@ import { NovaAvatar, NovaBot } from './NovaBot';
 //   - The launcher types out example questions
 //   - Suggested questions match the page you're on
 //   - Typing dots, a stop button, real bullet lists, link chips,
-//     copy-an-answer, and "email this chat to Hirat"
+//     and copy-an-answer
+//   - "Leave a message" emails Hirat through /api/nova-message
+//     (functions/api/nova-message.js), with the chat attached if wanted
 // The conversation is kept for the browser tab session.
 const FONT = "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace";
 const STORAGE_KEY = 'nova-chat';
@@ -19,7 +21,7 @@ const HISTORY_SENT = 12;
 const CONTACT_EMAIL = 'hrahi@iwu.edu';
 
 const GREETING =
-  "Hi, I'm Nova, Hirat's Virtual Assistant. I answer from his public profile: experience, security work, and the products he's shipped. What would you like to know?";
+  "Hi, I'm Nova, Hirat's Virtual Assistant. I know his work inside out (and I'm a little biased). Ask me about his experience, security work, or the products he's shipped.";
 
 // Typed out on the launcher, one after another
 const HINTS = [
@@ -261,6 +263,197 @@ const Message = ({ role, content, streaming, done }) => {
   );
 };
 
+// Loads Cloudflare Turnstile (the "are you human" check) once, on demand
+let turnstileScript = null;
+const loadTurnstile = () => {
+  if (window.turnstile) return Promise.resolve(window.turnstile);
+  if (!turnstileScript) {
+    turnstileScript = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      script.async = true;
+      script.onload = () => resolve(window.turnstile);
+      script.onerror = () => { turnstileScript = null; reject(new Error('Turnstile failed to load')); };
+      document.head.appendChild(script);
+    });
+  }
+  return turnstileScript;
+};
+
+const EMPTY_DRAFT = { name: '', email: '', message: '', includeChat: true };
+
+const fieldClass =
+  'w-full bg-black border border-red-900/70 focus:border-red-500 px-3 py-2 text-base sm:text-[13px] text-white ' +
+  'placeholder:text-gray-400 focus-visible:outline-none transition-colors';
+
+// "Leave a message": a short form that emails Hirat. The draft lives in the
+// parent so it survives switching back to the chat.
+const MessageForm = ({ draft, setDraft, chat, onBack }) => {
+  const { pathname } = useLocation();
+  const id = useId();
+  const nameRef = useRef(null);
+  const widgetEl = useRef(null);
+  const widgetId = useRef(null);
+  const [config, setConfig] = useState(null);      // null while loading
+  const [token, setToken] = useState('');
+  const [status, setStatus] = useState('idle');    // idle | sending | sent
+  const [error, setError] = useState('');
+
+  useEffect(() => { nameRef.current?.focus(); }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/nova-message')
+      .then((r) => (r.ok ? r.json() : { enabled: false }))
+      .catch(() => ({ enabled: false }))
+      .then((c) => { if (!cancelled) setConfig(c); });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Render the Turnstile check once the form knows its site key
+  useEffect(() => {
+    if (!config?.enabled || status === 'sent') return undefined;
+    let removed = false;
+    loadTurnstile()
+      .then((turnstile) => {
+        if (removed || !widgetEl.current) return;
+        widgetId.current = turnstile.render(widgetEl.current, {
+          sitekey: config.siteKey,
+          theme: 'dark',
+          size: 'flexible',
+          action: 'nova-message',
+          callback: setToken,
+          'expired-callback': () => setToken(''),
+          'error-callback': () => setToken(''),
+        });
+      })
+      .catch(() => setError("The spam check couldn't load. Please email Hirat instead."));
+    return () => {
+      removed = true;
+      if (widgetId.current !== null) window.turnstile?.remove(widgetId.current);
+      widgetId.current = null;
+    };
+  }, [config, status]);
+
+  const update = (field) => (e) =>
+    setDraft((d) => ({ ...d, [field]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (status === 'sending') return;
+    setError('');
+    if (!token) { setError('Please finish the quick check above the button.'); return; }
+    setStatus('sending');
+    try {
+      const res = await fetch('/api/nova-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: draft.name,
+          email: draft.email,
+          message: draft.message,
+          page: pathname,
+          transcript: draft.includeChat && chat.length ? chat.slice(-24) : undefined,
+          website: e.target.elements.website.value,
+          turnstileToken: token,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+      setStatus('sent');
+    } catch (err) {
+      setError(err.message);
+      setStatus('idle');
+      // Each check can be used once, so get a fresh one for the next try
+      setToken('');
+      if (widgetId.current !== null) window.turnstile?.reset(widgetId.current);
+    }
+  };
+
+  const backButton = (
+    <button type="button" onClick={() => onBack(status === 'sent')}
+            className="inline-flex items-center gap-1.5 text-[12px] text-gray-300 hover:text-white min-h-[36px]">
+      <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" /> Back to chat
+    </button>
+  );
+
+  if (status === 'sent') {
+    return (
+      <div className="flex-1 overflow-y-auto px-4 py-6" role="status">
+        <CheckCircle2 className="w-8 h-8 text-green-500" aria-hidden="true" />
+        <h3 className="mt-3 text-sm font-bold text-white">Message sent</h3>
+        <p className="mt-1.5 text-[13px] leading-relaxed text-gray-300">
+          Thanks, {draft.name.split(' ')[0]}. Hirat will reply to <span className="text-white">{draft.email}</span>.
+        </p>
+        <div className="mt-5">{backButton}</div>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} noValidate className="flex-1 overflow-y-auto px-4 py-4 flex flex-col">
+      {backButton}
+      <h3 className="mt-2 text-sm font-bold text-white">Leave Hirat a message</h3>
+      <p className="mt-1 text-[12px] leading-relaxed text-gray-400">He'll get it by email and reply to you directly.</p>
+
+      {config && !config.enabled ? (
+        <p className="mt-4 text-[13px] leading-relaxed text-gray-300">
+          Messages aren't available right now. You can email Hirat at{' '}
+          <a href={transcriptMailto(chat)} className="text-red-400 underline underline-offset-2 hover:text-red-300">{CONTACT_EMAIL}</a>.
+        </p>
+      ) : (
+        <>
+          <div className="mt-4 space-y-3">
+            <div>
+              <label htmlFor={`${id}-name`} className="block text-[11px] uppercase tracking-wider text-red-400 mb-1">Name</label>
+              <input id={`${id}-name`} ref={nameRef} type="text" required maxLength={80} autoComplete="name"
+                     value={draft.name} onChange={update('name')} className={fieldClass} />
+            </div>
+            <div>
+              <label htmlFor={`${id}-email`} className="block text-[11px] uppercase tracking-wider text-red-400 mb-1">Email</label>
+              <input id={`${id}-email`} type="email" required maxLength={254} autoComplete="email"
+                     value={draft.email} onChange={update('email')} className={fieldClass} />
+            </div>
+            <div>
+              <label htmlFor={`${id}-message`} className="block text-[11px] uppercase tracking-wider text-red-400 mb-1">Message</label>
+              <textarea id={`${id}-message`} required rows={4} minLength={10} maxLength={2000}
+                        value={draft.message} onChange={update('message')}
+                        placeholder="Role, team, or what you'd like to talk about"
+                        className={`${fieldClass} resize-none leading-relaxed`} />
+            </div>
+            {chat.length > 0 && (
+              <label className="flex items-center gap-2 text-[12px] text-gray-300 cursor-pointer">
+                <input type="checkbox" checked={draft.includeChat} onChange={update('includeChat')}
+                       className="w-4 h-4 accent-red-600" />
+                Include my chat with Nova
+              </label>
+            )}
+            {/* Hidden from people; bots that fill it in are ignored */}
+            <div aria-hidden="true" className="absolute -left-[9999px] w-px h-px overflow-hidden">
+              <label htmlFor={`${id}-website`}>Website</label>
+              <input id={`${id}-website`} name="website" type="text" tabIndex={-1} autoComplete="off" />
+            </div>
+          </div>
+
+          <div ref={widgetEl} className="mt-4 min-h-[65px]" />
+
+          {error && (
+            <p role="alert" className="mt-3 text-xs text-red-200 border border-red-900/70 bg-red-950/40 px-3 py-2.5">{error}</p>
+          )}
+
+          <button type="submit" disabled={!config || status === 'sending'}
+                  className="mt-4 inline-flex items-center justify-center gap-2 w-full min-h-[44px] bg-red-700 text-white text-[13px] font-semibold
+                             hover:bg-red-600 disabled:opacity-60 transition-colors">
+            {status === 'sending'
+              ? <><Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> Sending…</>
+              : <><Send className="w-4 h-4" aria-hidden="true" /> Send message</>}
+          </button>
+        </>
+      )}
+    </form>
+  );
+};
+
 const NovaChat = () => {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
@@ -274,6 +467,8 @@ const NovaChat = () => {
   const [teaser, setTeaser] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
+  const [view, setView] = useState('chat');        // chat | message
+  const [draft, setDraft] = useState(EMPTY_DRAFT);
 
   const launcherRef = useRef(null);
   const inputRef = useRef(null);
@@ -299,13 +494,18 @@ const NovaChat = () => {
     wasOpen.current = open;
   }, [open]);
 
+  useEffect(() => {
+    if (open && view === 'chat' && wasOpen.current) inputRef.current?.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view]);
+
   // Grow the input with its content, up to a few lines
   useEffect(() => {
     const el = inputRef.current;
     if (!el) return;
     el.style.height = 'auto';
     el.style.height = `${Math.min(el.scrollHeight, 112)}px`;
-  }, [input, open]);
+  }, [input, open, view]);
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
@@ -411,6 +611,12 @@ const NovaChat = () => {
   };
 
   const hasChat = messages.some((m) => m.content);
+  const openMessage = () => setView('message');
+  const backToChat = (sent) => {
+    // After sending, keep their name and email but clear the message
+    if (sent) setDraft((d) => ({ ...d, message: '' }));
+    setView('chat');
+  };
   const lastIndex = messages.length - 1;
   const botMode = busy ? 'think' : celebrate ? 'happy' : 'idle';
 
@@ -444,17 +650,17 @@ const NovaChat = () => {
               </div>
             </div>
             <div className="flex items-center">
-              {hasChat && (
-                <>
-                  <a href={transcriptMailto(messages)} title="Email this chat to Hirat" aria-label="Email this chat to Hirat"
-                     className="p-2 text-gray-400 hover:text-white min-w-[40px] min-h-[40px] flex items-center justify-center">
-                    <Mail className="w-4 h-4" aria-hidden="true" />
-                  </a>
-                  <button type="button" onClick={reset} title="Start a new chat" aria-label="Start a new chat"
-                          className="p-2 text-gray-400 hover:text-white min-w-[40px] min-h-[40px] flex items-center justify-center">
-                    <RotateCcw className="w-4 h-4" aria-hidden="true" />
-                  </button>
-                </>
+              {view === 'chat' && (
+                <button type="button" onClick={openMessage} title="Leave Hirat a message" aria-label="Leave Hirat a message"
+                        className="p-2 text-gray-400 hover:text-white min-w-[40px] min-h-[40px] flex items-center justify-center">
+                  <Mail className="w-4 h-4" aria-hidden="true" />
+                </button>
+              )}
+              {view === 'chat' && hasChat && (
+                <button type="button" onClick={reset} title="Start a new chat" aria-label="Start a new chat"
+                        className="p-2 text-gray-400 hover:text-white min-w-[40px] min-h-[40px] flex items-center justify-center">
+                  <RotateCcw className="w-4 h-4" aria-hidden="true" />
+                </button>
               )}
               <button type="button" onClick={close} aria-label="Close Nova"
                       className="p-2 text-gray-400 hover:text-white min-w-[40px] min-h-[40px] flex items-center justify-center">
@@ -463,6 +669,11 @@ const NovaChat = () => {
             </div>
           </header>
 
+          {view === 'message' ? (
+            <MessageForm draft={draft} setDraft={setDraft} onBack={backToChat}
+                         chat={messages.filter((m) => m.content)} />
+          ) : (
+          <>
           {/* Conversation */}
           <div ref={logRef} className="flex-1 overflow-y-auto px-4 py-4">
             <p id="nova-desc" className="sr-only">
@@ -539,13 +750,16 @@ const NovaChat = () => {
               )}
             </div>
             <p className="mt-2 text-[11px] leading-snug text-gray-400">
-              AI answers from Hirat's public profile and can be wrong. Anything important:{' '}
-              <a href={`mailto:${CONTACT_EMAIL}`} className="text-red-400 underline underline-offset-2 hover:text-red-300">{CONTACT_EMAIL}</a>
+              AI answers from Hirat's public profile and can be wrong. To reach him,{' '}
+              <button type="button" onClick={openMessage}
+                      className="text-red-400 underline underline-offset-2 hover:text-red-300">leave a message</button>.
             </p>
           </form>
+          </>
+          )}
         </section>
       ) : (
-        <div className="relative m-4 sm:m-0">
+        <div className="relative m-3 sm:m-0">
           <button
             ref={launcherRef}
             type="button"
@@ -557,30 +771,29 @@ const NovaChat = () => {
             aria-expanded={false}
             aria-controls="nova-panel"
             aria-label="Ask NOVA, Hirat's Virtual Assistant"
-            className="nova-launcher group relative flex flex-col items-start justify-center w-[218px] h-[60px] pl-4 pr-3
+            className="nova-launcher group relative flex flex-col items-start justify-center h-11 pl-3.5 pr-4 sm:w-[218px] sm:h-[60px] sm:pl-4 sm:pr-3
                        bg-black border border-red-700 text-left shadow-lg shadow-red-950/60
                        hover:border-red-500 hover:bg-red-950/60 transition-colors"
           >
-            {/* The ghost holds the card from behind and floats */}
-            <div className="absolute bottom-full left-2 -mb-[6px] pointer-events-none">
+            {/* The ghost holds the card from behind and floats (smaller on phones) */}
+            <div className="absolute bottom-full left-1 -mb-[4px] sm:left-2 sm:-mb-[6px] pointer-events-none">
               {teaser && (
                 <p aria-hidden="true"
-                   className="nova-bubble absolute bottom-full left-0 sm:bottom-[30px] sm:left-auto sm:right-full sm:mr-1
+                   className="nova-bubble absolute bottom-[14px] right-full mr-1 sm:bottom-[30px]
                               whitespace-nowrap text-xs text-white bg-black border border-red-700 px-3 py-2">
                   psst, ask me about Hirat
-                  {/* tail: points down at the head on phones, right at it on desktop */}
-                  <span className="sm:hidden absolute -bottom-[5px] left-8 w-2.5 h-2.5 rotate-45 bg-black border-r border-b border-red-700" />
-                  <span className="hidden sm:block absolute top-1/2 -mt-[5px] -right-[5px] w-2.5 h-2.5 rotate-45 bg-black border-t border-r border-red-700" />
+                  {/* tail pointing right, at the ghost */}
+                  <span className="absolute top-1/2 -mt-[5px] -right-[5px] w-2.5 h-2.5 rotate-45 bg-black border-t border-r border-red-700" />
                 </p>
               )}
-              <NovaBot mode={hovered || teaser ? 'excited' : 'idle'} />
+              <NovaBot mode={hovered || teaser ? 'excited' : 'idle'} className="w-14 h-[46px] sm:w-20 sm:h-[66px]" />
             </div>
             <span className="flex items-center gap-2 text-sm">
               <span className="nova-dot w-2 h-2 rounded-full bg-green-500" aria-hidden="true" />
               <span className="text-gray-300 group-hover:text-white">ask</span>
               <span className="font-bold tracking-[0.2em] text-white">NOVA</span>
             </span>
-            <span aria-hidden="true" className="mt-1 text-[11px] text-gray-400 truncate max-w-full">
+            <span aria-hidden="true" className="hidden sm:block mt-1 text-[11px] text-gray-400 truncate max-w-full">
               <span className="text-red-500">› </span>{hint}<span className="nova-caret text-red-400">▌</span>
             </span>
           </button>

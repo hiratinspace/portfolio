@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Shield, Terminal, Code, Briefcase, Radio, GraduationCap, User, Users, Mail, Linkedin, ChevronRight, Lock } from 'lucide-react';
+import { Shield, Terminal, Code, Briefcase, Radio, GraduationCap, User, Users, Mail, Linkedin, ChevronRight, Lock, X } from 'lucide-react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import ThreatFeedPage from './components/ThreatFeedPage';
 import ProjectsPage from './components/ProjectsPage';
@@ -19,6 +19,9 @@ const Portfolio = () => {
   const [scrolled, setScrolled] = useState(false);
   const [showResume, setShowResume] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+  const hamburgerRef = useRef(null);
+  // Closing the drawer from inside it returns focus to the hamburger
+  const closeNav = () => { setNavOpen(false); hamburgerRef.current?.focus(); };
   const dimOverlayRef = useRef(null);
 
   useEffect(() => {
@@ -183,6 +186,7 @@ const Portfolio = () => {
               </div>
               {/* Mobile hamburger */}
               <button
+                ref={hamburgerRef}
                 className="sm:hidden flex flex-col gap-1.5 p-1 ml-2"
                 onClick={() => setNavOpen(o => !o)}
                 aria-label={navOpen ? 'Close navigation' : 'Open navigation'}
@@ -225,11 +229,22 @@ const Portfolio = () => {
           transform: navOpen ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.25s ease',
           display: 'flex', flexDirection: 'column',
-          padding: '80px 28px 40px',
+          padding: '0 28px 40px',
         }}
+        onKeyDown={(e) => e.key === 'Escape' && closeNav()}
       >
-        <div style={{ color: 'rgba(220,180,180,0.75)', fontSize: 10, letterSpacing: 4, fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace", fontWeight: 700, marginBottom: 24 }}>
-          NAVIGATE
+        {/* Header with a close button (the drawer covers the hamburger) */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '0 -12px 16px 0', padding: '14px 0', borderBottom: '1px solid rgba(127,29,29,0.35)' }}>
+          <span style={{ color: 'rgba(220,180,180,0.75)', fontSize: 10, letterSpacing: 4, fontFamily: "'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace", fontWeight: 700 }}>
+            NAVIGATE
+          </span>
+          <button
+            onClick={closeNav}
+            aria-label="Close navigation"
+            style={{ background: 'none', border: 'none', color: 'rgba(220,180,180,0.85)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44 }}
+          >
+            <X size={20} />
+          </button>
         </div>
         {[
           { label: 'HOME',     id: 'home'         },

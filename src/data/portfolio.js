@@ -8,7 +8,7 @@ export const experiences = deepFreeze([
     title: "Information Technology Intern",
     company: "Integrity Technology Solutions",
     period: "Aug 2026 – Present",
-    description: "Support security operations and IT service delivery at a NIST CSF-aligned managed security service provider serving 150+ regulated banking and healthcare clients under HIPAA and financial-sector compliance requirements. Troubleshoot and resolve 100+ tickets across Windows 11 endpoints, Windows Server, and Microsoft 365, including account provisioning, access issues, patching, and device setup. Monitor endpoint protection, security alerts, and patch compliance, escalating suspicious activity per the firm's incident-response procedures."
+    description: "Help secure client environments at a NIST CSF-aligned managed security service provider with 150+ clients across regulated banking and healthcare, under HIPAA and financial-sector compliance requirements. Work across security tasks as an intern, from responding to security alerts to policy controls, domain controls, and other day-to-day security work."
   },
   {
     title: "Intern Analyst & Team Lead",

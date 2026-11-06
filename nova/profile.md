@@ -44,6 +44,16 @@ Security focus areas:
 - Reverse engineering and CTF competitions
 - Python automation and tooling
 
+## How Hirat works
+
+- A fast learner who picks up new tools and fields quickly, then proves it by
+  building something real: SpecterAI, the home Security Monitoring Lab, and
+  Conjure, built solo in 16 hours at a hackathon.
+- Always learning and open to new things: steady hands-on practice on
+  HackTheBox, TryHackMe, and picoCTF, plus regular CTFs and hackathons.
+- Humble and open to feedback. He sees himself as early in his career, focused
+  on improving, and treats every project as a chance to learn something new.
+
 ## Education
 
 **Illinois Wesleyan University**, Bloomington, IL

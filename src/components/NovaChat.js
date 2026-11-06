@@ -21,7 +21,7 @@ const HISTORY_SENT = 12;
 const CONTACT_EMAIL = 'hrahi@iwu.edu';
 
 const GREETING =
-  "Hi, I'm Nova, Hirat's Virtual Assistant. I answer from his public profile: experience, security work, and the products he's shipped. What would you like to know?";
+  "Hi, I'm Nova, Hirat's Virtual Assistant. I know his work inside out (and I'm a little biased). Ask me about his experience, security work, or the products he's shipped.";
 
 // Typed out on the launcher, one after another
 const HINTS = [
@@ -759,7 +759,7 @@ const NovaChat = () => {
           )}
         </section>
       ) : (
-        <div className="relative m-4 sm:m-0">
+        <div className="relative m-3 sm:m-0">
           <button
             ref={launcherRef}
             type="button"
@@ -771,30 +771,29 @@ const NovaChat = () => {
             aria-expanded={false}
             aria-controls="nova-panel"
             aria-label="Ask NOVA, Hirat's Virtual Assistant"
-            className="nova-launcher group relative flex flex-col items-start justify-center w-[218px] h-[60px] pl-4 pr-3
+            className="nova-launcher group relative flex flex-col items-start justify-center h-11 pl-3.5 pr-4 sm:w-[218px] sm:h-[60px] sm:pl-4 sm:pr-3
                        bg-black border border-red-700 text-left shadow-lg shadow-red-950/60
                        hover:border-red-500 hover:bg-red-950/60 transition-colors"
           >
-            {/* The ghost holds the card from behind and floats */}
-            <div className="absolute bottom-full left-2 -mb-[6px] pointer-events-none">
+            {/* The ghost holds the card from behind and floats (smaller on phones) */}
+            <div className="absolute bottom-full left-1 -mb-[4px] sm:left-2 sm:-mb-[6px] pointer-events-none">
               {teaser && (
                 <p aria-hidden="true"
-                   className="nova-bubble absolute bottom-full left-0 sm:bottom-[30px] sm:left-auto sm:right-full sm:mr-1
+                   className="nova-bubble absolute bottom-[14px] right-full mr-1 sm:bottom-[30px]
                               whitespace-nowrap text-xs text-white bg-black border border-red-700 px-3 py-2">
                   psst, ask me about Hirat
-                  {/* tail: points down at the head on phones, right at it on desktop */}
-                  <span className="sm:hidden absolute -bottom-[5px] left-8 w-2.5 h-2.5 rotate-45 bg-black border-r border-b border-red-700" />
-                  <span className="hidden sm:block absolute top-1/2 -mt-[5px] -right-[5px] w-2.5 h-2.5 rotate-45 bg-black border-t border-r border-red-700" />
+                  {/* tail pointing right, at the ghost */}
+                  <span className="absolute top-1/2 -mt-[5px] -right-[5px] w-2.5 h-2.5 rotate-45 bg-black border-t border-r border-red-700" />
                 </p>
               )}
-              <NovaBot mode={hovered || teaser ? 'excited' : 'idle'} />
+              <NovaBot mode={hovered || teaser ? 'excited' : 'idle'} className="w-14 h-[46px] sm:w-20 sm:h-[66px]" />
             </div>
             <span className="flex items-center gap-2 text-sm">
               <span className="nova-dot w-2 h-2 rounded-full bg-green-500" aria-hidden="true" />
               <span className="text-gray-300 group-hover:text-white">ask</span>
               <span className="font-bold tracking-[0.2em] text-white">NOVA</span>
             </span>
-            <span aria-hidden="true" className="mt-1 text-[11px] text-gray-400 truncate max-w-full">
+            <span aria-hidden="true" className="hidden sm:block mt-1 text-[11px] text-gray-400 truncate max-w-full">
               <span className="text-red-500">› </span>{hint}<span className="nova-caret text-red-400">▌</span>
             </span>
           </button>

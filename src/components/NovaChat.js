@@ -773,7 +773,7 @@ const NovaChat = () => {
             aria-expanded={false}
             aria-controls="nova-panel"
             aria-label="Ask NOVA, Hirat's Virtual Assistant"
-            className="nova-launcher group relative flex flex-col items-start justify-center h-11 pl-3.5 pr-4 sm:w-[184px] sm:h-[48px] sm:pl-4 sm:pr-3 min-[1600px]:w-[218px]
+            className="nova-launcher group relative flex flex-col items-start justify-center h-10 pl-3.5 pr-4 sm:pl-4 sm:pr-5
                        bg-black border border-red-700 text-left shadow-lg shadow-red-950/60
                        hover:border-red-500 hover:bg-red-950/60 transition-colors"
           >

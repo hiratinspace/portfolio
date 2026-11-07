@@ -125,6 +125,8 @@ code {
 .nova-hint { display: none; }
 @media (min-width: 1600px) and (min-height: 900px) {
   .nova-hint { display: block; }
+  /* fixed size only when the typed hint shows, so it doesn't jitter */
+  .nova-launcher { width: 218px; height: 48px; }
 }
 @media (max-height: 700px) {
   .nova-panel-ghost { display: none !important; }

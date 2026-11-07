@@ -16,7 +16,7 @@ const BLIPS = [
 const RadarSweep = () => (
   <div
     aria-hidden="true"
-    className="relative w-full max-w-[340px] mx-auto select-none pointer-events-none"
+    className="relative w-full max-w-[220px] lg:max-w-none mx-auto select-none pointer-events-none"
     style={{ fontFamily: FONT }}
   >
     <style>{`
@@ -77,10 +77,6 @@ const RadarSweep = () => (
 
       <circle cx="100" cy="100" r="2" fill="#ef4444" />
     </svg>
-
-    <p className="text-center text-[11px] tracking-[0.3em] text-red-400/70 mt-3">
-      ALWAYS SCANNING
-    </p>
   </div>
 );
 

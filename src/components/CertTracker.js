@@ -17,19 +17,19 @@ const CertTracker = () => {
     <section id="cert-roadmap" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-black px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
       <div className="max-w-6xl mx-auto">
 
-        {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 40 }}>
-          <Zap className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true" />
-          <div>
-            <h2 style={{ fontFamily: FONT, fontSize: 'clamp(1.6rem,4vw,2.25rem)', fontWeight: 700, color: '#fff', letterSpacing: 1 }}>PRACTICE PLATFORMS</h2>
-            <p style={{ color: 'rgba(209,213,219,0.75)', fontSize: 13, marginTop: 4, fontFamily: FONT }}>Hands-on reps outside of class: CTFs, labs, and practice machines.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,42rem)_15rem] gap-x-16 items-center">
+          {/* Header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 40 }} className="lg:col-start-1">
+            <Zap className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true" />
+            <div>
+              <h2 style={{ fontFamily: FONT, fontSize: 'clamp(1.6rem,4vw,2.25rem)', fontWeight: 700, color: '#fff', letterSpacing: 1 }}>PRACTICE PLATFORMS</h2>
+              <p style={{ color: 'rgba(209,213,219,0.75)', fontSize: 13, marginTop: 4, fontFamily: FONT }}>Hands-on reps outside of class: CTFs, labs, and practice machines.</p>
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
           {/* Terminal-style readout: raw counts, no implied maximum */}
           <div
-            className="border border-red-900/50 bg-black/60"
+            className="border border-red-900/50 bg-black/60 lg:col-start-1"
             style={{ fontFamily: FONT }}
           >
             <div className="px-4 py-2 border-b border-red-900/40 text-xs text-gray-400">
@@ -52,8 +52,10 @@ const CertTracker = () => {
             </ul>
           </div>
 
-          {/* Decorative radar fills the right column */}
-          <RadarSweep />
+          {/* Decorative radar sits beside the title and stats */}
+          <div className="mt-10 lg:mt-0 lg:col-start-2 lg:row-start-1 lg:row-span-2">
+            <RadarSweep />
+          </div>
         </div>
       </div>
     </section>

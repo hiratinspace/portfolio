@@ -38,7 +38,7 @@ const Portfolio = () => {
       }
 
       // Update active section based on scroll position
-      const sections = ['home', 'about', 'experience', 'cert-roadmap', 'contact'];
+      const sections = ['home', 'about', 'experience', 'contact'];
       const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
@@ -167,7 +167,6 @@ const Portfolio = () => {
                   { label: 'HOME',     id: 'home'         },
                   { label: 'ABOUT',   id: 'about'        },
                   { label: 'EXPERIENCE', id: 'experience' },
-                  { label: 'PRACTICE', id: 'cert-roadmap' },
                   { label: 'CONTACT', id: 'contact'      },
                 ].map((item) => (
                   <button
@@ -251,7 +250,6 @@ const Portfolio = () => {
           { label: 'HOME',     id: 'home'         },
           { label: 'ABOUT',   id: 'about'        },
           { label: 'EXPERIENCE', id: 'experience' },
-          { label: 'PRACTICE', id: 'cert-roadmap' },
           { label: 'CONTACT', id: 'contact'      },
         ].map((item) => (
           <button
@@ -538,18 +536,18 @@ const Portfolio = () => {
       {/* Contact Section */}
       <section id="contact" className="py-16 sm:py-[clamp(4rem,10vh,6rem)] bg-gradient-to-b from-black to-burgundy-950/20 px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center space-x-3 mb-8 sm:mb-12">
+          <div className="flex items-center justify-center space-x-3 mb-8 sm:mb-12">
             <Mail className="text-red-500 w-6 h-6 sm:w-8 sm:h-8" />
             <h2 className="text-3xl sm:text-4xl font-bold text-white">CONTACT</h2>
           </div>
 
-          <div className="max-w-4xl border border-red-900/50 p-6 sm:p-8 bg-gradient-to-br from-burgundy-950/30 to-black">
-            <p className="text-gray-300 text-lg mb-8 leading-relaxed">
+          <div className="max-w-4xl mx-auto border border-red-900/50 p-6 sm:p-8 bg-gradient-to-br from-burgundy-950/30 to-black text-center">
+            <p className="text-gray-300 text-lg mb-8 leading-relaxed max-w-2xl mx-auto">
               Interested in collaboration, have a security project, or just want to connect?
               Feel free to reach out through any of the channels below.
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
               {/* Email decoded at runtime - address never appears as a literal in source */}
               <a href={`mailto:${getEmail()}`}
                 className="flex flex-col items-center p-8 border border-red-900/50 hover:border-red-700 hover:bg-red-950/20 transition-all group"

@@ -26,7 +26,7 @@ const RadarSweep = () => (
         4%       { opacity: 1; }
         40%      { opacity: 0.15; }
       }
-      .radar-sweep { transform-box: fill-box; transform-origin: center;
+      .radar-sweep { transform-box: view-box; transform-origin: 100px 100px;
         animation: radar-spin 4.4s linear infinite; }
       .radar-blip  { animation: radar-blip 4.4s linear infinite; }
       @media (prefers-reduced-motion: reduce) {
